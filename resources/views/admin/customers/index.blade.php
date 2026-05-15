@@ -6,7 +6,7 @@
 @section('content')
 <div class="fade-in pt-2 space-y-5">
 
-    {{-- Stats Pelanggan --}}
+
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5" style="border-top: 4px solid #7c3aed">
             <div class="flex items-center justify-between mb-2">
@@ -16,7 +16,7 @@
                 <span class="text-2xl font-bold" style="color: #7c3aed">{{ $customers->count() }}</span>
             </div>
             <p class="text-sm font-semibold text-slate-700">Total Pelanggan</p>
-            <p class="text-xs text-slate-400">Terdaftar di sistem</p>
+            <p class="text-xs text-slate-400">Terdaftar Di Sistem</p>
         </div>
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5" style="border-top: 4px solid #3b82f6">
             <div class="flex items-center justify-between mb-2">
@@ -26,21 +26,21 @@
                 <span class="text-2xl font-bold" style="color: #3b82f6">{{ $customers->count() }}</span>
             </div>
             <p class="text-sm font-semibold text-slate-700">Pelanggan Aktif</p>
-            <p class="text-xs text-slate-400">Memiliki transaksi</p>
+            <p class="text-xs text-slate-400">Memiliki Transaksi</p>
         </div>
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5" style="border-top: 4px solid #10b981">
             <div class="flex items-center justify-between mb-2">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #10b981">
                     <i class="fas fa-user-plus text-white"></i>
                 </div>
-                <span class="text-2xl font-bold" style="color: #10b981">+{{ $customers->count() }}</span>
+                <span class="text-2xl font-bold" style="color: #10b981">+ {{ $customers->count() }}</span>
             </div>
             <p class="text-sm font-semibold text-slate-700">Total Terdaftar</p>
-            <p class="text-xs text-slate-400">Semua waktu</p>
+            <p class="text-xs text-slate-400">Semua Waktu</p>
         </div>
     </div>
 
-    {{-- Tabel Pelanggan --}}
+    
     <div class="card">
         <div class="flex items-center justify-between mb-6">
             <div>

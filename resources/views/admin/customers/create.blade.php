@@ -12,7 +12,7 @@
             </div>
             <div>
                 <h3 class="font-bold text-slate-800">Form Tambah Pelanggan</h3>
-                <p class="text-slate-400 text-xs">Isi data pelanggan baru</p>
+                <p class="text-slate-400 text-xs">Isi Data Pelanggan Baru</p>
             </div>
         </div>
         <form action="{{ route('admin.customers.store') }}" method="POST" class="space-y-5">

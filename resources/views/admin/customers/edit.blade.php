@@ -12,7 +12,7 @@
             </div>
             <div>
                 <h3 class="font-bold text-slate-800">Form Edit Pelanggan</h3>
-                <p class="text-slate-400 text-xs">Perbarui data {{ $customer->user->name }}</p>
+                <p class="text-slate-400 text-xs">Perbarui Data {{ $customer->user->name }}</p>
             </div>
         </div>
         <form action="{{ route('admin.customers.update', $customer->id) }}" method="POST" class="space-y-5">
