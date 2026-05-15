@@ -6,7 +6,7 @@
 @section('content')
 <div class="fade-in pt-2 space-y-6">
 
-    {{-- Stats Cards --}}
+
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
         <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg">
             <div class="flex items-center justify-between mb-3">
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    {{-- Filter Dropdown Di-upgrade --}}
+
     <div class="card">
         <h3 class="font-bold text-slate-800 text-sm mb-4">Filter Laporan</h3>
         <form method="GET" class="flex flex-wrap gap-3 items-end">
@@ -73,7 +73,7 @@
         </form>
     </div>
 
-    {{-- Charts --}}
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="card">
             <div class="flex items-center justify-between mb-4">
@@ -95,7 +95,7 @@
         </div>
     </div>
 
-    {{-- Layanan Terpopuler --}}
+
     <div class="card">
         <div class="flex items-center justify-between mb-5">
             <h3 class="font-bold text-slate-800">Layanan Terpopuler</h3>
@@ -126,7 +126,7 @@
                             </div>
                         </td>
                         <td class="px-4 py-3.5">
-                            <span class="badge" style="background-color: #dbeafe; color: #1e40af">{{ $l->total_order }} order</span>
+                            <span class="badge" style="background-color: #dbeafe; color: #1e40af">{{ $l->total_order }} Order</span>
                         </td>
                         <td class="px-4 py-3.5 font-bold text-slate-800">Rp {{ number_format($l->total_pendapatan, 0, ',', '.') }}</td>
                     </tr>
@@ -163,14 +163,14 @@
         }
     });
 
-    const dailyData   = @json($transaksiHarian);
+    const dailyData = @json($transaksiHarian);
     const dailyLabels = dailyData.map(d => 'Tgl ' + d.hari);
     const dailyValues = dailyData.map(d => d.total);
 
     new Chart(document.getElementById('dailyChart').getContext('2d'), {
         type: 'line',
         data: {
-            labels: dailyLabels.length ? dailyLabels : ['Tidak ada data'],
+            labels: dailyLabels.length ? dailyLabels : ['Tidak Ada Data'],
             datasets: [{
                 label: 'Transaksi',
                 data: dailyValues.length ? dailyValues : [0],
