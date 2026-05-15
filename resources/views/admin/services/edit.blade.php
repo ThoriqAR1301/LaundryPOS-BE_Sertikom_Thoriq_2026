@@ -12,7 +12,7 @@
             </div>
             <div>
                 <h3 class="font-bold text-slate-800">Form Edit Layanan</h3>
-                <p class="text-slate-400 text-xs">Perbarui data {{ ucfirst($service->service_name) }}</p>
+                <p class="text-slate-400 text-xs">Perbarui Data {{ ucfirst($service->service_name) }}</p>
             </div>
         </div>
         <form action="{{ route('admin.services.update', $service->id) }}" method="POST" class="space-y-5">

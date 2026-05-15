@@ -6,7 +6,7 @@
 @section('content')
 <div class="fade-in pt-2 space-y-5">
 
-    {{-- Stats Layanan --}}
+
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5" style="border-top: 4px solid #3b82f6">
             <div class="flex items-center justify-between mb-2">
@@ -16,7 +16,7 @@
                 <span class="text-2xl font-bold" style="color: #3b82f6">{{ $services->count() }}</span>
             </div>
             <p class="text-sm font-semibold text-slate-700">Total Layanan</p>
-            <p class="text-xs text-slate-400">Tersedia di sistem</p>
+            <p class="text-xs text-slate-400">Tersedia Di Sistem</p>
         </div>
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5" style="border-top: 4px solid #10b981">
             <div class="flex items-center justify-between mb-2">
@@ -26,7 +26,7 @@
                 <span class="text-2xl font-bold" style="color: #10b981">{{ $services->count() }}</span>
             </div>
             <p class="text-sm font-semibold text-slate-700">Layanan Aktif</p>
-            <p class="text-xs text-slate-400">Siap digunakan</p>
+            <p class="text-xs text-slate-400">Siap Digunakan</p>
         </div>
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5" style="border-top: 4px solid #f59e0b">
             <div class="flex items-center justify-between mb-2">
@@ -36,11 +36,11 @@
                 <span class="text-2xl font-bold" style="color: #f59e0b">{{ $services->count() }}</span>
             </div>
             <p class="text-sm font-semibold text-slate-700">Layanan Unggulan</p>
-            <p class="text-xs text-slate-400">Paling diminati</p>
+            <p class="text-xs text-slate-400">Paling Diminati</p>
         </div>
     </div>
 
-    {{-- Tabel Layanan --}}
+    
     <div class="card">
         <div class="flex items-center justify-between mb-6">
             <div>

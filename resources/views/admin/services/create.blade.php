@@ -12,7 +12,7 @@
             </div>
             <div>
                 <h3 class="font-bold text-slate-800">Form Tambah Layanan</h3>
-                <p class="text-slate-400 text-xs">Isi data layanan baru</p>
+                <p class="text-slate-400 text-xs">Isi Data Layanan Baru</p>
             </div>
         </div>
         <form action="{{ route('admin.services.store') }}" method="POST" class="space-y-5">
@@ -40,7 +40,7 @@
                 <label class="form-label"><i class="fas fa-ruler text-amber-400 mr-1"></i> Satuan</label>
                 <div class="relative">
                     <i class="fas fa-balance-scale absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                    <input type="text" name="unit" value="{{ old('unit') }}" placeholder="contoh: Kg, Pcs" class="form-input pl-10">
+                    <input type="text" name="unit" value="{{ old('unit') }}" placeholder="Contoh : Kg, Pcs" class="form-input pl-10">
                 </div>
             </div>
             <div class="flex gap-3 pt-2">
