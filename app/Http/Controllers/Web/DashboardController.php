@@ -35,7 +35,7 @@ class DashboardController extends Controller
     private function getPendapatanBulanan()
     {
         $year = Carbon::now()->year;
-        $raw  = Transaction::where('payment_status', 'paid')->whereYear('paid_at', $year)->selectRaw('MONTH(paid_at) as bulan, SUM(total_price) as total')->groupBy('bulan')->orderBy('bulan')->get();
+        $raw = Transaction::where('payment_status', 'paid')->whereYear('paid_at', $year)->selectRaw('MONTH(paid_at) as bulan, SUM(total_price) as total')->groupBy('bulan')->orderBy('bulan')->get();
 
         $result = array_fill(0, 12, 0);
         foreach ($raw as $item) {

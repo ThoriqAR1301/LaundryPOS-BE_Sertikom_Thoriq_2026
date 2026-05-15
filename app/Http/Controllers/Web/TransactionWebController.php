@@ -32,8 +32,8 @@ class TransactionWebController extends Controller
             'siap diambil' => Transaction::where('status', 'siap diambil')->count(),
             'diambil' => Transaction::where('status', 'diambil')->count(),
             'total' => Transaction::count(),
-            'lunas'        => Transaction::where('payment_status', 'paid')->count(),
-            'pending'      => Transaction::where('payment_status', 'pending')->count(),
+            'lunas' => Transaction::where('payment_status', 'paid')->count(),
+            'pending' => Transaction::where('payment_status', 'pending')->count(),
         ];
 
         return view('admin.transactions.index', compact('transactions', 'summary'));
@@ -42,7 +42,7 @@ class TransactionWebController extends Controller
     public function create()
     {
         $customers = Customer::with('user')->get();
-        $services  = Service::all();
+        $services = Service::all();
         return view('admin.transactions.create', compact('customers', 'services'));
     }
 
