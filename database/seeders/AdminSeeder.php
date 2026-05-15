@@ -11,10 +11,10 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name'     => 'Admin Laundry',
-            'email'    => 'admin@laundry.com',
+            'name' => 'Admin Laundry',
+            'email' => 'admin@laundry.com',
             'password' => Hash::make('password123'),
-            'role'     => 'admin',
+            'role' => 'admin',
         ]);
     }
 }
