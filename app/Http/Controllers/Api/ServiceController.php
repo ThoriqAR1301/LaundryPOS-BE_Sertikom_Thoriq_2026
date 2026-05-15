@@ -14,7 +14,7 @@ class ServiceController extends Controller
 
         return response()->json([
             'status' => true,
-            'data'   => $services,
+            'data' => $services,
         ], 200);
     }
 
@@ -22,28 +22,28 @@ class ServiceController extends Controller
     {
         $request->validate([
             'service_name' => 'required|in:kiloan,satuan',
-            'price'        => 'required|numeric|min:0',
-            'unit'         => 'required|string|max:20',
+            'price' => 'required|numeric|min:0',
+            'unit' => 'required|string|max:20',
         ], [
             'service_name.required' => 'Nama Layanan Wajib Diisi',
-            'service_name.in'       => 'Nama Layanan Harus Kiloan Atau Satuan',
-            'price.required'        => 'Harga Wajib Diisi',
-            'price.numeric'         => 'Harga Harus Berupa Angka',
-            'price.min'             => 'Harga Tidak Boleh Negatif',
-            'unit.required'         => 'Satuan Wajib Diisi',
-            'unit.max'              => 'Satuan Maksimal 20 Karakter',
+            'service_name.in' => 'Nama Layanan Harus Kiloan Atau Satuan',
+            'price.required' => 'Harga Wajib Diisi',
+            'price.numeric' => 'Harga Harus Berupa Angka',
+            'price.min' => 'Harga Tidak Boleh Negatif',
+            'unit.required' => 'Satuan Wajib Diisi',
+            'unit.max' => 'Satuan Maksimal 20 Karakter',
         ]);
 
         $service = Service::create([
             'service_name' => $request->service_name,
-            'price'        => $request->price,
-            'unit'         => $request->unit,
+            'price' => $request->price,
+            'unit' => $request->unit,
         ]);
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Layanan Berhasil Ditambahkan',
-            'data'    => $service,
+            'data' => $service,
         ], 201);
     }
 
@@ -53,14 +53,14 @@ class ServiceController extends Controller
 
         if (! $service) {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => 'Layanan Tidak Ditemukan',
             ], 404);
         }
 
         return response()->json([
             'status' => true,
-            'data'   => $service,
+            'data' => $service,
         ], 200);
     }
 
@@ -70,35 +70,35 @@ class ServiceController extends Controller
 
         if (! $service) {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => 'Layanan Tidak Ditemukan',
             ], 404);
         }
 
         $request->validate([
             'service_name' => 'required|in:kiloan,satuan',
-            'price'        => 'required|numeric|min:0',
-            'unit'         => 'required|string|max:20',
+            'price' => 'required|numeric|min:0',
+            'unit' => 'required|string|max:20',
         ], [
             'service_name.required' => 'Nama Layanan Wajib Diisi',
-            'service_name.in'       => 'Nama Layanan Harus Kiloan Atau Satuan',
-            'price.required'        => 'Harga Wajib Diisi',
-            'price.numeric'         => 'Harga Harus Berupa Angka',
-            'price.min'             => 'Harga Tidak Boleh Negatif',
-            'unit.required'         => 'Satuan Wajib Diisi',
-            'unit.max'              => 'Satuan Maksimal 20 Karakter',
+            'service_name.in' => 'Nama Layanan Harus Kiloan Atau Satuan',
+            'price.required' => 'Harga Wajib Diisi',
+            'price.numeric' => 'Harga Harus Berupa Angka',
+            'price.min' => 'Harga Tidak Boleh Negatif',
+            'unit.required' => 'Satuan Wajib Diisi',
+            'unit.max' => 'Satuan Maksimal 20 Karakter',
         ]);
 
         $service->update([
             'service_name' => $request->service_name,
-            'price'        => $request->price,
-            'unit'         => $request->unit,
+            'price' => $request->price,
+            'unit' => $request->unit,
         ]);
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Layanan Berhasil Diperbarui',
-            'data'    => $service,
+            'data' => $service,
         ], 200);
     }
 
@@ -108,7 +108,7 @@ class ServiceController extends Controller
 
         if (! $service) {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => 'Layanan Tidak Ditemukan',
             ], 404);
         }
@@ -116,7 +116,7 @@ class ServiceController extends Controller
         $service->delete();
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Layanan Berhasil Dihapus',
         ], 200);
     }

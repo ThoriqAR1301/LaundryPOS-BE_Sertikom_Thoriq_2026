@@ -33,21 +33,21 @@ class ReportController extends Controller
 
         return response()->json([
             'status' => true,
-            'data'   => [
+            'data' => [
                 'pendapatan' => [
-                    'total'      => $totalPendapatan,
-                    'hari_ini'   => $pendapatanHariIni,
+                    'total' => $totalPendapatan,
+                    'hari_ini' => $pendapatanHariIni,
                 ],
                 'transaksi' => [
-                    'total'      => $totalTransaksi,
-                    'hari_ini'   => $transaksiHariIni,
-                    'antrian'    => $transaksiAntrian,
-                    'diproses'   => $transaksiDiproses,
-                    'siap'       => $transaksiSiap,
-                    'selesai'    => $transaksiSelesai,
+                    'total' => $totalTransaksi,
+                    'hari_ini' => $transaksiHariIni,
+                    'antrian' => $transaksiAntrian,
+                    'diproses' => $transaksiDiproses,
+                    'siap' => $transaksiSiap,
+                    'selesai' => $transaksiSelesai,
                 ],
                 'total_customer' => $totalCustomer,
-                'total_layanan'  => $totalLayanan,
+                'total_layanan' => $totalLayanan,
                 'status_summary' => $statusSummary,
             ],
         ], 200);
@@ -65,15 +65,15 @@ class ReportController extends Controller
         for ($i = 1; $i <= 12; $i++) {
             $found = $data->firstWhere('bulan', $i);
             $result[] = [
-                'bulan'  => $bulanLabel[$i - 1],
-                'total'  => $found ? $found->total : 0,
+                'bulan' => $bulanLabel[$i - 1],
+                'total' => $found ? $found->total : 0,
             ];
         }
 
         return response()->json([
             'status' => true,
-            'data'   => $result,
-            'year'   => $year,
+            'data' => $result,
+            'year' => $year,
         ], 200);
     }
 
@@ -86,9 +86,9 @@ class ReportController extends Controller
 
         return response()->json([
             'status' => true,
-            'data'   => $data,
-            'month'  => $month,
-            'year'   => $year,
+            'data' => $data,
+            'month' => $month,
+            'year' => $year,
         ], 200);
     }
 
@@ -98,7 +98,7 @@ class ReportController extends Controller
 
         return response()->json([
             'status' => true,
-            'data'   => $data,
+            'data' => $data,
         ], 200);
     }
 
@@ -125,7 +125,7 @@ class ReportController extends Controller
 
         return response()->json([
             'status' => true,
-            'data'   => $transactions,
+            'data' => $transactions,
         ], 200);
     }
 }

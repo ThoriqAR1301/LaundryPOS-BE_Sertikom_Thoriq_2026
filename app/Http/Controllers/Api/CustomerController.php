@@ -16,47 +16,47 @@ class CustomerController extends Controller
 
         return response()->json([
             'status' => true,
-            'data'   => $customers,
+            'data' => $customers,
         ], 200);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'phone'    => 'required|string|max:15',
-            'address'  => 'required|string',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string',
         ], [
-            'name.required'     => 'Nama Wajib Diisi',
-            'email.required'    => 'Email Wajib Diisi',
-            'email.email'       => 'Format Email Tidak Valid',
-            'email.unique'      => 'Email Sudah Digunakan',
+            'name.required' => 'Nama Wajib Diisi',
+            'email.required' => 'Email Wajib Diisi',
+            'email.email' => 'Format Email Tidak Valid',
+            'email.unique' => 'Email Sudah Digunakan',
             'password.required' => 'Password Wajib Diisi',
-            'password.min'      => 'Password Minimal 6 Karakter',
-            'phone.required'    => 'Nomor HP Wajib Diisi',
-            'phone.max'         => 'Nomor HP Maksimal 15 Karakter',
-            'address.required'  => 'Alamat Wajib Diisi',
+            'password.min' => 'Password Minimal 6 Karakter',
+            'phone.required' => 'Nomor HP Wajib Diisi',
+            'phone.max' => 'Nomor HP Maksimal 15 Karakter',
+            'address.required' => 'Alamat Wajib Diisi',
         ]);
 
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => 'customer',
+            'role' => 'customer',
         ]);
 
         $customer = Customer::create([
             'user_id' => $user->id,
-            'phone'   => $request->phone,
+            'phone' => $request->phone,
             'address' => $request->address,
         ]);
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Pelanggan Berhasil Ditambahkan',
-            'data'    => $customer->load('user'),
+            'data' => $customer->load('user'),
         ], 201);
     }
 
@@ -66,14 +66,14 @@ class CustomerController extends Controller
 
         if (! $customer) {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => 'Pelanggan Tidak Ditemukan',
             ], 404);
         }
 
         return response()->json([
             'status' => true,
-            'data'   => $customer,
+            'data' => $customer,
         ], 200);
     }
 
@@ -83,40 +83,40 @@ class CustomerController extends Controller
 
         if (! $customer) {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => 'Pelanggan Tidak Ditemukan',
             ], 404);
         }
 
         $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email|unique:users,email,' . $customer->user_id,
-            'phone'   => 'required|string|max:15',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $customer->user_id,
+            'phone' => 'required|string|max:15',
             'address' => 'required|string',
         ], [
-            'name.required'    => 'Nama Wajib Diisi',
-            'email.required'   => 'Email Wajib Diisi',
-            'email.email'      => 'Format Email Tidak Valid',
-            'email.unique'     => 'Email Sudah Digunakan',
-            'phone.required'   => 'Nomor HP Wajib Diisi',
-            'phone.max'        => 'Nomor HP Maksimal 15 Karakter',
+            'name.required' => 'Nama Wajib Diisi',
+            'email.required' => 'Email Wajib Diisi',
+            'email.email' => 'Format Email Tidak Valid',
+            'email.unique' => 'Email Sudah Digunakan',
+            'phone.required' => 'Nomor HP Wajib Diisi',
+            'phone.max' => 'Nomor HP Maksimal 15 Karakter',
             'address.required' => 'Alamat Wajib Diisi',
         ]);
 
         $customer->user->update([
-            'name'  => $request->name,
+            'name' => $request->name,
             'email' => $request->email,
         ]);
 
         $customer->update([
-            'phone'   => $request->phone,
+            'phone' => $request->phone,
             'address' => $request->address,
         ]);
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Pelanggan Berhasil Diperbarui',
-            'data'    => $customer->load('user'),
+            'data' => $customer->load('user'),
         ], 200);
     }
 
@@ -126,7 +126,7 @@ class CustomerController extends Controller
 
         if (! $customer) {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => 'Pelanggan Tidak Ditemukan',
             ], 404);
         }
@@ -134,7 +134,7 @@ class CustomerController extends Controller
         $customer->user->delete();
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Pelanggan Berhasil Dihapus',
         ], 200);
     }

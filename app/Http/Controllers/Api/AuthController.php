@@ -13,11 +13,11 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required|string',
         ], [
-            'email.required'    => 'Email Wajib Diisi',
-            'email.email'       => 'Format Email Tidak Valid',
+            'email.required' => 'Email Wajib Diisi',
+            'email.email' => 'Format Email Tidak Valid',
             'password.required' => 'Password Wajib Diisi',
         ]);
 
@@ -32,10 +32,10 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Login Berhasil',
-            'data'    => [
-                'user'  => $user,
+            'data' => [
+                'user' => $user,
                 'token' => $token,
             ],
         ], 200);
@@ -46,7 +46,7 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Logout Berhasil',
         ], 200);
     }
@@ -55,7 +55,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'status' => true,
-            'data'   => $request->user(),
+            'data' => $request->user(),
         ], 200);
     }
 }
