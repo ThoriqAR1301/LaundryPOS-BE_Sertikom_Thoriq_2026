@@ -30,7 +30,7 @@
                     <p class="text-slate-400 text-xs">Nama</p>
                     <p class="font-semibold text-slate-700">{{ auth()->user()->name }}</p>
                 </div>
-                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+                
             </div>
             <div class="flex items-center gap-3 p-4 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: #cffafe">
@@ -40,7 +40,7 @@
                     <p class="text-slate-400 text-xs">Email</p>
                     <p class="font-semibold text-slate-700">{{ auth()->user()->email }}</p>
                 </div>
-                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+                
             </div>
             <div class="flex items-center gap-3 p-4 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: #ede9fe">
@@ -50,7 +50,7 @@
                     <p class="text-slate-400 text-xs">Role</p>
                     <p class="font-semibold text-slate-700 capitalize">{{ auth()->user()->role }}</p>
                 </div>
-                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+                
             </div>
             <div class="flex items-center gap-3 p-4 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: #d1fae5">
@@ -60,7 +60,7 @@
                     <p class="text-slate-400 text-xs">Bergabung Sejak</p>
                     <p class="font-semibold text-slate-700">{{ auth()->user()->created_at->format('d M Y') }}</p>
                 </div>
-                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+
             </div>
         </div>
 
