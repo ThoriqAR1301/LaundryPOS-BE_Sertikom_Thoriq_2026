@@ -145,7 +145,7 @@
 
     <div class="flex-1 flex flex-col overflow-hidden">
 
-        <header class="bg-white border-slate-100 px-6 py-6 flex items-center justify-between flex-shrink-0 shadow-sm transition-colors duration-300">
+        <header class="bg-white border-b border-slate-100 px-6 py-6 flex items-center justify-between flex-shrink-0 shadow-sm transition-colors duration-300">
             <div class="flex items-center gap-3">
                 <button onclick="document.getElementById('sidebar').classList.toggle('hidden')" class="text-slate-400 hover:text-slate-600 lg:hidden">
                     <i class="fas fa-bars text-lg"></i>
@@ -165,9 +165,9 @@
                     <i id="theme-icon" class="fas fa-moon text-sm"></i>
                 </button>
 
-                <div class="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 shadow-inner">
-                    <i class="fas fa-clock text-cyan-400 text-sm"></i>
-                    <span class="text-white font-bold text-sm font-mono tracking-wide" id="live-clock">00:00:00</span>
+                <div class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+                    <i class="fas fa-clock text-cyan-500 text-sm"></i>
+                    <span class="text-slate-600 text-sm font-bold font-mono tracking-wide" id="live-clock">00:00:00</span>
                 </div>
             </div>
         </header>
@@ -241,9 +241,9 @@
 
     function updateClock() {
         const now  = new Date();
-        const h    = String(now.getHours()).padStart(2, '0');
-        const m    = String(now.getMinutes()).padStart(2, '0');
-        const s    = String(now.getSeconds()).padStart(2, '0');
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const s = String(now.getSeconds()).padStart(2, '0');
         document.getElementById('live-clock').textContent = h + ':' + m + ':' + s;
     }
     updateClock();

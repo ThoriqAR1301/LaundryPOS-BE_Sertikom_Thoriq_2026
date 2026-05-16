@@ -28,7 +28,7 @@
 
     <div class="w-full max-w-md relative z-10">
 
-        {{-- Logo --}}
+
         <div class="text-center mb-8">
             <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-blue-500/30" style="background: linear-gradient(135deg, #60a5fa, #22d3ee)">
                 <i class="fas fa-shirt text-white text-3xl"></i>
@@ -37,7 +37,7 @@
             <p class="text-blue-200 text-sm mt-1">Sistem Manajemen Laundry Modern</p>
         </div>
 
-        {{-- Card --}}
+
         <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
             <h2 class="text-white text-xl font-bold mb-1">Selamat Datang! 👋</h2>
             <p class="text-blue-200 text-sm mb-6">Masuk Ke Panel Admin Anda</p>
