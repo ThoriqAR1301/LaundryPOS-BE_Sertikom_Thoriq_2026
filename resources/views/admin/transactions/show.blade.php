@@ -27,8 +27,7 @@
             </div>
             @foreach($statusSteps as $i => $step)
             <div class="flex flex-col items-center gap-2 z-10">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all
-                    {{ $i <= $currentStep ? 'bg-gradient-to-br from-blue-400 to-cyan-400 border-blue-400 text-white' : 'bg-white border-slate-200 text-slate-300' }}">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all {{ $i <= $currentStep ? 'bg-gradient-to-br from-blue-400 to-cyan-400 border-blue-400 text-white' : 'bg-white border-slate-200 text-slate-300' }}">
                     @if($i < $currentStep)
                         <i class="fas fa-check text-sm"></i>
                     @elseif($i == $currentStep)

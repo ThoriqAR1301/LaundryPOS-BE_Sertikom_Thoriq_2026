@@ -6,7 +6,7 @@
 @section('content')
 <div class="space-y-6 fade-in pt-2">
 
-    {{-- Stats Cards --}}
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg shadow-blue-500/25">
             <div class="flex items-center justify-between mb-4">
@@ -54,14 +54,14 @@
         </div>
     </div>
 
-    {{-- Status Order pakai hex --}}
+
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         @php
             $statuses = [
-                ['label'=>'Antrian',   'value'=>$data['antrian'],  'icon'=>'clock',          'hex'=>'#f59e0b'],
-                ['label'=>'Diproses',  'value'=>$data['diproses'], 'icon'=>'soap',           'hex'=>'#3b82f6'],
-                ['label'=>'Siap Ambil','value'=>$data['siap'],     'icon'=>'check-circle',   'hex'=>'#10b981'],
-                ['label'=>'Selesai',   'value'=>$data['selesai'],  'icon'=>'flag-checkered', 'hex'=>'#64748b'],
+                ['label'=>'Antrian', 'value'=>$data['antrian'], 'icon'=>'clock', 'hex'=>'#f59e0b'],
+                ['label'=>'Diproses', 'value'=>$data['diproses'], 'icon'=>'soap', 'hex'=>'#3b82f6'],
+                ['label'=>'Siap Ambil', 'value'=>$data['siap'], 'icon'=>'check-circle', 'hex'=>'#10b981'],
+                ['label'=>'Selesai', 'value'=>$data['selesai'], 'icon'=>'flag-checkered', 'hex'=>'#64748b'],
             ];
         @endphp
         @foreach($statuses as $s)
@@ -77,7 +77,7 @@
         @endforeach
     </div>
 
-    {{-- Chart + Transaksi Terbaru --}}
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 card">
             <div class="flex items-center justify-between mb-6">
@@ -101,20 +101,20 @@
                 @forelse($data['transaksi_terbaru'] as $trx)
                 @php
                     $trxHex = match($trx->status) {
-                        'antrian'      => '#f59e0b',
-                        'dicuci'       => '#3b82f6',
-                        'disetrika'    => '#7c3aed',
+                        'antrian' => '#f59e0b',
+                        'dicuci' => '#3b82f6',
+                        'disetrika' => '#7c3aed',
                         'siap diambil' => '#10b981',
-                        'diambil'      => '#64748b',
-                        default        => '#64748b'
+                        'diambil' => '#64748b',
+                        default => '#64748b'
                     };
                     $trxBg = match($trx->status) {
-                        'antrian'      => '#fef3c7',
-                        'dicuci'       => '#dbeafe',
-                        'disetrika'    => '#ede9fe',
+                        'antrian' => '#fef3c7',
+                        'dicuci' => '#dbeafe',
+                        'disetrika' => '#ede9fe',
                         'siap diambil' => '#d1fae5',
-                        'diambil'      => '#f1f5f9',
-                        default        => '#f1f5f9'
+                        'diambil' => '#f1f5f9',
+                        default => '#f1f5f9'
                     };
                 @endphp
                 <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl hover:bg-blue-50 transition-colors">

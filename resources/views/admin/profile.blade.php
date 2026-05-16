@@ -6,7 +6,7 @@
 @section('content')
 <div class="max-w-lg fade-in pt-2 space-y-5">
 
-    {{-- Avatar Card --}}
+
     <div class="card text-center">
         <div class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl" style="background: linear-gradient(135deg, #3b82f6, #06b6d4)">
             <span class="text-white text-4xl font-bold">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
@@ -18,7 +18,7 @@
         </span>
     </div>
 
-    {{-- Info Card --}}
+    
     <div class="card">
         <h3 class="font-bold text-slate-800 mb-5">Informasi Akun</h3>
         <div class="space-y-3 text-sm">
