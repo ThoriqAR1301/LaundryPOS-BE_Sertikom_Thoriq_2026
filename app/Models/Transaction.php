@@ -16,7 +16,11 @@ class Transaction extends Model
         'payment_method',
         'payment_status',
         'payment_proof',
-        'paid_at',
+
+    ];
+
+    protected $casts = [
+        'paid_at' => 'datetime',
     ];
 
     public function admin()

@@ -10,15 +10,15 @@
         $statusSteps = ['antrian','dicuci','disetrika','siap diambil','diambil'];
         $currentStep = array_search($transaction->status, $statusSteps);
         $statusOptions = [
-            'antrian'      => ['label'=>'Antrian',     'icon'=>'🕐', 'hex'=>'#f59e0b'],
-            'dicuci'       => ['label'=>'Dicuci',      'icon'=>'🫧', 'hex'=>'#3b82f6'],
-            'disetrika'    => ['label'=>'Disetrika',   'icon'=>'♨️', 'hex'=>'#7c3aed'],
+            'antrian' => ['label'=>'Antrian', 'icon'=>'🕐', 'hex'=>'#f59e0b'],
+            'dicuci' => ['label'=>'Dicuci', 'icon'=>'🫧', 'hex'=>'#3b82f6'],
+            'disetrika' => ['label'=>'Disetrika', 'icon'=>'♨️', 'hex'=>'#7c3aed'],
             'siap diambil' => ['label'=>'Siap Diambil','icon'=>'✅', 'hex'=>'#10b981'],
-            'diambil'      => ['label'=>'Selesai',     'icon'=>'🏁', 'hex'=>'#64748b'],
+            'diambil' => ['label'=>'Selesai', 'icon'=>'🏁', 'hex'=>'#64748b'],
         ];
     @endphp
 
-    {{-- Progress Cucian --}}
+
     <div class="card">
         <h3 class="font-bold text-slate-800 mb-5">Progress Cucian</h3>
         <div class="flex items-center justify-between relative">
@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    {{-- Info Transaksi & Pelanggan --}}
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div class="card space-y-4">
             <h3 class="font-bold text-slate-800">Info Transaksi</h3>
@@ -97,7 +97,7 @@
         </div>
     </div>
 
-    {{-- Update Status — Dropdown Di-upgrade --}}
+
     <div class="card">
         <h3 class="font-bold text-slate-800 mb-4">Update Status Cucian</h3>
         <form action="{{ route('admin.transactions.update-status', $transaction->id) }}" method="POST" class="flex flex-wrap gap-3 items-end">
@@ -120,7 +120,7 @@
         </form>
     </div>
 
-    {{-- Bukti Pembayaran --}}
+
     @if($transaction->payment_method == 'transfer')
     <div class="card">
         <h3 class="font-bold text-slate-800 mb-4">Bukti Pembayaran Transfer</h3>
@@ -128,7 +128,14 @@
         <div class="mb-4">
             <img src="{{ Storage::url($transaction->payment_proof) }}" alt="Bukti Bayar" class="rounded-xl border border-slate-200 max-w-xs shadow-sm">
             <p class="text-emerald-600 text-sm font-semibold mt-2 flex items-center gap-2">
-                <i class="fas fa-check-circle"></i> Sudah Dibayar Pada {{ $transaction->paid_at?->format('d M Y H:i') }}
+                @php
+                     try {
+                        $paidAtText = $transaction->paid_at ? \Carbon\Carbon::parse($transaction->paid_at)->format('d M Y H:i') : '-';
+                     } catch (\Exception $e) {
+                        $paidAtText = '-';
+                    }
+                @endphp
+                <i class="fas fa-check-circle"></i> Sudah Dibayar Pada {{ $paidAtText }}
             </p>
         </div>
         @endif

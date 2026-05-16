@@ -86,7 +86,15 @@ class TransactionWebController extends Controller
     {
         $transaction = Transaction::findOrFail($id);
         $request->validate(['status' => 'required|in:antrian,dicuci,disetrika,siap diambil,diambil']);
-        $transaction->update(['status' => $request->status]);
+
+        $updateData = ['status' => $request->status];
+
+        if ($request->status === 'diambil' && $transaction->payment_method === 'cash') {
+            $updateData['payment_status'] = 'paid';
+            $updateData['paid_at'] = now();
+        }
+
+        $transaction->update($updateData);
         return back()->with('success', 'Status Berhasil Diperbarui');
     }
 
@@ -107,5 +115,17 @@ class TransactionWebController extends Controller
         ]);
 
         return back()->with('success', 'Bukti Pembayaran Berhasil Diupload');
+    }
+
+    public function destroy($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+
+        if ($transaction->payment_proof) {
+            Storage::disk('public')->delete($transaction->payment_proof);
+        }
+
+        $transaction->delete();
+        return redirect()->route('admin.transactions.index')->with('success', 'Transaksi Berhasil Dihapus');
     }
 }

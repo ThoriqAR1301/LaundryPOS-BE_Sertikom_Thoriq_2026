@@ -6,7 +6,34 @@
 @section('content')
 <div class="fade-in pt-2 space-y-5">
 
-    {{-- ===== FILTER ===== --}}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        @php
+            $cardStatuses = [
+                ['key'=>'antrian', 'label'=>'Antrian', 'icon'=>'clock', 'desc'=>'Menunggu Diproses', 'hex'=>'#f59e0b'],
+                ['key'=>'dicuci', 'label'=>'Dicuci', 'icon'=>'soap', 'desc'=>'Sedang Dicuci', 'hex'=>'#3b82f6'],
+                ['key'=>'disetrika', 'label'=>'Disetrika', 'icon'=>'wind', 'desc'=>'Sedang Disetrika', 'hex'=>'#7c3aed'],
+                ['key'=>'siap diambil','label'=>'Siap Ambil', 'icon'=>'check-circle', 'desc'=>'Siap Diambil Pelanggan', 'hex'=>'#10b981'],
+            ];
+        @endphp
+        @foreach($cardStatuses as $s)
+        @php $pct = $summary['total'] > 0 ? round($summary[$s['key']] / $summary['total'] * 100) : 0; @endphp
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6" style="border-top: 4px solid {{ $s['hex'] }}">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: {{ $s['hex'] }}">
+                    <i class="fas fa-{{ $s['icon'] }} text-white"></i>
+                </div>
+                <span class="text-2xl font-bold" style="color: {{ $s['hex'] }}">{{ $summary[$s['key']] }}</span>
+            </div>
+            <p class="text-sm font-semibold text-slate-700">{{ $s['label'] }}</p>
+            <p class="text-xs text-slate-400 mb-3">{{ $s['desc'] }}</p>
+            <div class="w-full bg-slate-200 rounded-full h-2">
+                <div class="h-2 rounded-full" style="width: {{ $pct }}%; background-color: {{ $s['hex'] }}"></div>
+            </div>
+            <p class="text-xs font-semibold mt-1.5 text-right" style="color: {{ $s['hex'] }}">{{ $pct }}% Dari Total</p>
+        </div>
+        @endforeach
+    </div>
+
     <div class="card">
         <form method="GET" class="flex flex-wrap gap-3 items-end">
             <div class="flex-1 min-w-40">
@@ -23,11 +50,11 @@
                     <select name="status" class="form-input pl-10 pr-10 appearance-none cursor-pointer">
                         <option value="">Semua Status</option>
                         @foreach([
-                            'antrian'     => ['label'=>'Antrian',     'icon'=>'🕐'],
-                            'dicuci'      => ['label'=>'Dicuci',      'icon'=>'🫧'],
-                            'disetrika'   => ['label'=>'Disetrika',   'icon'=>'♨️'],
-                            'siap diambil'=> ['label'=>'Siap Diambil','icon'=>'✅'],
-                            'diambil'     => ['label'=>'Selesai',     'icon'=>'🏁'],
+                            'antrian' => ['label'=>'Antrian', 'icon'=>'🕐'],
+                            'dicuci' => ['label'=>'Dicuci', 'icon'=>'🫧'],
+                            'disetrika' => ['label'=>'Disetrika', 'icon'=>'♨️'],
+                            'siap diambil' => ['label'=>'Siap Diambil','icon'=>'✅'],
+                            'diambil' => ['label'=>'Selesai', 'icon'=>'🏁'],
                         ] as $val => $opt)
                         <option value="{{ $val }}" {{ request('status')==$val ? 'selected' : '' }}>
                             {{ $opt['icon'] }} {{ $opt['label'] }}
@@ -56,10 +83,10 @@
         </form>
     </div>
 
-    {{-- ===== TABEL TRANSAKSI ===== --}}
+
     <div class="card">
         <div class="flex items-center justify-between mb-5">
-            <p class="text-slate-500 text-sm">Menampilkan <span class="font-bold text-slate-700">{{ $transactions->total() }}</span> Transaksi</p>
+            <p class="text-slate-500 text-sm">Menampilkan <span class="font-bold text-dark px-2 py-1 bg-slate-200 rounded-lg">{{ $transactions->total() }}</span> Transaksi</p>
             <a href="{{ route('admin.transactions.create') }}" class="btn-primary">
                 <i class="fas fa-plus"></i> Transaksi Baru
             </a>
@@ -81,28 +108,28 @@
                     @forelse($transactions as $trx)
                     @php
                         $statusHex = match($trx->status) {
-                            'antrian'      => '#f59e0b',
-                            'dicuci'       => '#3b82f6',
-                            'disetrika'    => '#7c3aed',
+                            'antrian' => '#f59e0b',
+                            'dicuci' => '#3b82f6',
+                            'disetrika' => '#7c3aed',
                             'siap diambil' => '#10b981',
-                            'diambil'      => '#64748b',
-                            default        => '#64748b'
+                            'diambil' => '#64748b',
+                            default => '#64748b'
                         };
                         $statusBg = match($trx->status) {
-                            'antrian'      => '#fef3c7',
-                            'dicuci'       => '#dbeafe',
-                            'disetrika'    => '#ede9fe',
+                            'antrian' => '#fef3c7',
+                            'dicuci' => '#dbeafe',
+                            'disetrika' => '#ede9fe',
                             'siap diambil' => '#d1fae5',
-                            'diambil'      => '#f1f5f9',
-                            default        => '#f1f5f9'
+                            'diambil' => '#f1f5f9',
+                            default => '#f1f5f9'
                         };
                         $statusIcon = match($trx->status) {
-                            'antrian'      => 'clock',
-                            'dicuci'       => 'soap',
-                            'disetrika'    => 'wind',
+                            'antrian' => 'clock',
+                            'dicuci' => 'soap',
+                            'disetrika' => 'wind',
                             'siap diambil' => 'box-open',
-                            'diambil'      => 'flag-checkered',
-                            default        => 'circle'
+                            'diambil' => 'flag-checkered',
+                            default => 'circle'
                         };
                     @endphp
                     <tr class="hover:bg-slate-50 transition-colors">
@@ -123,15 +150,29 @@
                         </td>
                         <td class="px-4 py-3.5">
                             @if($trx->payment_status == 'paid')
-                                <span class="badge" style="background-color: #d1fae5; color: #065f46"><i class="fas fa-check text-xs"></i> Lunas</span>
+                                <span class="badge" style="background-color: #d1fae5; color: #065f46">
+                                    <i class="fas fa-check text-xs"></i> Lunas
+                                </span>
                             @else
-                                <span class="badge" style="background-color: #ffedd5; color: #7c2d12"><i class="fas fa-clock text-xs"></i> Pending</span>
+                                <span class="badge" style="background-color: #ffedd5; color: #7c2d12">
+                                    <i class="fas fa-clock text-xs"></i> Pending
+                                </span>
                             @endif
                         </td>
                         <td class="px-4 py-3.5">
-                            <a href="{{ route('admin.transactions.show', $trx->id) }}" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-200 transition-colors inline-flex" title="Detail">
-                                <i class="fas fa-eye text-xs"></i>
-                            </a>
+                            <div class="flex items-center gap-2">
+                                <a href="{{ route('admin.transactions.show', $trx->id) }}" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-200 transition-colors inline-flex" title="Detail">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </a>
+                                @if($trx->status === 'diambil')
+                                <form action="{{ route('admin.transactions.destroy', $trx->id) }}" method="POST" onsubmit="return confirm('Yakin Hapus Transaksi {{ $trx->invoice_code }}?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="w-8 h-8 bg-red-100 text-red-600 rounded-lg flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
+                                        <i class="fas fa-trash text-xs"></i>
+                                    </button>
+                                </form>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @empty
@@ -156,7 +197,7 @@
         @endif
     </div>
 
-    {{-- ===== SECTION 1: TABEL RINGKASAN STATUS ===== --}}
+
     <div class="card overflow-hidden p-0">
         <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
             <h3 class="font-bold text-slate-800 text-sm">Ringkasan Status Transaksi</h3>
@@ -175,11 +216,11 @@
                 <tbody class="divide-y divide-slate-100">
                     @php
                         $tableStatuses = [
-                            ['key'=>'antrian',     'label'=>'Antrian',     'icon'=>'clock',          'hex'=>'#f59e0b'],
-                            ['key'=>'dicuci',      'label'=>'Dicuci',      'icon'=>'soap',           'hex'=>'#3b82f6'],
-                            ['key'=>'disetrika',   'label'=>'Disetrika',   'icon'=>'wind',           'hex'=>'#7c3aed'],
-                            ['key'=>'siap diambil','label'=>'Siap Diambil','icon'=>'check-circle',   'hex'=>'#10b981'],
-                            ['key'=>'diambil',     'label'=>'Selesai',     'icon'=>'flag-checkered', 'hex'=>'#64748b'],
+                            ['key'=>'antrian', 'label'=>'Antrian', 'icon'=>'clock', 'hex'=>'#f59e0b'],
+                            ['key'=>'dicuci', 'label'=>'Dicuci', 'icon'=>'soap', 'hex'=>'#3b82f6'],
+                            ['key'=>'disetrika', 'label'=>'Disetrika', 'icon'=>'wind', 'hex'=>'#7c3aed'],
+                            ['key'=>'siap diambil','label'=>'Siap Diambil','icon'=>'check-circle', 'hex'=>'#10b981'],
+                            ['key'=>'diambil', 'label'=>'Selesai', 'icon'=>'flag-checkered', 'hex'=>'#64748b'],
                         ];
                     @endphp
                     @foreach($tableStatuses as $s)
@@ -214,47 +255,18 @@
         </div>
     </div>
 
-    {{-- ===== SECTION 2: CARD DENGAN PROGRESS BAR ===== --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        @php
-            $cardStatuses = [
-                ['key'=>'antrian',     'label'=>'Antrian',    'icon'=>'clock',        'desc'=>'Menunggu Diproses',      'hex'=>'#f59e0b'],
-                ['key'=>'dicuci',      'label'=>'Dicuci',     'icon'=>'soap',         'desc'=>'Sedang Dicuci',          'hex'=>'#3b82f6'],
-                ['key'=>'disetrika',   'label'=>'Disetrika',  'icon'=>'wind',         'desc'=>'Sedang Disetrika',       'hex'=>'#7c3aed'],
-                ['key'=>'siap diambil','label'=>'Siap Ambil', 'icon'=>'check-circle', 'desc'=>'Siap Diambil Pelanggan', 'hex'=>'#10b981'],
-            ];
-        @endphp
-        @foreach($cardStatuses as $s)
-        @php $pct = $summary['total'] > 0 ? round($summary[$s['key']] / $summary['total'] * 100) : 0; @endphp
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6" style="border-top: 4px solid {{ $s['hex'] }}">
-            <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: {{ $s['hex'] }}">
-                    <i class="fas fa-{{ $s['icon'] }} text-white"></i>
-                </div>
-                <span class="text-2xl font-bold" style="color: {{ $s['hex'] }}">{{ $summary[$s['key']] }}</span>
-            </div>
-            <p class="text-sm font-semibold text-slate-700">{{ $s['label'] }}</p>
-            <p class="text-xs text-slate-400 mb-3">{{ $s['desc'] }}</p>
-            <div class="w-full bg-slate-200 rounded-full h-2">
-                <div class="h-2 rounded-full" style="width: {{ $pct }}%; background-color: {{ $s['hex'] }}"></div>
-            </div>
-            <p class="text-xs font-semibold mt-1.5 text-right" style="color: {{ $s['hex'] }}">{{ $pct }}% dari total</p>
-        </div>
-        @endforeach
-    </div>
 
-    {{-- ===== SECTION 3: TIMELINE HORIZONTAL ===== --}}
     <div class="card">
         <h3 class="font-bold text-slate-800 text-sm mb-6">Alur Status Cucian</h3>
         <div class="flex items-start justify-between relative">
             <div class="absolute top-5 left-0 right-0 h-0.5 bg-slate-300 z-0 mx-10"></div>
             @php
                 $timelineStatuses = [
-                    ['key'=>'antrian',     'label'=>'Antrian',    'icon'=>'clock',          'hex'=>'#f59e0b'],
-                    ['key'=>'dicuci',      'label'=>'Dicuci',     'icon'=>'soap',           'hex'=>'#3b82f6'],
-                    ['key'=>'disetrika',   'label'=>'Disetrika',  'icon'=>'wind',           'hex'=>'#7c3aed'],
-                    ['key'=>'siap diambil','label'=>'Siap Ambil', 'icon'=>'box-open',       'hex'=>'#10b981'],
-                    ['key'=>'diambil',     'label'=>'Selesai',    'icon'=>'flag-checkered', 'hex'=>'#64748b'],
+                    ['key'=>'antrian', 'label'=>'Antrian', 'icon'=>'clock', 'hex'=>'#f59e0b'],
+                    ['key'=>'dicuci', 'label'=>'Dicuci', 'icon'=>'soap', 'hex'=>'#3b82f6'],
+                    ['key'=>'disetrika', 'label'=>'Disetrika', 'icon'=>'wind', 'hex'=>'#7c3aed'],
+                    ['key'=>'siap diambil','label'=>'Siap Ambil', 'icon'=>'box-open', 'hex'=>'#10b981'],
+                    ['key'=>'diambil', 'label'=>'Selesai', 'icon'=>'flag-checkered', 'hex'=>'#64748b'],
                 ];
             @endphp
             @foreach($timelineStatuses as $s)
@@ -269,7 +281,7 @@
         </div>
     </div>
 
-    {{-- ===== SECTION 4: BADGE / PILL BESAR (melebar penuh) ===== --}}
+
     <div class="card">
         <h3 class="font-bold text-slate-800 text-sm mb-4">Status Pembayaran</h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">

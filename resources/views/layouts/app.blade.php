@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <title>@yield('title', 'LaundryPOS') — Admin Panel</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -133,8 +135,8 @@
                 </div>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="text-slate-400 hover:text-red-400 transition-colors" title="Logout">
-                        <i class="fas fa-sign-out-alt"></i>
+                    <button type="submit" class="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 text-slate-400 hover:bg-red-500 hover:text-white transition-all duration-200" title="Logout">
+                        <i class="fas fa-sign-out-alt text-sm"></i>
                     </button>
                 </form>
             </div>
@@ -143,7 +145,7 @@
 
     <div class="flex-1 flex flex-col overflow-hidden">
 
-        <header class="bg-white border-b border-slate-100 px-6 py-6 flex items-center justify-between flex-shrink-0 shadow-sm transition-colors duration-300">
+        <header class="bg-white border-slate-100 px-6 py-6 flex items-center justify-between flex-shrink-0 shadow-sm transition-colors duration-300">
             <div class="flex items-center gap-3">
                 <button onclick="document.getElementById('sidebar').classList.toggle('hidden')" class="text-slate-400 hover:text-slate-600 lg:hidden">
                     <i class="fas fa-bars text-lg"></i>
@@ -170,38 +172,60 @@
             </div>
         </header>
 
-        <div class="px-6 pt-4">
+        <div class="px-6 pt-4 space-y-3">
+
             @if(session('success'))
-                <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl flex items-center gap-3 mb-4 fade-in alert-dismiss">
-                    <i class="fas fa-check-circle text-emerald-500"></i>
-                    <span class="text-sm font-medium">{{ session('success') }}</span>
-                    <button onclick="this.parentElement.remove()" class="ml-auto text-emerald-400 hover:text-emerald-600">
-                        <i class="fas fa-times text-xs"></i>
-                    </button>
+            <div class="alert-dismiss flex items-start gap-4 px-5 py-4 rounded-2xl border fade-in" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-color: #10b981">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: #10b981">
+                    <i class="fas fa-check text-white text-sm"></i>
                 </div>
+                <div class="flex-1">
+                    <p class="font-bold text-sm" style="color: #064e3b">Berhasil!</p>
+                    <p class="text-sm mt-0.5" style="color: #065f46">{{ session('success') }}</p>
+                </div>
+                <button onclick="this.closest('.alert-dismiss').remove()" class="text-emerald-400 hover:text-emerald-600 transition-colors mt-0.5">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
             @endif
+
             @if(session('error'))
-                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3 mb-4 fade-in alert-dismiss">
-                    <i class="fas fa-exclamation-circle text-red-500"></i>
-                    <span class="text-sm font-medium">{{ session('error') }}</span>
-                    <button onclick="this.parentElement.remove()" class="ml-auto text-red-400 hover:text-red-600">
-                        <i class="fas fa-times text-xs"></i>
-                    </button>
+            <div class="alert-dismiss flex items-start gap-4 px-5 py-4 rounded-2xl border fade-in" style="background: linear-gradient(135deg, #fee2e2, #fecaca); border-color: #ef4444">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: #ef4444">
+                    <i class="fas fa-exclamation text-white text-sm"></i>
                 </div>
+                <div class="flex-1">
+                    <p class="font-bold text-sm" style="color: #7f1d1d">Gagal!</p>
+                    <p class="text-sm mt-0.5" style="color: #991b1b">{{ session('error') }}</p>
+                </div>
+                <button onclick="this.closest('.alert-dismiss').remove()" class="text-red-400 hover:text-red-600 transition-colors mt-0.5">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
             @endif
+
             @if($errors->any())
-                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 fade-in alert-dismiss">
-                    <div class="flex items-center gap-3 mb-2">
-                        <i class="fas fa-exclamation-circle text-red-500"></i>
-                        <span class="text-sm font-semibold">Terdapat Kesalahan :</span>
-                    </div>
-                    <ul class="list-disc list-inside text-sm space-y-1 ml-2">
+            <div class="alert-dismiss flex items-start gap-4 px-5 py-4 rounded-2xl border fade-in" style="background: linear-gradient(135deg, #fef3c7, #fde68a); border-color: #f59e0b">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: #f59e0b">
+                    <i class="fas fa-triangle-exclamation text-white text-sm"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-bold text-sm mb-1" style="color: #78350f">Terdapat Kesalahan :</p>
+                    <ul class="space-y-0.5">
                         @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
+                        <li class="text-sm flex items-center gap-1.5" style="color: #92400e">
+                            <i class="fas fa-circle text-amber-400" style="font-size: 5px"></i>
+                            {{ $error }}
+                        </li>
                         @endforeach
                     </ul>
                 </div>
+                <button onclick="this.closest('.alert-dismiss').remove()" class="text-amber-400 hover:text-amber-600 transition-colors mt-0.5">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
             @endif
+
         </div>
 
         <main class="flex-1 overflow-y-auto px-6 pb-6">

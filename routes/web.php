@@ -28,6 +28,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/transactions/{id}', [TransactionWebController::class, 'show'])->name('transactions.show');
     Route::put('/transactions/{id}/status', [TransactionWebController::class, 'updateStatus'])->name('transactions.update-status');
     Route::post('/transactions/{id}/payment-proof', [TransactionWebController::class, 'uploadPaymentProof'])->name('transactions.payment-proof');
+    Route::delete('/transactions/{id}/destroy', [TransactionWebController::class, 'destroy'])->name('transactions.destroy');
 
     Route::get('/reports', [ReportWebController::class, 'index'])->name('reports.index');
 

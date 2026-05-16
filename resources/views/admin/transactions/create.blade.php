@@ -10,7 +10,7 @@
         <form action="{{ route('admin.transactions.store') }}" method="POST" class="space-y-5" id="trxForm">
             @csrf
 
-            {{-- Dropdown Pelanggan --}}
+
             <div>
                 <label class="form-label"><i class="fas fa-user text-blue-400 mr-1"></i> Pelanggan</label>
                 <div class="relative">
@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            {{-- Dropdown Layanan --}}
+
             <div>
                 <label class="form-label"><i class="fas fa-tags text-cyan-400 mr-1"></i> Layanan</label>
                 <div class="relative">
@@ -44,7 +44,7 @@
                 </div>
             </div>
 
-            {{-- Berat --}}
+
             <div>
                 <label class="form-label"><i class="fas fa-weight text-violet-400 mr-1"></i> Berat / Jumlah</label>
                 <div class="relative">
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            {{-- Preview Total --}}
+
             <div class="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 rounded-xl p-4">
                 <div class="flex items-center justify-between">
                     <span class="text-slate-600 text-sm font-medium">Estimasi Total Harga :</span>
@@ -61,23 +61,23 @@
                 </div>
             </div>
 
-            {{-- Metode Pembayaran --}}
+
             <div>
                 <label class="form-label"><i class="fas fa-wallet text-emerald-400 mr-1"></i> Metode Pembayaran</label>
-                <div class="grid grid-cols-2 gap-3">
-                    <label class="flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-blue-400 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
-                        <input type="radio" name="payment_method" value="cash" class="accent-blue-500" {{ old('payment_method','cash')=='cash' ? 'checked' : '' }}>
+                <div class="grid grid-cols-2 gap-3" id="paymentMethods">
+                    <label class="payment-label flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-blue-400 transition-all" onclick="selectPayment(this)">
+                        <input type="radio" name="payment_method" value="cash" class="accent-blue-500 hidden" {{ old('payment_method','cash')=='cash' ? 'checked' : '' }}>
                         <div>
                             <i class="fas fa-money-bill-wave text-emerald-500 mb-1"></i>
-                            <p class="font-semibold text-slate-700 text-sm">Cash</p>
+                            <p class="method-label font-semibold text-sm text-slate-400 transition-colors">Cash</p>
                             <p class="text-slate-400 text-xs">Bayar Tunai</p>
                         </div>
                     </label>
-                    <label class="flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-blue-400 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
-                        <input type="radio" name="payment_method" value="transfer" class="accent-blue-500" {{ old('payment_method')=='transfer' ? 'checked' : '' }}>
+                    <label class="payment-label flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-blue-400 transition-all" onclick="selectPayment(this)">
+                        <input type="radio" name="payment_method" value="transfer" class="accent-blue-500 hidden" {{ old('payment_method')=='transfer' ? 'checked' : '' }}>
                         <div>
                             <i class="fas fa-university text-blue-500 mb-1"></i>
-                            <p class="font-semibold text-slate-700 text-sm">Transfer</p>
+                            <p class="method-label font-semibold text-sm text-slate-400 transition-colors">Transfer</p>
                             <p class="text-slate-400 text-xs">Transfer Bank</p>
                         </div>
                     </label>
@@ -96,14 +96,31 @@
 <script>
     function hitungTotal() {
         const select = document.getElementById('serviceSelect');
-        const opt    = select.options[select.selectedIndex];
-        const price  = parseFloat(opt.dataset.price) || 0;
-        const unit   = opt.dataset.unit || 'unit';
+        const opt = select.options[select.selectedIndex];
+        const price = parseFloat(opt.dataset.price) || 0;
+        const unit = opt.dataset.unit || 'unit';
         const weight = parseFloat(document.getElementById('weight').value) || 0;
-        const total  = price * weight;
+        const total = price * weight;
         document.getElementById('unitLabel').textContent = unit;
         document.getElementById('totalPreview').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
     }
+
+    function selectPayment(el) {
+        document.querySelectorAll('.payment-label').forEach(l => {
+            l.style.borderColor = '#e2e8f0';
+            l.style.background  = '';
+            l.querySelector('.method-label').style.color = '#94a3b8';
+        });
+        el.style.borderColor = '#3b82f6';
+        el.style.background  = '#eff6ff';
+        el.querySelector('.method-label').style.color = '#1e293b';
+        el.querySelector('input[type=radio]').checked  = true;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const checked = document.querySelector('.payment-label input:checked');
+        if (checked) selectPayment(checked.closest('.payment-label'));
+    });
 </script>
 @endpush
 @endsection
