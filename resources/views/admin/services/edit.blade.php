@@ -4,7 +4,7 @@
 @section('page-subtitle', 'Perbarui Data Layanan')
 
 @section('content')
-<div class="max-w-lg fade-in pt-2">
+<div class="fade-in pt-2 space-y-5">
     <div class="card">
         <div class="flex items-center gap-3 mb-6">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #f59e0b">

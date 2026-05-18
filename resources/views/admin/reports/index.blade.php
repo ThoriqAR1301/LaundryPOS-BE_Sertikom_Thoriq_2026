@@ -107,7 +107,7 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="table-head">
-                        <th class="px-4 py-3 text-left rounded-l-xl">#</th>
+                        <th class="px-4 py-3 text-left rounded-l-xl">No</th>
                         <th class="px-4 py-3 text-left">Layanan</th>
                         <th class="px-4 py-3 text-left">Total Order</th>
                         <th class="px-4 py-3 text-left rounded-r-xl">Total Pendapatan</th>

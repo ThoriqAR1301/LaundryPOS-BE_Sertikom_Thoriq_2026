@@ -55,7 +55,7 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="table-head">
-                        <th class="px-4 py-3 text-left rounded-l-xl">#</th>
+                        <th class="px-4 py-3 text-left rounded-l-xl">No</th>
                         <th class="px-4 py-3 text-left">Pelanggan</th>
                         <th class="px-4 py-3 text-left">No. HP</th>
                         <th class="px-4 py-3 text-left">Alamat</th>

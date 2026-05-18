@@ -5,25 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
     <title>Daftar — LaundryPOS</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .bubble { position: absolute; border-radius: 50%; opacity: 0.12; animation: float linear infinite; }
-        @keyframes float { 0% { transform: translateY(100vh) scale(0); } 100% { transform: translateY(-100px) scale(1); } }
-        .glass-input { width:100%; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:0.75rem; padding:0.75rem 1rem 0.75rem 2.75rem; color:#fff; font-size:0.875rem; outline:none; transition:all 0.2s; }
+
+        .bubble {
+            position: absolute; border-radius: 50%; opacity: 0.12;
+            animation: float linear infinite;
+        }
+        @keyframes float {
+            0%   { transform: translateY(100vh) scale(0); }
+            100% { transform: translateY(-100px) scale(1); }
+        }
+
+        .glass-input {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            color: #fff; font-size: 0.875rem; outline: none; transition: all 0.2s;
+        }
         .glass-input::placeholder { color: rgba(147,197,253,0.7); }
-        .glass-input:focus { background:rgba(255,255,255,0.12); border-color:rgba(34,211,238,0.6); box-shadow: 0 0 0 3px rgba(34,211,238,0.15); }
+        .glass-input:focus {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(34,211,238,0.6);
+            box-shadow: 0 0 0 3px rgba(34,211,238,0.15);
+        }
+
+        #loading-overlay {
+            position: fixed; inset: 0; background: rgba(15,23,42,0.6);
+            backdrop-filter: blur(4px); z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column; gap: 1rem;
+        }
+        #loading-overlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .spinner-ring {
+            width: 52px; height: 52px; border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.15);
+            border-top-color: #38bdf8; border-right-color: #818cf8;
+            animation: spin 0.75s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner-text {
+            color: #e2e8f0; font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            animation: pulseTxt 1s ease-in-out infinite;
+        }
+        @keyframes pulseTxt { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+        #toast-container {
+            position: fixed; top: 1.25rem; right: 1.25rem; z-index: 10000;
+            display: flex; flex-direction: column; gap: 0.625rem; pointer-events: none;
+        }
+        .toast {
+            pointer-events: all;
+            display: flex; align-items: flex-start; gap: 0.875rem;
+            padding: 0.875rem 1.125rem; border-radius: 1rem;
+            min-width: 300px; max-width: 380px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(12px);
+            animation: slideIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative; overflow: hidden;
+        }
+        .toast.toast-hide { animation: slideOut 0.3s ease-in forwards; }
+        @keyframes slideIn {
+            from { opacity:0; transform: translateX(120%) scale(0.92); }
+            to   { opacity:1; transform: translateX(0) scale(1); }
+        }
+        @keyframes slideOut {
+            from { opacity:1; transform: translateX(0); }
+            to   { opacity:0; transform: translateX(120%) scale(0.9); }
+        }
+        .toast-progress {
+            position: absolute; bottom: 0; left: 0; height: 3px;
+            border-radius: 0 0 1rem 1rem; animation: shrink linear forwards;
+        }
+        @keyframes shrink { from { width: 100%; } to { width: 0%; } }
+
+        .toast-success { background: linear-gradient(135deg,rgba(6,78,59,0.95),rgba(5,150,105,0.92)); border-color: rgba(16,185,129,0.4); }
+        .toast-success .toast-progress { background: #34d399; }
+        .toast-error   { background: linear-gradient(135deg,rgba(127,29,29,0.95),rgba(185,28,28,0.92)); border-color: rgba(239,68,68,0.4); }
+        .toast-error   .toast-progress { background: #f87171; }
+        .toast-warning { background: linear-gradient(135deg,rgba(120,53,15,0.95),rgba(180,83,9,0.92)); border-color: rgba(245,158,11,0.4); }
+        .toast-warning .toast-progress { background: #fbbf24; }
+
+        .toast-icon {
+            width: 36px; height: 36px; border-radius: 0.6rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; font-size: 0.9rem;
+        }
+        .toast-success .toast-icon { background: rgba(16,185,129,0.25); color: #6ee7b7; }
+        .toast-error   .toast-icon { background: rgba(239,68,68,0.25);  color: #fca5a5; }
+        .toast-warning .toast-icon { background: rgba(245,158,11,0.25); color: #fde68a; }
+
+        .toast-body    { flex: 1; }
+        .toast-title   { font-weight: 700; font-size: 0.8rem; color: #f1f5f9; margin-bottom: 0.1rem; }
+        .toast-message { font-size: 0.78rem; color: #cbd5e1; line-height: 1.45; }
+        .toast-close   {
+            background: none; border: none; color: #94a3b8; cursor: pointer;
+            padding: 0.1rem; flex-shrink: 0; transition: color 0.15s;
+            font-size: 0.75rem; margin-top: 0.1rem;
+        }
+        .toast-close:hover { color: #f1f5f9; }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-800 via-blue-900 to-cyan-900 flex justify-center p-4 py-8 relative overflow-y-auto">
 
+    <div id="loading-overlay">
+        <div class="spinner-ring"></div>
+        <p class="spinner-text">Membuat Akun...</p>
+    </div>
+
+    <div id="toast-container"></div>
+
     @for($i = 0; $i < 8; $i++)
-    <div class="bubble bg-white"
-         style="width:{{ rand(20,80) }}px; height:{{ rand(20,80) }}px; left:{{ rand(0,100) }}%; animation-duration:{{ rand(8,20) }}s; animation-delay:{{ rand(0,10) }}s;"></div>
+    <div class="bubble bg-white" style="width:{{ rand(20,80) }}px; height:{{ rand(20,80) }}px; left:{{ rand(0,100) }}%; animation-duration:{{ rand(8,20) }}s; animation-delay:{{ rand(0,10) }}s;"></div>
     @endfor
 
     <div class="w-full max-w-md relative z-10">
@@ -42,58 +147,58 @@
             <h2 class="text-white text-xl font-bold mb-1">Daftar Admin 🚀</h2>
             <p class="text-blue-200 text-sm mb-6">Isi Data Berikut Untuk Membuat Akun</p>
 
-            @if($errors->any())
-                <div class="bg-red-500/20 border border-red-400/30 text-red-300 px-4 py-3 rounded-xl mb-4 text-sm">
-                    @foreach($errors->all() as $error)
-                        <div class="flex items-center gap-2 mb-1"><i class="fas fa-exclamation-circle"></i> {{ $error }}</div>
-                    @endforeach
-                </div>
-            @endif
-
-            <form action="{{ route('register.post') }}" method="POST" class="space-y-4">
+            <form action="{{ route('register.post') }}" method="POST" class="space-y-4" id="register-form">
                 @csrf
+
                 <div>
                     <label class="block text-blue-200 text-sm font-semibold mb-1.5">Nama Lengkap</label>
                     <div class="relative">
                         <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-blue-300 text-sm"></i>
-                        <input type="text" name="name" value="{{ old('name') }}" placeholder="Nama Lengkap Anda" class="glass-input">
+                        <input type="text" name="name" value="{{ old('name') }}" placeholder="Nama Lengkap Anda" class="glass-input" required>
                     </div>
                 </div>
+
                 <div>
                     <label class="block text-blue-200 text-sm font-semibold mb-1.5">Email</label>
                     <div class="relative">
                         <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-blue-300 text-sm"></i>
-                        <input type="email" name="email" value="{{ old('email') }}" placeholder="email@contoh.com" class="glass-input">
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="email@contoh.com" class="glass-input" required>
                     </div>
                 </div>
+
                 <div>
                     <label class="block text-blue-200 text-sm font-semibold mb-1.5">Password</label>
                     <div class="relative">
                         <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-blue-300 text-sm"></i>
-                        <input type="password" name="password" id="password" placeholder="Minimal 8 Karakter" class="glass-input" style="padding-right: 2.75rem">
-                        <button type="button" onclick="togglePassword('password','eye-icon-1')" class="absolute right-4 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white transition-colors">
-                            <i class="fas fa-eye text-sm" id="eye-icon-1"></i>
+                        <input type="password" name="password" id="password" placeholder="Minimal 8 Karakter" class="glass-input" style="padding-right:2.75rem" required>
+                        <button type="button" onclick="togglePwd('password','eye-1')" class="absolute right-4 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white transition-colors">
+                            <i class="fas fa-eye text-sm" id="eye-1"></i>
                         </button>
                     </div>
                 </div>
+
                 <div>
                     <label class="block text-blue-200 text-sm font-semibold mb-1.5">Konfirmasi Password</label>
                     <div class="relative">
                         <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-blue-300 text-sm"></i>
-                        <input type="password" name="password_confirmation" id="password2" placeholder="Ulangi Password" class="glass-input" style="padding-right: 2.75rem">
-                        <button type="button" onclick="togglePassword('password2','eye-icon-2')" class="absolute right-4 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white transition-colors">
-                            <i class="fas fa-eye text-sm" id="eye-icon-2"></i>
+                        <input type="password" name="password_confirmation" id="password2" placeholder="Ulangi Password" class="glass-input" style="padding-right:2.75rem" required>
+                        <button type="button" onclick="togglePwd('password2','eye-2')" class="absolute right-4 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white transition-colors">
+                            <i class="fas fa-eye text-sm" id="eye-2"></i>
                         </button>
                     </div>
                 </div>
-                <button type="submit" class="w-full py-3.5 rounded-xl font-bold text-sm text-white transition-all duration-200 shadow-lg flex items-center justify-center gap-2 mt-2" style="background: linear-gradient(to right, #3b82f6, #06b6d4)">
+
+                <button type="submit" class="w-full py-3.5 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center gap-2 mt-2 transition-all duration-200" style="background: linear-gradient(to right, #3b82f6, #06b6d4)">
                     <i class="fas fa-user-plus"></i> Buat Akun Sekarang
                 </button>
             </form>
 
             <div class="text-center mt-6 pt-6 border-t border-white/10">
-                <p class="text-blue-200 text-sm">Sudah Punya Akun?
-                    <a href="{{ route('login') }}" class="text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">Masuk Di Sini</a>
+                <p class="text-blue-200 text-sm">
+                    Sudah Punya Akun?
+                    <a href="{{ route('login') }}" class="text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">
+                        Masuk Di Sini
+                    </a>
                 </p>
             </div>
         </div>
@@ -102,17 +207,67 @@
     </div>
 
     <script>
-        function togglePassword(inputId, iconId) {
+        function togglePwd(inputId, iconId) {
             const input = document.getElementById(inputId);
-            const icon  = document.getElementById(iconId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
+            const icon = document.getElementById(iconId);
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            icon.classList.toggle('fa-eye',       !isHidden);
+            icon.classList.toggle('fa-eye-slash',  isHidden);
         }
+
+        window.addEventListener('pageshow', () => {
+            document.getElementById('loading-overlay').classList.remove('active');
+        });
+        document.getElementById('register-form').addEventListener('submit', () => {
+            document.getElementById('loading-overlay').classList.add('active');
+        });
+
+        const LaundryToast = (() => {
+            const container = document.getElementById('toast-container');
+            const DURATION = 4500;
+            const iconMap = { success:'fas fa-check', error:'fas fa-times', warning:'fas fa-exclamation' };
+            const titleMap = { success:'Berhasil!', error:'Gagal!', warning:'Perhatian!' };
+
+            function show(type, title, message, duration) {
+                const dur = duration || DURATION;
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.innerHTML = `
+                    <div class="toast-icon"><i class="${iconMap[type]}"></i></div>
+                    <div class="toast-body">
+                        <p class="toast-title">${title || titleMap[type]}</p>
+                        ${message ? `<p class="toast-message">${message}</p>` : ''}
+                    </div>
+                    <button class="toast-close" onclick="LaundryToast.dismiss(this.closest('.toast'))">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="toast-progress" style="animation-duration:${dur}ms"></div>
+                `;
+                container.appendChild(toast);
+                setTimeout(() => LaundryToast.dismiss(toast), dur);
+            }
+
+            function dismiss(toast) {
+                if (!toast || toast.classList.contains('toast-hide')) return;
+                toast.classList.add('toast-hide');
+                setTimeout(() => toast.remove(), 300);
+            }
+
+            return {
+                success : (t, m, d) => show('success', t, m, d),
+                error   : (t, m, d) => show('error',   t, m, d),
+                warning : (t, m, d) => show('warning', t, m, d),
+                dismiss,
+            };
+        })();
+
+        @if(session('success'))
+            LaundryToast.success('Berhasil!', @json(session('success')));
+        @endif
+        @if($errors->any())
+            LaundryToast.error('Pendaftaran Gagal!', @json($errors->first()));
+        @endif
     </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 @section('page-subtitle', 'Invoice : ' . $transaction->invoice_code)
 
 @section('content')
-<div class="max-w-3xl fade-in pt-2 space-y-5">
+<div class="fade-in pt-2 space-y-5">
 
     @php
         $statusSteps = ['antrian','dicuci','disetrika','siap diambil','diambil'];

@@ -4,7 +4,7 @@
 @section('page-subtitle', 'Input Data Transaksi Laundry')
 
 @section('content')
-<div class="max-w-2xl fade-in pt-2">
+<div class="fade-in pt-2 space-y-5">
     <div class="card">
         <h3 class="font-bold text-slate-800 mb-6">Form Transaksi Baru</h3>
         <form action="{{ route('admin.transactions.store') }}" method="POST" class="space-y-5" id="trxForm">

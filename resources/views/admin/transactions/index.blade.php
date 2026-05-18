@@ -6,34 +6,33 @@
 @section('content')
 <div class="fade-in pt-2 space-y-5">
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        @php
-            $cardStatuses = [
-                ['key'=>'antrian', 'label'=>'Antrian', 'icon'=>'clock', 'desc'=>'Menunggu Diproses', 'hex'=>'#f59e0b'],
-                ['key'=>'dicuci', 'label'=>'Dicuci', 'icon'=>'soap', 'desc'=>'Sedang Dicuci', 'hex'=>'#3b82f6'],
-                ['key'=>'disetrika', 'label'=>'Disetrika', 'icon'=>'wind', 'desc'=>'Sedang Disetrika', 'hex'=>'#7c3aed'],
-                ['key'=>'siap diambil','label'=>'Siap Ambil', 'icon'=>'check-circle', 'desc'=>'Siap Diambil Pelanggan', 'hex'=>'#10b981'],
-            ];
-        @endphp
-        @foreach($cardStatuses as $s)
-        @php $pct = $summary['total'] > 0 ? round($summary[$s['key']] / $summary['total'] * 100) : 0; @endphp
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6" style="border-top: 4px solid {{ $s['hex'] }}">
-            <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: {{ $s['hex'] }}">
-                    <i class="fas fa-{{ $s['icon'] }} text-white"></i>
+    <div class="card">
+        <h3 class="font-bold text-slate-800 text-sm mb-6">Alur Status Cucian</h3>
+        <div class="flex items-start justify-between relative">
+            <div class="absolute top-5 left-0 right-0 h-0.5 bg-slate-300 z-0 mx-10"></div>
+            @php
+                $timelineStatuses = [
+                    ['key'=>'antrian', 'label'=>'Antrian', 'icon'=>'clock', 'hex'=>'#f59e0b'],
+                    ['key'=>'dicuci', 'label'=>'Dicuci', 'icon'=>'soap', 'hex'=>'#3b82f6'],
+                    ['key'=>'disetrika', 'label'=>'Disetrika', 'icon'=>'wind', 'hex'=>'#7c3aed'],
+                    ['key'=>'siap diambil','label'=>'Siap Ambil', 'icon'=>'box-open', 'hex'=>'#10b981'],
+                    ['key'=>'diambil', 'label'=>'Selesai', 'icon'=>'flag-checkered', 'hex'=>'#64748b'],
+                ];
+            @endphp
+            @foreach($timelineStatuses as $s)
+            <div class="flex flex-col items-center gap-2 z-10 flex-1">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" style="background-color: {{ $s['hex'] }}">
+                    <i class="fas fa-{{ $s['icon'] }} text-white text-sm"></i>
                 </div>
                 <span class="text-2xl font-bold" style="color: {{ $s['hex'] }}">{{ $summary[$s['key']] }}</span>
+                <span class="text-xs font-semibold text-slate-600 text-center">{{ $s['label'] }}</span>
             </div>
-            <p class="text-sm font-semibold text-slate-700">{{ $s['label'] }}</p>
-            <p class="text-xs text-slate-400 mb-3">{{ $s['desc'] }}</p>
-            <div class="w-full bg-slate-200 rounded-full h-2">
-                <div class="h-2 rounded-full" style="width: {{ $pct }}%; background-color: {{ $s['hex'] }}"></div>
-            </div>
-            <p class="text-xs font-semibold mt-1.5 text-right" style="color: {{ $s['hex'] }}">{{ $pct }}% Dari Total</p>
+            @endforeach
         </div>
-        @endforeach
+
     </div>
 
+    
     <div class="card">
         <form method="GET" class="flex flex-wrap gap-3 items-end">
             <div class="flex-1 min-w-40">
@@ -78,7 +77,7 @@
             </div>
             <div class="flex gap-2">
                 <button type="submit" class="btn-primary"><i class="fas fa-filter"></i> Filter</button>
-                <a href="{{ route('admin.transactions.index') }}" class="btn-secondary"><i class="fas fa-times"></i></a>
+                
             </div>
         </form>
     </div>
@@ -86,7 +85,10 @@
 
     <div class="card">
         <div class="flex items-center justify-between mb-5">
-            <p class="text-slate-500 text-sm">Menampilkan <span class="font-bold text-dark px-2 py-1 bg-slate-200 rounded-lg">{{ $transactions->total() }}</span> Transaksi</p>
+            <div>
+                <h3 class="font-bold text-slate-800">Daftar Transaksi</h3>
+                <p class="text-slate-400 text-sm mt-0.5">Total {{ $transactions->total() }} Transaksi</p>
+            </div>
             <a href="{{ route('admin.transactions.create') }}" class="btn-primary">
                 <i class="fas fa-plus"></i> Transaksi Baru
             </a>
@@ -254,33 +256,6 @@
             </table>
         </div>
     </div>
-
-
-    <div class="card">
-        <h3 class="font-bold text-slate-800 text-sm mb-6">Alur Status Cucian</h3>
-        <div class="flex items-start justify-between relative">
-            <div class="absolute top-5 left-0 right-0 h-0.5 bg-slate-300 z-0 mx-10"></div>
-            @php
-                $timelineStatuses = [
-                    ['key'=>'antrian', 'label'=>'Antrian', 'icon'=>'clock', 'hex'=>'#f59e0b'],
-                    ['key'=>'dicuci', 'label'=>'Dicuci', 'icon'=>'soap', 'hex'=>'#3b82f6'],
-                    ['key'=>'disetrika', 'label'=>'Disetrika', 'icon'=>'wind', 'hex'=>'#7c3aed'],
-                    ['key'=>'siap diambil','label'=>'Siap Ambil', 'icon'=>'box-open', 'hex'=>'#10b981'],
-                    ['key'=>'diambil', 'label'=>'Selesai', 'icon'=>'flag-checkered', 'hex'=>'#64748b'],
-                ];
-            @endphp
-            @foreach($timelineStatuses as $s)
-            <div class="flex flex-col items-center gap-2 z-10 flex-1">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" style="background-color: {{ $s['hex'] }}">
-                    <i class="fas fa-{{ $s['icon'] }} text-white text-sm"></i>
-                </div>
-                <span class="text-2xl font-bold" style="color: {{ $s['hex'] }}">{{ $summary[$s['key']] }}</span>
-                <span class="text-xs font-semibold text-slate-600 text-center">{{ $s['label'] }}</span>
-            </div>
-            @endforeach
-        </div>
-    </div>
-
 
     <div class="card">
         <h3 class="font-bold text-slate-800 text-sm mb-4">Status Pembayaran</h3>
