@@ -33,7 +33,7 @@
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #10b981">
                     <i class="fas fa-user-plus text-white"></i>
                 </div>
-                <span class="text-2xl font-bold" style="color: #10b981">+ {{ $customers->count() }}</span>
+                <span class="text-2xl font-bold" style="color: #10b981">{{ $customers->count() }}</span>
             </div>
             <p class="text-sm font-semibold text-slate-700">Total Terdaftar</p>
             <p class="text-xs text-slate-400">Semua Waktu</p>
