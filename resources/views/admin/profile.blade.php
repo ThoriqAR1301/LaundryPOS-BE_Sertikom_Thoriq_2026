@@ -4,7 +4,7 @@
 @section('page-subtitle', 'Kelola Informasi Akun Anda')
 
 @section('content')
-<div class="max-w-3xl fade-in pt-2 space-y-5">
+<div class="fade-in pt-2 space-y-5">
 
     <div class="card text-center">
         <div class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl"
