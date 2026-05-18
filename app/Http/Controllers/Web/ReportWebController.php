@@ -8,7 +8,7 @@ use App\Models\Customer;
 
 use Carbon\Carbon;
 
-class ReportsController extends Controller
+class ReportWebController extends Controller
 {
     public function index()
     {
