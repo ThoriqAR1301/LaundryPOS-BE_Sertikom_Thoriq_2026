@@ -15,8 +15,10 @@ class DashboardController extends Controller
         $today = Carbon::today();
 
         $data = [
-            'total_pendapatan' => Transaction::where('payment_status', 'paid')->sum('total_price'),
-            'pendapatan_hari_ini' => Transaction::where('payment_status', 'paid')->whereDate('paid_at', $today)->sum('total_price'),
+            'total_pendapatan' => (float) Transaction::where('payment_status', 'paid')->sum('total_price'),
+
+            'pendapatan_hari_ini' => (float) Transaction::where('payment_status', 'paid')->where(function ($q) use ($today) { $q->whereDate('paid_at', $today)->orWhere(function ($q2) use ($today) { $q2->whereNull('paid_at')->whereDate('created_at', $today); }); })->sum('total_price'),
+
             'total_transaksi' => Transaction::count(),
             'transaksi_hari_ini' => Transaction::whereDate('created_at', $today)->count(),
             'total_customer' => Customer::count(),
@@ -51,7 +53,7 @@ class DashboardController extends Controller
     {
         $year = Carbon::now()->year;
 
-        $raw = Transaction::where('payment_status', 'paid')->whereYear('paid_at', $year)->selectRaw('MONTH(paid_at) as bulan, SUM(total_price) as total')->groupBy('bulan')->orderBy('bulan')->get();
+        $raw = Transaction::where('payment_status', 'paid')->whereYear('created_at', $year)->selectRaw('MONTH(created_at) as bulan, SUM(total_price) as total')->groupBy('bulan')->orderBy('bulan')->get();
 
         $result = array_fill(0, 12, 0);
         foreach ($raw as $item) {
