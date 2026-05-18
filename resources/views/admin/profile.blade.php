@@ -74,13 +74,7 @@
             </div>
 
         </div>
-
-        <form action="{{ route('logout') }}" method="POST" class="mt-6">
-            @csrf
-            <button type="submit" class="w-full btn-danger justify-center">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </form>
+        
     </div>
 
 </div>
