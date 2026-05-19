@@ -222,9 +222,9 @@
 
         <div class="card">
             <h3 class="font-bold text-slate-800 text-sm mb-5">Status Pembayaran</h3>
-            <div class="space-y-3">
+            <div class="space-y-6">
 
-                <div class="flex items-center gap-4 rounded-2xl px-5 py-4 border-2" style="background-color:#d1fae5; border-color:#10b981">
+                <div class="flex items-center gap-3 rounded-2xl px-7 py-6 border-2" style="background-color:#d1fae5; border-color:#10b981">
                     <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:#10b981">
                         <i class="fas fa-check text-white"></i>
                     </div>
@@ -235,7 +235,7 @@
                     <i class="fas fa-check-circle text-3xl opacity-20" style="color:#10b981"></i>
                 </div>
 
-                <div class="flex items-center gap-4 rounded-2xl px-5 py-4 border-2" style="background-color:#ffedd5; border-color:#f97316">
+                <div class="flex items-center gap-3 rounded-2xl px-7 py-6 border-2" style="background-color:#ffedd5; border-color:#f97316">
                     <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:#f97316">
                         <i class="fas fa-clock text-white"></i>
                     </div>
@@ -246,7 +246,7 @@
                     <i class="fas fa-hourglass-half text-3xl opacity-20" style="color:#f97316"></i>
                 </div>
 
-                <div class="flex items-center gap-4 rounded-2xl px-5 py-4 border-2" style="background-color:#dbeafe; border-color:#3b82f6">
+                <div class="flex items-center gap-3 rounded-2xl px-7 py-6 border-2" style="background-color:#dbeafe; border-color:#3b82f6">
                     <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:#3b82f6">
                         <i class="fas fa-receipt text-white"></i>
                     </div>

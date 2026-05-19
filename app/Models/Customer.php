@@ -19,6 +19,16 @@ class Customer extends Model
 
     public function transactions()
     {
+        return $this->hasMany(Transaction::class)->withTrashed();
+    }
+
+    public function activeTransactions()
+    {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereHas('transactions');
     }
 }

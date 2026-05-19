@@ -13,7 +13,7 @@
             'antrian' => ['label'=>'Antrian', 'icon'=>'🕐', 'hex'=>'#f59e0b'],
             'dicuci' => ['label'=>'Dicuci', 'icon'=>'🫧', 'hex'=>'#3b82f6'],
             'disetrika' => ['label'=>'Disetrika', 'icon'=>'♨️', 'hex'=>'#7c3aed'],
-            'siap diambil' => ['label'=>'Siap Diambil','icon'=>'✅', 'hex'=>'#10b981'],
+            'siap diambil' => ['label'=>'Siap Diambil', 'icon'=>'✅', 'hex'=>'#10b981'],
             'diambil' => ['label'=>'Selesai', 'icon'=>'🏁', 'hex'=>'#64748b'],
         ];
     @endphp
@@ -23,7 +23,7 @@
         <h3 class="font-bold text-slate-800 mb-5">Progress Cucian</h3>
         <div class="flex items-center justify-between relative">
             <div class="absolute left-0 right-0 top-5 h-1 bg-slate-100 -z-0">
-                <div class="h-full bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-500" style="width: {{ ($currentStep / (count($statusSteps)-1)) * 100 }}%"></div>
+                <div class="h-full bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-500" style="width:{{ ($currentStep / (count($statusSteps)-1)) * 100 }}%"></div>
             </div>
             @foreach($statusSteps as $i => $step)
             <div class="flex flex-col items-center gap-2 z-10">
@@ -36,7 +36,9 @@
                         <i class="fas fa-circle text-sm"></i>
                     @endif
                 </div>
-                <span class="text-xs font-semibold text-center w-14 leading-tight {{ $i <= $currentStep ? 'text-blue-600' : 'text-slate-400' }}">{{ ucfirst($step) }}</span>
+                <span class="text-xs font-semibold text-center w-14 leading-tight {{ $i <= $currentStep ? 'text-blue-600' : 'text-slate-400' }}">
+                    {{ ucfirst($step) }}
+                </span>
             </div>
             @endforeach
         </div>
@@ -44,12 +46,15 @@
 
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
         <div class="card space-y-4">
             <h3 class="font-bold text-slate-800">Info Transaksi</h3>
             <div class="space-y-3 text-sm">
                 <div class="flex justify-between">
                     <span class="text-slate-500">Invoice</span>
-                    <span class="font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-lg">{{ $transaction->invoice_code }}</span>
+                    <span class="font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-lg">
+                        {{ $transaction->invoice_code }}
+                    </span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-500">Tanggal</span>
@@ -61,13 +66,27 @@
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-500">Total Harga</span>
-                    <span class="font-bold text-slate-800 text-base">Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</span>
+                    <span class="font-bold text-slate-800 text-base">
+                        Rp {{ number_format($transaction->total_price, 0, ',', '.') }}
+                    </span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-500">Pembayaran</span>
-                    <span class="badge {{ $transaction->payment_method=='cash' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700' }}">
+                    <span class="badge {{ $transaction->payment_method == 'cash' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700' }}">
                         {{ $transaction->payment_method == 'cash' ? '💵 Cash' : '🏦 Transfer' }}
                     </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Status Bayar</span>
+                    @if($transaction->payment_status === 'paid')
+                        <span class="badge bg-emerald-100 text-emerald-700">
+                            <i class="fas fa-check text-xs"></i> Lunas
+                        </span>
+                    @else
+                        <span class="badge bg-orange-100 text-orange-700">
+                            <i class="fas fa-clock text-xs"></i> Pending
+                        </span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -76,7 +95,9 @@
             <h3 class="font-bold text-slate-800">Info Pelanggan</h3>
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-12 h-12 bg-gradient-to-br from-violet-400 to-purple-500 rounded-full flex items-center justify-center">
-                    <span class="text-white font-bold">{{ strtoupper(substr($transaction->customer->user->name, 0, 1)) }}</span>
+                    <span class="text-white font-bold">
+                        {{ strtoupper(substr($transaction->customer->user->name, 0, 1)) }}
+                    </span>
                 </div>
                 <div>
                     <p class="font-bold text-slate-800">{{ $transaction->customer->user->name }}</p>
@@ -107,7 +128,7 @@
                     <i class="fas fa-tshirt absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
                     <select name="status" class="form-input pl-10 pr-10 appearance-none cursor-pointer font-semibold">
                         @foreach($statusOptions as $val => $opt)
-                        <option value="{{ $val }}" {{ $transaction->status==$val ? 'selected' : '' }}>
+                        <option value="{{ $val }}" {{ $transaction->status == $val ? 'selected' : '' }}>
                             {{ $opt['icon'] }} {{ $opt['label'] }}
                         </option>
                         @endforeach
@@ -115,42 +136,63 @@
                     <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
                 </div>
             </div>
-            <button type="submit" class="btn-primary"><i class="fas fa-sync"></i> Update Status</button>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-sync"></i> Update Status
+            </button>
         </form>
     </div>
 
-
-    @if($transaction->payment_method == 'transfer')
+    @if($transaction->payment_method === 'transfer')
     <div class="card">
         <h3 class="font-bold text-slate-800 mb-4">Bukti Pembayaran Transfer</h3>
+
         @if($transaction->payment_proof)
         <div class="mb-4">
-            <img src="{{ Storage::url($transaction->payment_proof) }}" alt="Bukti Bayar" class="rounded-xl border border-slate-200 max-w-xs shadow-sm">
+            <img src="{{ Storage::url($transaction->payment_proof) }}"
+                 alt="Bukti Bayar"
+                 class="rounded-xl border border-slate-200 max-w-xs shadow-sm">
+            @php
+                try {
+                    $paidAtText = $transaction->paid_at ? \Carbon\Carbon::parse($transaction->paid_at)->format('d M Y H:i') : '-';
+                } catch (\Exception $e) {
+                    $paidAtText = '-';
+                }
+            @endphp
             <p class="text-emerald-600 text-sm font-semibold mt-2 flex items-center gap-2">
-                @php
-                     try {
-                        $paidAtText = $transaction->paid_at ? \Carbon\Carbon::parse($transaction->paid_at)->format('d M Y H:i') : '-';
-                     } catch (\Exception $e) {
-                        $paidAtText = '-';
-                    }
-                @endphp
                 <i class="fas fa-check-circle"></i> Sudah Dibayar Pada {{ $paidAtText }}
             </p>
         </div>
         @endif
+
         <form action="{{ route('admin.transactions.payment-proof', $transaction->id) }}" method="POST" enctype="multipart/form-data" class="flex flex-wrap gap-3 items-end">
             @csrf
             <div class="flex-1 min-w-48">
-                <label class="form-label">{{ $transaction->payment_proof ? 'Ganti' : 'Upload' }} Bukti Transfer</label>
+                <label class="form-label">
+                    {{ $transaction->payment_proof ? 'Ganti' : 'Upload' }} Bukti Transfer
+                </label>
                 <input type="file" name="payment_proof" accept="image/*" class="form-input">
             </div>
-            <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> Upload</button>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-upload"></i> Upload
+            </button>
         </form>
     </div>
     @endif
 
-    <div class="flex gap-3">
-        <a href="{{ route('admin.transactions.index') }}" class="btn-secondary"><i class="fas fa-arrow-left"></i> Kembali</a>
+    <div class="flex gap-3 flex-wrap">
+        <a href="{{ route('admin.transactions.index') }}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+
+        @if($transaction->isDeletable())
+        <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" data-confirm-title="Hapus Transaksi?" data-confirm-message="Transaksi {{ $transaction->invoice_code }} Akan Dihapus Dari Daftar. Data Statistik Tetap Tersimpan" data-confirm-type="danger" data-confirm-ok="Hapus">
+            @csrf @method('DELETE')
+            <button type="submit" class="btn-danger">
+                <i class="fas fa-trash"></i> Hapus Transaksi
+            </button>
+        </form>
+        @endif
     </div>
+
 </div>
 @endsection

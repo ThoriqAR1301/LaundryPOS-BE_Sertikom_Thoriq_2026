@@ -13,7 +13,10 @@ class CustomerWebController extends Controller
     public function index()
     {
         $customers = Customer::with('user')->latest()->get();
-        return view('admin.customers.index', compact('customers'));
+
+        $activeCount = Customer::active()->count();
+
+        return view('admin.customers.index', compact('customers', 'activeCount'));
     }
 
     public function create()
@@ -28,7 +31,7 @@ class CustomerWebController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'phone' => 'required|string|max:15',
-            'address' => 'required|string',
+            'address'  => 'required|string',
         ]);
 
         $user = User::create([
@@ -44,7 +47,7 @@ class CustomerWebController extends Controller
             'address' => $request->address,
         ]);
 
-        return redirect()->route('admin.customers.index')->with('success', 'Customer Berhasil Ditambahkan');
+        return redirect()->route('admin.customers.index')->with('success', 'Pelanggan Berhasil Ditambahkan');
     }
 
     public function edit($id)
@@ -56,6 +59,7 @@ class CustomerWebController extends Controller
     public function update(Request $request, $id)
     {
         $customer = Customer::with('user')->findOrFail($id);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $customer->user_id,
@@ -63,16 +67,26 @@ class CustomerWebController extends Controller
             'address' => 'required|string',
         ]);
 
-        $customer->user->update(['name' => $request->name, 'email' => $request->email]);
-        $customer->update(['phone' => $request->phone, 'address' => $request->address]);
+        $customer->user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
 
-        return redirect()->route('admin.customers.index')->with('success', 'Customer Berhasil Diperbarui');
+        $customer->update([
+            'phone' => $request->phone,
+            'address' => $request->address,
+        ]);
+
+        return redirect()->route('admin.customers.index')->with('success', 'Data Pelanggan Berhasil Diperbarui');
     }
 
     public function destroy($id)
     {
         $customer = Customer::with('user')->findOrFail($id);
+
         $customer->user->delete();
-        return redirect()->route('admin.customers.index')->with('success', 'Customer Berhasil Dihapus');
+        $customer->delete();
+
+        return redirect()->route('admin.customers.index')->with('success', 'Pelanggan Berhasil Dihapus');
     }
 }

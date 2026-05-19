@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'invoice_code',
         'admin_id',
@@ -16,11 +19,13 @@ class Transaction extends Model
         'payment_method',
         'payment_status',
         'payment_proof',
-
+        'paid_at',
     ];
 
     protected $casts = [
-        'paid_at' => 'datetime',
+        'paid_at'    => 'datetime',
+        'deleted_at' => 'datetime',
+        'total_price'=> 'float',
     ];
 
     public function admin()
@@ -36,5 +41,18 @@ class Transaction extends Model
     public function service()
     {
         return $this->belongsTo(Service::class);
+    }
+
+    public function isDeletable(): bool
+    {
+        if ($this->payment_method === 'cash') {
+            return $this->status === 'diambil';
+        }
+
+        if ($this->payment_method === 'transfer') {
+            return $this->status === 'diambil' && !empty($this->payment_proof);
+        }
+
+        return false;
     }
 }
