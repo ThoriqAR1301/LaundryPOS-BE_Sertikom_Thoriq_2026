@@ -8,15 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('user', function (Blueprint $table) {
-            //
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->decimal('service_unit', 8, 2)->after('service_id')->default(0);
         });
     }
 
     public function down(): void
     {
-        Schema::table('user', function (Blueprint $table) {
-            //
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->dropColumn('service_unit');
         });
     }
 };

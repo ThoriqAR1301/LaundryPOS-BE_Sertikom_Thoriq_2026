@@ -89,4 +89,10 @@ class CustomerWebController extends Controller
 
         return redirect()->route('admin.customers.index')->with('success', 'Pelanggan Berhasil Dihapus');
     }
+
+    public function show(Customer $customer)
+    {
+        $customer->load('user', 'transactions.service');
+        return view('admin.customers.show', compact('customer'));
+    }
 }

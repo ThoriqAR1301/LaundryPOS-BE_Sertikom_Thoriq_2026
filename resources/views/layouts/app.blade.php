@@ -463,8 +463,8 @@ const LaundryConfirm = (() => {
     const okEl = document.getElementById('confirm-ok');
 
     const typeConfig = {
-        danger  : { icon:'fas fa-trash',        bg:'#fee2e2', iconColor:'#ef4444', okBg:'linear-gradient(to right,#ef4444,#f43f5e)', okText:'Hapus'    },
-        warning : { icon:'fas fa-exclamation',   bg:'#fef3c7', iconColor:'#f59e0b', okBg:'linear-gradient(to right,#f59e0b,#f97316)', okText:'Lanjutkan' },
+        danger  : { icon:'fas fa-trash', bg:'#fee2e2', iconColor:'#ef4444', okBg:'linear-gradient(to right,#ef4444,#f43f5e)', okText:'Hapus'    },
+        warning : { icon:'fas fa-exclamation', bg:'#fef3c7', iconColor:'#f59e0b', okBg:'linear-gradient(to right,#f59e0b,#f97316)', okText:'Lanjutkan' },
         info    : { icon:'fas fa-question-circle',bg:'#dbeafe',iconColor:'#3b82f6', okBg:'linear-gradient(to right,#3b82f6,#06b6d4)', okText:'OK'       },
     };
 

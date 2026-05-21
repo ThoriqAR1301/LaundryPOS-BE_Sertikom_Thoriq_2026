@@ -166,6 +166,11 @@
                                 <a href="{{ route('admin.transactions.show', $trx->id) }}" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-200 transition-colors inline-flex" title="Detail">
                                     <i class="fas fa-eye text-xs"></i>
                                 </a>
+                                @if(!in_array($trx->status, ['siap diambil', 'diambil']))
+                                <a href="{{ route('admin.transactions.edit', $trx->id) }}" class="w-8 h-8 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center hover:bg-amber-200 transition-colors inline-flex" title="Edit Transaksi">
+                                    <i class="fas fa-edit text-xs"></i>
+                                </a>
+                                @endif
                                 @if($trx->status === 'diambil')
                                 <form action="{{ route('admin.transactions.destroy', $trx->id) }}" method="POST" onsubmit="return confirm('Yakin Hapus Transaksi {{ $trx->invoice_code }}?')">
                                     @csrf @method('DELETE')

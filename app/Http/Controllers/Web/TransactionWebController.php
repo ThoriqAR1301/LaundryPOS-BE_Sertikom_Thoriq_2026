@@ -68,6 +68,7 @@ class TransactionWebController extends Controller
             'admin_id' => auth()->id(),
             'customer_id' => $request->customer_id,
             'service_id' => $request->service_id,
+            'service_unit' => $request->weight,
             'total_price' => $total_price,
             'status' => 'antrian',
             'payment_method' => $request->payment_method,
@@ -84,6 +85,39 @@ class TransactionWebController extends Controller
         return view('admin.transactions.show', compact('transaction'));
     }
 
+    public function edit($id)
+    {
+        $transaction = Transaction::with(['customer.user', 'service'])->findOrFail($id);
+        $customers = Customer::with('user')->get();
+        $services = Service::all();
+        return view('admin.transactions.edit', compact('transaction', 'customers', 'services'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $transaction = Transaction::findOrFail($id);
+
+        $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'service_id' => 'required|exists:services,id',
+            'service_unit' => 'required|numeric|min:0.1',
+            'payment_method' => 'required|in:cash,transfer',
+        ]);
+
+        $service = Service::findOrFail($request->service_id);
+        $total_price = $service->price * $request->service_unit;
+
+        $transaction->update([
+            'customer_id' => $request->customer_id,
+            'service_id' => $request->service_id,
+            'service_unit' => $request->service_unit,
+            'total_price' => $total_price,
+            'payment_method' => $request->payment_method,
+        ]);
+
+        return redirect()->route('admin.transactions.show', ['id' => $transaction->id])->with('success', 'Transaksi Berhasil Diperbarui');
+    }
+
     public function updateStatus(Request $request, $id)
     {
         $transaction = Transaction::findOrFail($id);
@@ -96,7 +130,7 @@ class TransactionWebController extends Controller
 
         if ($request->status === 'diambil' && $transaction->payment_method === 'cash') {
             $updateData['payment_status'] = 'paid';
-            $updateData['paid_at']        = now();
+            $updateData['paid_at'] = now();
         }
 
         $transaction->update($updateData);

@@ -18,7 +18,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('/customers', CustomerWebController::class);
+    Route::resource('customers', CustomerWebController::class);
 
     Route::resource('/services', ServiceWebController::class);
 
@@ -26,6 +26,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/transactions/create', [TransactionWebController::class, 'create'])->name('transactions.create');
     Route::post('/transactions', [TransactionWebController::class, 'store'])->name('transactions.store');
     Route::get('/transactions/{id}', [TransactionWebController::class, 'show'])->name('transactions.show');
+    
+    Route::get('/transactions/{id}/edit', [TransactionWebController::class, 'edit'])->name('transactions.edit');
+    Route::put('/transactions/{id}', [TransactionWebController::class, 'update'])->name('transactions.update');
+
     Route::put('/transactions/{id}/status', [TransactionWebController::class, 'updateStatus'])->name('transactions.update-status');
     Route::post('/transactions/{id}/payment-proof', [TransactionWebController::class, 'uploadPaymentProof'])->name('transactions.payment-proof');
     Route::delete('/transactions/{id}/destroy', [TransactionWebController::class, 'destroy'])->name('transactions.destroy');

@@ -116,6 +116,9 @@
 
                         <td class="px-4 py-3.5">
                             <div class="flex items-center gap-2">
+                                <a href="{{ route('admin.customers.show', $customer->id) }}" class="w-8 h-8 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center hover:bg-purple-200 transition-colors" title="Detail Pelanggan">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </a>
                                 <a href="{{ route('admin.customers.edit', $customer->id) }}" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-200 transition-colors" title="Edit">
                                     <i class="fas fa-edit text-xs"></i>
                                 </a>
