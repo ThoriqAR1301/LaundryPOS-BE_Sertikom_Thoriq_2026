@@ -16,50 +16,57 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
 
         .bubble {
-            position: absolute; border-radius: 50%; opacity: 0.12;
-            animation: float linear infinite;
+            position: absolute; border-radius: 50%; opacity: 0.10;
+            animation: floatUp linear infinite;
         }
-        @keyframes float {
-            0%   { transform: translateY(100vh) scale(0); }
-            100% { transform: translateY(-100px) scale(1); }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) scale(0.3); opacity: 0; }
+            10% { opacity: 0.10; }
+            90% { opacity: 0.10; }
+            100% { transform: translateY(-120px) scale(1); opacity: 0; }
         }
 
         .glass-input {
             width: 100%;
             background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem 0.75rem 2.75rem;
-            color: #fff; font-size: 0.875rem; outline: none; transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 0.875rem;
+            padding: 0.875rem 1rem 0.875rem 2.875rem;
+            color: #fff; font-size: 0.875rem; outline: none;
+            transition: all 0.25s;
         }
-        .glass-input::placeholder { color: rgba(147,197,253,0.7); }
+        .glass-input::placeholder { color: rgba(147,197,253,0.6); }
         .glass-input:focus {
-            background: rgba(255,255,255,0.12);
-            border-color: rgba(34,211,238,0.6);
+            background: rgba(255,255,255,0.13);
+            border-color: rgba(34,211,238,0.7);
             box-shadow: 0 0 0 3px rgba(34,211,238,0.15);
         }
 
         #loading-overlay {
-            position: fixed; inset: 0; background: rgba(15,23,42,0.6);
-            backdrop-filter: blur(4px); z-index: 9999;
+            position: fixed; inset: 0;
+            background: rgba(15,23,42,0.65);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
             display: none; align-items: center; justify-content: center;
             flex-direction: column; gap: 1rem;
         }
         #loading-overlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
         .spinner-ring {
-            width: 52px; height: 52px; border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.15);
+            width: 56px; height: 56px; border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.12);
             border-top-color: #38bdf8; border-right-color: #818cf8;
             animation: spin 0.75s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+
         .spinner-text {
             color: #e2e8f0; font-size: 0.8rem; font-weight: 600;
-            letter-spacing: 0.08em; text-transform: uppercase;
-            animation: pulseTxt 1s ease-in-out infinite;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            animation: pulseTxt 1.2s ease-in-out infinite;
         }
-        @keyframes pulseTxt { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+        @keyframes pulseTxt { 0%,100% { opacity:0.5; } 50% { opacity:1; } }
 
         #toast-container {
             position: fixed; top: 1.25rem; right: 1.25rem; z-index: 10000;
@@ -70,55 +77,57 @@
             display: flex; align-items: flex-start; gap: 0.875rem;
             padding: 0.875rem 1.125rem; border-radius: 1rem;
             min-width: 300px; max-width: 380px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
             border: 1px solid rgba(255,255,255,0.12);
             backdrop-filter: blur(12px);
-            animation: slideIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            animation: toastIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
             position: relative; overflow: hidden;
         }
-        .toast.toast-hide { animation: slideOut 0.3s ease-in forwards; }
-        @keyframes slideIn {
-            from { opacity:0; transform: translateX(120%) scale(0.92); }
-            to   { opacity:1; transform: translateX(0) scale(1); }
-        }
-        @keyframes slideOut {
-            from { opacity:1; transform: translateX(0); }
-            to   { opacity:0; transform: translateX(120%) scale(0.9); }
-        }
-        .toast-progress {
-            position: absolute; bottom: 0; left: 0; height: 3px;
-            border-radius: 0 0 1rem 1rem; animation: shrink linear forwards;
-        }
-        @keyframes shrink { from { width: 100%; } to { width: 0%; } }
+        .toast.toast-hide { animation: toastOut 0.3s ease-in forwards; }
+        @keyframes toastIn { from { opacity:0; transform:translateX(120%) scale(0.92); } to { opacity:1; transform:translateX(0) scale(1); } }
+        @keyframes toastOut { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(120%) scale(0.9); } }
+        .toast-progress { position:absolute; bottom:0; left:0; height:3px; border-radius:0 0 1rem 1rem; animation:shrink linear forwards; }
+        @keyframes shrink { from { width:100%; } to { width:0%; } }
 
-        .toast-success { background: linear-gradient(135deg,rgba(6,78,59,0.95),rgba(5,150,105,0.92)); border-color: rgba(16,185,129,0.4); }
-        .toast-success .toast-progress { background: #34d399; }
-        .toast-error   { background: linear-gradient(135deg,rgba(127,29,29,0.95),rgba(185,28,28,0.92)); border-color: rgba(239,68,68,0.4); }
-        .toast-error   .toast-progress { background: #f87171; }
-        .toast-warning { background: linear-gradient(135deg,rgba(120,53,15,0.95),rgba(180,83,9,0.92)); border-color: rgba(245,158,11,0.4); }
-        .toast-warning .toast-progress { background: #fbbf24; }
+        .toast-success { background:linear-gradient(135deg,rgba(6,78,59,0.95),rgba(5,150,105,0.92)); border-color:rgba(16,185,129,0.4); }
+        .toast-success .toast-progress { background:#34d399; }
+        .toast-error { background:linear-gradient(135deg,rgba(127,29,29,0.95),rgba(185,28,28,0.92)); border-color:rgba(239,68,68,0.4); }
+        .toast-error .toast-progress { background:#f87171; }
+        .toast-warning { background:linear-gradient(135deg,rgba(120,53,15,0.95),rgba(180,83,9,0.92)); border-color:rgba(245,158,11,0.4); }
+        .toast-warning .toast-progress { background:#fbbf24; }
 
-        .toast-icon {
-            width: 36px; height: 36px; border-radius: 0.6rem;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; font-size: 0.9rem;
-        }
-        .toast-success .toast-icon { background: rgba(16,185,129,0.25); color: #6ee7b7; }
-        .toast-error   .toast-icon { background: rgba(239,68,68,0.25);  color: #fca5a5; }
-        .toast-warning .toast-icon { background: rgba(245,158,11,0.25); color: #fde68a; }
+        .toast-icon { width:36px; height:36px; border-radius:0.6rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.9rem; }
+        .toast-success .toast-icon { background:rgba(16,185,129,0.25); color:#6ee7b7; }
+        .toast-error .toast-icon { background:rgba(239,68,68,0.25);  color:#fca5a5; }
+        .toast-warning .toast-icon { background:rgba(245,158,11,0.25); color:#fde68a; }
+        .toast-body { flex:1; }
+        .toast-title { font-weight:700; font-size:0.8rem; color:#f1f5f9; margin-bottom:0.1rem; }
+        .toast-message { font-size:0.78rem; color:#cbd5e1; line-height:1.45; }
+        .toast-close { background:none; border:none; color:#94a3b8; cursor:pointer; padding:0.1rem; flex-shrink:0; transition:color 0.15s; font-size:0.75rem; margin-top:0.1rem; }
+        .toast-close:hover { color:#f1f5f9; }
 
-        .toast-body    { flex: 1; }
-        .toast-title   { font-weight: 700; font-size: 0.8rem; color: #f1f5f9; margin-bottom: 0.1rem; }
-        .toast-message { font-size: 0.78rem; color: #cbd5e1; line-height: 1.45; }
-        .toast-close   {
-            background: none; border: none; color: #94a3b8; cursor: pointer;
-            padding: 0.1rem; flex-shrink: 0; transition: color 0.15s;
-            font-size: 0.75rem; margin-top: 0.1rem;
+        .btn-register {
+            background: linear-gradient(to right, #3b82f6, #06b6d4);
+            transition: all 0.25s;
         }
-        .toast-close:hover { color: #f1f5f9; }
+        .btn-register:hover {
+            background: linear-gradient(to right, #2563eb, #0891b2);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(59,130,246,0.4);
+        }
+        .btn-register:active { transform: translateY(0); }
+
+        .register-card {
+            background: rgba(255,255,255,0.10);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.20);
+            border-radius: 1.75rem;
+            padding: 2.25rem;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
+        }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-800 via-blue-900 to-cyan-900 flex justify-center p-4 py-8 relative overflow-y-auto">
+<body class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #0c4a6e 70%, #134e4a 100%)">
 
     <div id="loading-overlay">
         <div class="spinner-ring"></div>
@@ -127,39 +136,42 @@
 
     <div id="toast-container"></div>
 
-    @for($i = 0; $i < 8; $i++)
-    <div class="bubble bg-white" style="width:{{ rand(20,80) }}px; height:{{ rand(20,80) }}px; left:{{ rand(0,100) }}%; animation-duration:{{ rand(8,20) }}s; animation-delay:{{ rand(0,10) }}s;"></div>
+    @for($i = 0; $i < 10; $i++)
+    <div class="bubble bg-cyan-400" style="width:{{ rand(15,70) }}px;height:{{ rand(15,70) }}px;left:{{ rand(0,100) }}%;animation-duration:{{ rand(10,22) }}s;animation-delay:{{ rand(0,12) }}s;"></div>
     @endfor
 
     <div class="w-full max-w-md relative z-10">
 
 
         <div class="text-center mb-8">
-            <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-blue-500/30" style="background: linear-gradient(135deg, #60a5fa, #22d3ee)">
+            <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl" style="background:linear-gradient(135deg,#3b82f6,#06b6d4);box-shadow:0 16px 40px rgba(59,130,246,0.4)">
                 <i class="fas fa-shirt text-white text-3xl"></i>
             </div>
-            <h1 class="text-white text-3xl font-bold">LaundryPOS</h1>
-            <p class="text-blue-200 text-sm mt-1">Buat Akun Admin Baru</p>
+            <h1 class="text-white text-3xl font-bold tracking-tight">LaundryPOS</h1>
+            <p class="text-blue-300 text-sm mt-1.5">Buat Akun Admin Baru</p>
         </div>
 
-
-        <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
+        <div class="register-card">
             <h2 class="text-white text-xl font-bold mb-1">Daftar Admin 🚀</h2>
-            <p class="text-blue-200 text-sm mb-6">Isi Data Berikut Untuk Membuat Akun</p>
+            <p class="text-blue-200 text-sm mb-7">Isi Data Berikut Untuk Membuat Akun</p>
 
-            <form action="{{ route('register.post') }}" method="POST" class="space-y-4" id="register-form">
+            <form action="{{ route('register.post') }}" method="POST" class="space-y-5" id="register-form">
                 @csrf
 
                 <div>
-                    <label class="block text-blue-200 text-sm font-semibold mb-1.5">Nama Lengkap</label>
+                    <label class="block text-blue-200 text-xs font-semibold mb-2 uppercase tracking-wider">
+                        <i class="fas fa-user mr-1 opacity-70"></i> Nama Lengkap
+                    </label>
                     <div class="relative">
                         <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-blue-300 text-sm"></i>
-                        <input type="text" name="name" value="{{ old('name') }}" placeholder="Nama Lengkap Anda" class="glass-input" required>
+                        <input type="text" name="name" value="{{ old('name') }}" placeholder="Nama Lengkap Anda" class="glass-input" required autofocus>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-blue-200 text-sm font-semibold mb-1.5">Email</label>
+                    <label class="block text-blue-200 text-xs font-semibold mb-2 uppercase tracking-wider">
+                        <i class="fas fa-envelope mr-1 opacity-70"></i> Email
+                    </label>
                     <div class="relative">
                         <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-blue-300 text-sm"></i>
                         <input type="email" name="email" value="{{ old('email') }}" placeholder="email@contoh.com" class="glass-input" required>
@@ -167,10 +179,12 @@
                 </div>
 
                 <div>
-                    <label class="block text-blue-200 text-sm font-semibold mb-1.5">Password</label>
+                    <label class="block text-blue-200 text-xs font-semibold mb-2 uppercase tracking-wider">
+                        <i class="fas fa-lock mr-1 opacity-70"></i> Password
+                    </label>
                     <div class="relative">
                         <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-blue-300 text-sm"></i>
-                        <input type="password" name="password" id="password" placeholder="Minimal 8 Karakter" class="glass-input" style="padding-right:2.75rem" required>
+                        <input type="password" name="password" id="password" placeholder="Minimal 8 Karakter" class="glass-input" style="padding-right:3rem" required>
                         <button type="button" onclick="togglePwd('password','eye-1')" class="absolute right-4 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white transition-colors">
                             <i class="fas fa-eye text-sm" id="eye-1"></i>
                         </button>
@@ -178,17 +192,19 @@
                 </div>
 
                 <div>
-                    <label class="block text-blue-200 text-sm font-semibold mb-1.5">Konfirmasi Password</label>
+                    <label class="block text-blue-200 text-xs font-semibold mb-2 uppercase tracking-wider">
+                        <i class="fas fa-lock mr-1 opacity-70"></i> Konfirmasi Password
+                    </label>
                     <div class="relative">
                         <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-blue-300 text-sm"></i>
-                        <input type="password" name="password_confirmation" id="password2" placeholder="Ulangi Password" class="glass-input" style="padding-right:2.75rem" required>
+                        <input type="password" name="password_confirmation" id="password2" placeholder="Ulangi Password" class="glass-input" style="padding-right:3rem" required>
                         <button type="button" onclick="togglePwd('password2','eye-2')" class="absolute right-4 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white transition-colors">
                             <i class="fas fa-eye text-sm" id="eye-2"></i>
                         </button>
                     </div>
                 </div>
 
-                <button type="submit" class="w-full py-3.5 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center gap-2 mt-2 transition-all duration-200" style="background: linear-gradient(to right, #3b82f6, #06b6d4)">
+                <button type="submit" class="btn-register w-full py-3.5 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center gap-2 mt-2">
                     <i class="fas fa-user-plus"></i> Buat Akun Sekarang
                 </button>
             </form>
@@ -203,17 +219,19 @@
             </div>
         </div>
 
-        <p class="text-center text-blue-300 text-xs mt-6">© {{ date('Y') }} LaundryPOS. All Rights Reserved</p>
+        <p class="text-center text-blue-400 text-xs mt-6 opacity-60">
+            © {{ date('Y') }} LaundryPOS. All Rights Reserved
+        </p>
     </div>
 
     <script>
         function togglePwd(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
-            const isHidden = input.type === 'password';
-            input.type = isHidden ? 'text' : 'password';
-            icon.classList.toggle('fa-eye',       !isHidden);
-            icon.classList.toggle('fa-eye-slash',  isHidden);
+            const hidden = input.type === 'password';
+            input.type = hidden ? 'text' : 'password';
+            icon.classList.toggle('fa-eye', !hidden);
+            icon.classList.toggle('fa-eye-slash', hidden);
         }
 
         window.addEventListener('pageshow', () => {

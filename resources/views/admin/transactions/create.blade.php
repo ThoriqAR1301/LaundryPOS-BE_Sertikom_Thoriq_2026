@@ -5,70 +5,136 @@
 
 @section('content')
 <div class="fade-in pt-2 space-y-5">
+
+    <div class="rounded-2xl p-5 flex items-center gap-4 relative overflow-hidden" style="background:linear-gradient(135deg,#0c4a6e,#0369a1,#0ea5e9);border:1px solid #38bdf8">
+        <div class="absolute -right-6 -top-6 w-28 h-28 rounded-full opacity-10" style="background:#fff"></div>
+        <div class="absolute -right-2 bottom-0 w-16 h-16 rounded-full opacity-10" style="background:#7dd3fc"></div>
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg" style="background:rgba(255,255,255,0.15)">
+            <i class="fas fa-plus-circle text-white text-xl"></i>
+        </div>
+        <div class="relative z-10">
+            <p class="text-sky-200 text-xs font-semibold uppercase tracking-wider mb-0.5">Transaksi</p>
+            <p class="text-white font-bold text-lg">Buat Transaksi Baru</p>
+            <p class="text-sky-300 text-xs mt-0.5">Isi Form Di Bawah Untuk Membuat Transaksi Laundry</p>
+        </div>
+    </div>
+
     <div class="card">
-        <h3 class="font-bold text-slate-800 mb-6">Form Transaksi Baru</h3>
+        <div class="flex items-center gap-3 mb-6 pb-5 border-b border-slate-100">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#e0f2fe">
+                <i class="fas fa-file-invoice text-sky-600"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-slate-800">Form Transaksi Baru</h3>
+                <p class="text-slate-400 text-xs mt-0.5">Isi Semua Data Transaksi Dengan Benar</p>
+            </div>
+        </div>
+
+        @if($errors->any())
+        <div class="mb-5 p-4 rounded-xl border flex items-start gap-3" style="background:#fef2f2;border-color:#fecaca">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ef4444">
+                <i class="fas fa-exclamation text-white text-xs"></i>
+            </div>
+            <div>
+                <p class="text-sm font-semibold mb-1" style="color:#991b1b">Terdapat Kesalahan :</p>
+                <ul class="text-xs space-y-0.5 list-disc list-inside" style="color:#b91c1c">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        @endif
+
         <form action="{{ route('admin.transactions.store') }}" method="POST" class="space-y-5" id="trxForm">
             @csrf
 
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
-            <div>
-                <label class="form-label"><i class="fas fa-user text-blue-400 mr-1"></i> Pelanggan</label>
-                <div class="relative">
-                    <i class="fas fa-users absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                    <select name="customer_id" class="form-input pl-10 pr-10 appearance-none cursor-pointer" required>
-                        <option value="">— Pilih Pelanggan —</option>
-                        @foreach($customers as $c)
-                        <option value="{{ $c->id }}" {{ old('customer_id')==$c->id ? 'selected' : '' }}>
-                            {{ $c->user->name }} — {{ $c->phone }}
-                        </option>
-                        @endforeach
-                    </select>
-                    <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                <div>
+                    <label class="form-label">
+                        <i class="fas fa-user text-blue-400 mr-1.5"></i> Pelanggan
+                    </label>
+                    <div class="relative">
+                        <i class="fas fa-users absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <select name="customer_id" class="form-input pl-10 pr-10 appearance-none cursor-pointer" required>
+                            <option value="">— Pilih Pelanggan —</option>
+                            @foreach($customers as $c)
+                            <option value="{{ $c->id }}" {{ old('customer_id')==$c->id ? 'selected' : '' }}>
+                                {{ $c->user->name }} — {{ $c->phone }}
+                            </option>
+                            @endforeach
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
+                        <i class="fas fa-info-circle text-blue-300"></i>
+                        Pilih Pelanggan Yang Akan Melakukan Laundry
+                    </p>
                 </div>
+
+                <div>
+                    <label class="form-label">
+                        <i class="fas fa-tags text-cyan-400 mr-1.5"></i> Layanan
+                    </label>
+                    <div class="relative">
+                        <i class="fas fa-concierge-bell absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <select name="service_id" class="form-input pl-10 pr-10 appearance-none cursor-pointer" id="serviceSelect" onchange="hitungTotal()" required>
+                            <option value="">— Pilih Layanan —</option>
+                            @foreach($services as $s)
+                            <option value="{{ $s->id }}" data-price="{{ $s->price }}" data-unit="{{ $s->unit }}" {{ old('service_id')==$s->id ? 'selected' : '' }}>
+                                {{ ucfirst($s->service_name) }} — Rp {{ number_format($s->price, 0, ',', '.') }}/{{ $s->unit }}
+                            </option>
+                            @endforeach
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
+                        <i class="fas fa-info-circle text-blue-300"></i>
+                        Harga Akan Dihitung Otomatis
+                    </p>
+                </div>
+
             </div>
 
 
             <div>
-                <label class="form-label"><i class="fas fa-tags text-cyan-400 mr-1"></i> Layanan</label>
+                <label class="form-label">
+                    <i class="fas fa-weight text-violet-400 mr-1.5"></i> Berat / Jumlah
+                </label>
                 <div class="relative">
-                    <i class="fas fa-concierge-bell absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                    <select name="service_id" class="form-input pl-10 pr-10 appearance-none cursor-pointer" id="serviceSelect" onchange="hitungTotal()" required>
-                        <option value="">— Pilih Layanan —</option>
-                        @foreach($services as $s)
-                        <option value="{{ $s->id }}" data-price="{{ $s->price }}" data-unit="{{ $s->unit }}" {{ old('service_id')==$s->id ? 'selected' : '' }}>
-                            {{ ucfirst($s->service_name) }} — Rp {{ number_format($s->price, 0, ',', '.') }}/{{ $s->unit }}
-                        </option>
-                        @endforeach
-                    </select>
-                    <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
-                </div>
-            </div>
-
-
-            <div>
-                <label class="form-label"><i class="fas fa-weight text-violet-400 mr-1"></i> Berat / Jumlah</label>
-                <div class="relative">
-                    <input type="number" name="weight" id="weight" value="{{ old('weight') }}" placeholder="0" min="0.1" step="0.1" onkeyup="hitungTotal()" class="form-input pr-16">
+                    <i class="fas fa-balance-scale absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="number" name="weight" id="weight" value="{{ old('weight') }}" placeholder="Contoh : 5" min="0.1" step="0.1" onkeyup="hitungTotal()" oninput="hitungTotal()" class="form-input pl-10 pr-16" required>
                     <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-semibold" id="unitLabel">Unit</span>
                 </div>
+                <p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
+                    <i class="fas fa-info-circle text-blue-300"></i>
+                    Masukkan Berat (Kg) Atau Jumlah (Pcs) Sesuai Layanan
+                </p>
             </div>
 
-
-            <div class="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 rounded-xl p-4">
+            <div class="rounded-xl p-4 border" style="background:linear-gradient(135deg,#eff6ff,#ecfdf5);border-color:#bfdbfe">
                 <div class="flex items-center justify-between">
-                    <span class="text-slate-600 text-sm font-medium">Estimasi Total Harga :</span>
-                    <span class="text-blue-600 font-bold text-lg" id="totalPreview">Rp 0</span>
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#3b82f6">
+                            <i class="fas fa-calculator text-white text-xs"></i>
+                        </div>
+                        <span class="text-slate-600 text-sm font-medium">Estimasi Total Harga</span>
+                    </div>
+                    <span class="text-blue-600 font-bold text-xl" id="totalPreview">Rp 0</span>
                 </div>
             </div>
 
 
             <div>
-                <label class="form-label"><i class="fas fa-wallet text-emerald-400 mr-1"></i> Metode Pembayaran</label>
+                <label class="form-label">
+                    <i class="fas fa-wallet text-emerald-400 mr-1.5"></i> Metode Pembayaran
+                </label>
                 <div class="grid grid-cols-2 gap-3" id="paymentMethods">
                     <label class="payment-label flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-blue-400 transition-all" onclick="selectPayment(this)">
                         <input type="radio" name="payment_method" value="cash" class="accent-blue-500 hidden" {{ old('payment_method','cash')=='cash' ? 'checked' : '' }}>
                         <div>
-                            <i class="fas fa-money-bill-wave text-emerald-500 mb-1"></i>
+                            <i class="fas fa-money-bill-wave text-emerald-500 mb-1 text-lg"></i>
                             <p class="method-label font-semibold text-sm text-slate-400 transition-colors">Cash</p>
                             <p class="text-slate-400 text-xs">Bayar Tunai</p>
                         </div>
@@ -76,7 +142,7 @@
                     <label class="payment-label flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-blue-400 transition-all" onclick="selectPayment(this)">
                         <input type="radio" name="payment_method" value="transfer" class="accent-blue-500 hidden" {{ old('payment_method')=='transfer' ? 'checked' : '' }}>
                         <div>
-                            <i class="fas fa-university text-blue-500 mb-1"></i>
+                            <i class="fas fa-university text-blue-500 mb-1 text-lg"></i>
                             <p class="method-label font-semibold text-sm text-slate-400 transition-colors">Transfer</p>
                             <p class="text-slate-400 text-xs">Transfer Bank</p>
                         </div>
@@ -84,9 +150,13 @@
                 </div>
             </div>
 
-            <div class="flex gap-3 pt-2">
-                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Buat Transaksi</button>
-                <a href="{{ route('admin.transactions.index') }}" class="btn-secondary"><i class="fas fa-arrow-left"></i> Batal</a>
+            <div class="flex gap-3 pt-5 border-t border-slate-100">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Buat Transaksi
+                </button>
+                <a href="{{ route('admin.transactions.index') }}" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Batal
+                </a>
             </div>
         </form>
     </div>
@@ -94,33 +164,34 @@
 
 @push('scripts')
 <script>
-    function hitungTotal() {
-        const select = document.getElementById('serviceSelect');
-        const opt = select.options[select.selectedIndex];
-        const price = parseFloat(opt.dataset.price) || 0;
-        const unit = opt.dataset.unit || 'unit';
-        const weight = parseFloat(document.getElementById('weight').value) || 0;
-        const total = price * weight;
-        document.getElementById('unitLabel').textContent = unit;
-        document.getElementById('totalPreview').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
-    }
+function hitungTotal() {
+    const select = document.getElementById('serviceSelect');
+    const opt = select.options[select.selectedIndex];
+    const price = parseFloat(opt.dataset.price) || 0;
+    const unit = opt.dataset.unit || 'Unit';
+    const weight = parseFloat(document.getElementById('weight').value) || 0;
+    const total = price * weight;
+    document.getElementById('unitLabel').textContent = unit;
+    document.getElementById('totalPreview').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
+}
 
-    function selectPayment(el) {
-        document.querySelectorAll('.payment-label').forEach(l => {
-            l.style.borderColor = '#e2e8f0';
-            l.style.background  = '';
-            l.querySelector('.method-label').style.color = '#94a3b8';
-        });
-        el.style.borderColor = '#3b82f6';
-        el.style.background  = '#eff6ff';
-        el.querySelector('.method-label').style.color = '#1e293b';
-        el.querySelector('input[type=radio]').checked  = true;
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-        const checked = document.querySelector('.payment-label input:checked');
-        if (checked) selectPayment(checked.closest('.payment-label'));
+function selectPayment(el) {
+    document.querySelectorAll('.payment-label').forEach(l => {
+        l.style.borderColor = '#e2e8f0';
+        l.style.background = '';
+        l.querySelector('.method-label').style.color = '#94a3b8';
     });
+    el.style.borderColor = '#3b82f6';
+    el.style.background = '#eff6ff';
+    el.querySelector('.method-label').style.color = '#1e293b';
+    el.querySelector('input[type=radio]').checked = true;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const checked = document.querySelector('.payment-label input:checked');
+    if (checked) selectPayment(checked.closest('.payment-label'));
+    hitungTotal();
+});
 </script>
 @endpush
 @endsection

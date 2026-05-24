@@ -21,7 +21,7 @@
                     fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
                     colors: {
                         primary: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a' },
-                        aqua:    { 50:'#ecfeff',100:'#cffafe',200:'#a5f3fc',300:'#67e8f9',400:'#22d3ee',500:'#06b6d4',600:'#0891b2',700:'#0e7490',800:'#155e75',900:'#164e63' },
+                        aqua: { 50:'#ecfeff',100:'#cffafe',200:'#a5f3fc',300:'#67e8f9',400:'#22d3ee',500:'#06b6d4',600:'#0891b2',700:'#0e7490',800:'#155e75',900:'#164e63' },
                         laundry: { 50:'#f0f9ff',100:'#e0f2fe',200:'#bae6fd',300:'#7dd3fc',400:'#38bdf8',500:'#0ea5e9',600:'#0284c7',700:'#0369a1',800:'#075985',900:'#0c4a6e' },
                     }
                 }
@@ -36,9 +36,9 @@
         .sidebar-link.active { background:rgba(255,255,255,0.15); color:#fff; font-weight:600; }
         .card { background:#fff; border-radius:1rem; box-shadow:0 1px 3px rgba(0,0,0,0.06); border:1px solid #f1f5f9; padding:1.5rem; }
         .dark .card { background:#1e293b; border-color:#334155; }
-        .btn-primary { background:linear-gradient(to right,#3b82f6,#06b6d4); color:#fff; padding:0.625rem 1.25rem; border-radius:0.75rem; font-weight:600; font-size:0.875rem; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; box-shadow:0 4px 6px rgba(59,130,246,0.25); }
+        .btn-primary { background:linear-gradient(to right,#3b82f6,#06b6d4); color:#fff; padding:0.825rem 1.25rem; border-radius:0.75rem; font-weight:600; font-size:0.875rem; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; box-shadow:0 4px 6px rgba(59,130,246,0.25); }
         .btn-primary:hover { background:linear-gradient(to right,#2563eb,#0891b2); }
-        .btn-secondary { background:#f1f5f9; color:#334155; padding:0.625rem 1.25rem; border-radius:0.75rem; font-weight:600; font-size:0.875rem; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; }
+        .btn-secondary { background:#f1f5f9; color:#334155; padding:0.825rem 1.25rem; border-radius:0.75rem; font-weight:600; font-size:0.875rem; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; }
         .btn-secondary:hover { background:#e2e8f0; }
         .dark .btn-secondary { background:#334155; color:#cbd5e1; }
         .dark .btn-secondary:hover { background:#475569; }
@@ -120,21 +120,21 @@
         @keyframes shrink { from{width:100%} to{width:0%} }
         .toast-success { background:linear-gradient(135deg,rgba(6,78,59,0.95),rgba(5,150,105,0.92)); border-color:rgba(16,185,129,0.4); }
         .toast-success .toast-progress { background:#34d399; }
-        .toast-error   { background:linear-gradient(135deg,rgba(127,29,29,0.95),rgba(185,28,28,0.92)); border-color:rgba(239,68,68,0.4); }
-        .toast-error   .toast-progress { background:#f87171; }
+        .toast-error { background:linear-gradient(135deg,rgba(127,29,29,0.95),rgba(185,28,28,0.92)); border-color:rgba(239,68,68,0.4); }
+        .toast-error .toast-progress { background:#f87171; }
         .toast-warning { background:linear-gradient(135deg,rgba(120,53,15,0.95),rgba(180,83,9,0.92)); border-color:rgba(245,158,11,0.4); }
         .toast-warning .toast-progress { background:#fbbf24; }
-        .toast-info    { background:linear-gradient(135deg,rgba(30,58,138,0.95),rgba(29,78,216,0.92)); border-color:rgba(59,130,246,0.4); }
-        .toast-info    .toast-progress { background:#60a5fa; }
+        .toast-info { background:linear-gradient(135deg,rgba(30,58,138,0.95),rgba(29,78,216,0.92)); border-color:rgba(59,130,246,0.4); }
+        .toast-info .toast-progress { background:#60a5fa; }
         .toast-icon { width:36px; height:36px; border-radius:0.6rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.9rem; }
         .toast-success .toast-icon { background:rgba(16,185,129,0.25); color:#6ee7b7; }
-        .toast-error   .toast-icon { background:rgba(239,68,68,0.25);  color:#fca5a5; }
+        .toast-error .toast-icon { background:rgba(239,68,68,0.25);  color:#fca5a5; }
         .toast-warning .toast-icon { background:rgba(245,158,11,0.25); color:#fde68a; }
-        .toast-info    .toast-icon { background:rgba(59,130,246,0.25); color:#93c5fd; }
-        .toast-body    { flex:1; }
-        .toast-title   { font-weight:700; font-size:0.8rem; color:#f1f5f9; margin-bottom:0.1rem; }
+        .toast-info .toast-icon { background:rgba(59,130,246,0.25); color:#93c5fd; }
+        .toast-body { flex:1; }
+        .toast-title { font-weight:700; font-size:0.8rem; color:#f1f5f9; margin-bottom:0.1rem; }
         .toast-message { font-size:0.78rem; color:#cbd5e1; line-height:1.45; }
-        .toast-close   { background:none; border:none; color:#94a3b8; cursor:pointer; padding:0.1rem; flex-shrink:0; transition:color 0.15s; font-size:0.75rem; margin-top:0.1rem; }
+        .toast-close { background:none; border:none; color:#94a3b8; cursor:pointer; padding:0.1rem; flex-shrink:0; transition:color 0.15s; font-size:0.75rem; margin-top:0.1rem; }
         .toast-close:hover { color:#f1f5f9; }
 
         #confirm-overlay {
@@ -149,14 +149,23 @@
             background:#fff; border-radius:1.25rem;
             padding:1.75rem; max-width:400px; width:100%;
             box-shadow:0 25px 50px rgba(0,0,0,0.25);
-            animation:popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+            animation: confirmSlideUp 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards;
         }
         .dark #confirm-box { background:#1e293b; }
-        @keyframes popIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+
+        @keyframes confirmSlideUp {
+            from { opacity:0; transform:translateY(60px) scale(0.95); }
+            to   { opacity:1; transform:translateY(0)   scale(1);    }
+        }
+        @keyframes confirmSlideDown {
+            from { opacity:1; transform:translateY(0)   scale(1);    }
+            to   { opacity:0; transform:translateY(60px) scale(0.95); }
+        }
+
         #confirm-icon { width:52px; height:52px; border-radius:1rem; display:flex; align-items:center; justify-content:center; margin-bottom:1rem; font-size:1.25rem; }
-        #confirm-title   { font-weight:700; font-size:1rem; color:#0f172a; margin-bottom:0.375rem; }
+        #confirm-title { font-weight:700; font-size:1rem; color:#0f172a; margin-bottom:0.375rem; }
         #confirm-message { font-size:0.875rem; color:#64748b; line-height:1.6; margin-bottom:1.5rem; }
-        .dark #confirm-title   { color:#e2e8f0; }
+        .dark #confirm-title { color:#e2e8f0; }
         .dark #confirm-message { color:#94a3b8; }
         #confirm-actions { display:flex; gap:0.75rem; }
         #confirm-actions button { flex:1; padding:0.7rem; border-radius:0.75rem; font-weight:600; font-size:0.875rem; cursor:pointer; transition:all 0.2s; border:none; }
@@ -246,7 +255,7 @@
                     <p class="text-white text-sm font-semibold truncate">{{ auth()->user()->name }}</p>
                     <p class="text-slate-400 text-xs truncate">{{ auth()->user()->email }}</p>
                 </div>
-                <form action="{{ route('logout') }}" method="POST">
+                <form action="{{ route('logout') }}" method="POST" data-confirm-title="Keluar Dari Sistem?" data-confirm-message="Anda Akan Logout Dari LaundryPOS. Pastikan Semua Pekerjaan Sudah Tersimpan" data-confirm-type="warning" data-confirm-ok="Ya, Logout" data-confirm-cancel="Batal" data-no-loading>
                     @csrf
                     <button type="submit" class="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 text-slate-400 hover:bg-red-500 hover:text-white transition-all duration-200" title="Logout">
                         <i class="fas fa-sign-out-alt text-sm"></i>
@@ -286,54 +295,7 @@
         </header>
 
         <div class="px-6 pt-4 space-y-3">
-            @if(session('success'))
-            <div class="alert-dismiss flex items-start gap-4 px-5 py-4 rounded-2xl border fade-in" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-color:#10b981">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color:#10b981">
-                    <i class="fas fa-check text-white text-sm"></i>
-                </div>
-                <div class="flex-1">
-                    <p class="font-bold text-sm" style="color:#064e3b">Berhasil!</p>
-                    <p class="text-sm mt-0.5" style="color:#065f46">{{ session('success') }}</p>
-                </div>
-                <button onclick="this.closest('.alert-dismiss').remove()" class="text-emerald-400 hover:text-emerald-600 transition-colors mt-0.5">
-                    <i class="fas fa-times text-sm"></i>
-                </button>
-            </div>
-            @endif
-            @if(session('error'))
-            <div class="alert-dismiss flex items-start gap-4 px-5 py-4 rounded-2xl border fade-in" style="background:linear-gradient(135deg,#fee2e2,#fecaca);border-color:#ef4444">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color:#ef4444">
-                    <i class="fas fa-exclamation text-white text-sm"></i>
-                </div>
-                <div class="flex-1">
-                    <p class="font-bold text-sm" style="color:#7f1d1d">Gagal!</p>
-                    <p class="text-sm mt-0.5" style="color:#991b1b">{{ session('error') }}</p>
-                </div>
-                <button onclick="this.closest('.alert-dismiss').remove()" class="text-red-400 hover:text-red-600 transition-colors mt-0.5">
-                    <i class="fas fa-times text-sm"></i>
-                </button>
-            </div>
-            @endif
-            @if($errors->any())
-            <div class="alert-dismiss flex items-start gap-4 px-5 py-4 rounded-2xl border fade-in" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#f59e0b">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color:#f59e0b">
-                    <i class="fas fa-triangle-exclamation text-white text-sm"></i>
-                </div>
-                <div class="flex-1">
-                    <p class="font-bold text-sm mb-1" style="color:#78350f">Terdapat Kesalahan :</p>
-                    <ul class="space-y-0.5">
-                        @foreach($errors->all() as $error)
-                        <li class="text-sm flex items-center gap-1.5" style="color:#92400e">
-                            <i class="fas fa-circle text-amber-400" style="font-size:5px"></i> {{ $error }}
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
-                <button onclick="this.closest('.alert-dismiss').remove()" class="text-amber-400 hover:text-amber-600 transition-colors mt-0.5">
-                    <i class="fas fa-times text-sm"></i>
-                </button>
-            </div>
-            @endif
+
         </div>
 
         <main class="flex-1 overflow-y-auto px-6 pb-6">
@@ -372,7 +334,7 @@ function toggleTheme() {
 }
 
 const loadingOverlay = document.getElementById('loading-overlay');
-const loadingText    = document.getElementById('loading-text');
+const loadingText = document.getElementById('loading-text');
 
 function showLoading(text) {
     loadingText.textContent = text || 'Memproses...';
@@ -384,7 +346,7 @@ window.addEventListener('pageshow', () => hideLoading());
 document.addEventListener('submit', function(e) {
     const form = e.target;
     if (form.hasAttribute('data-no-loading')) return;
-    
+
     const btn = form.querySelector('[type="submit"]');
     const text = btn ? btn.innerText.trim() : '';
     const map = {
@@ -410,7 +372,7 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
 const LaundryToast = (() => {
     const container = document.getElementById('toast-container');
     const DURATION = 4500;
-    const iconMap = { success:'fas fa-check', error:'fas fa-times', warning:'fas fa-exclamation', info:'fas fa-info' };
+    const iconMap  = { success:'fas fa-check', error:'fas fa-times', warning:'fas fa-exclamation', info:'fas fa-info' };
     const titleMap = { success:'Berhasil!', error:'Gagal!', warning:'Perhatian!', info:'Informasi' };
 
     function show(type, title, message, duration) {
@@ -448,7 +410,7 @@ const LaundryToast = (() => {
 
 @if(session('success')) LaundryToast.success('Berhasil!', @json(session('success'))); @endif
 @if(session('error')) LaundryToast.error('Gagal!', @json(session('error'))); @endif
-@if(session('info')) LaundryToast.info('Informasi',  @json(session('info'))); @endif
+@if(session('info')) LaundryToast.info('Informasi', @json(session('info'))); @endif
 @if($errors->any()) LaundryToast.warning('Terdapat Kesalahan!', @json($errors->first())); @endif
 
 const LaundryConfirm = (() => {
@@ -459,37 +421,53 @@ const LaundryConfirm = (() => {
     const iconEl = document.getElementById('confirm-icon');
     const titleEl = document.getElementById('confirm-title');
     const msgEl = document.getElementById('confirm-message');
-    const cancelEl = document.getElementById('confirm-cancel');
+    const cancelEl= document.getElementById('confirm-cancel');
     const okEl = document.getElementById('confirm-ok');
 
     const typeConfig = {
-        danger  : { icon:'fas fa-trash', bg:'#fee2e2', iconColor:'#ef4444', okBg:'linear-gradient(to right,#ef4444,#f43f5e)', okText:'Hapus'    },
+        danger  : { icon:'fas fa-trash', bg:'#fee2e2', iconColor:'#ef4444', okBg:'linear-gradient(to right,#ef4444,#f43f5e)', okText:'Hapus' },
         warning : { icon:'fas fa-exclamation', bg:'#fef3c7', iconColor:'#f59e0b', okBg:'linear-gradient(to right,#f59e0b,#f97316)', okText:'Lanjutkan' },
-        info    : { icon:'fas fa-question-circle',bg:'#dbeafe',iconColor:'#3b82f6', okBg:'linear-gradient(to right,#3b82f6,#06b6d4)', okText:'OK'       },
+        info    : { icon:'fas fa-question-circle', bg:'#dbeafe', iconColor:'#3b82f6', okBg:'linear-gradient(to right,#3b82f6,#06b6d4)', okText:'OK' },
     };
+
+    function playSlideUp() {
+        box.style.animation = 'none';
+        void box.offsetWidth;
+        box.style.animation = 'confirmSlideUp 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards';
+    }
+
+    function playSlideDown(callback) {
+        box.style.animation = 'confirmSlideDown 0.25s ease-in forwards';
+        setTimeout(() => {
+            overlay.classList.remove('active');
+            box.style.animation = '';
+            if (callback) callback();
+        }, 240);
+    }
 
     function show({ title, message, type = 'danger', confirmText, cancelText, onConfirm }) {
         const cfg = typeConfig[type] || typeConfig.danger;
         iconEl.innerHTML = `<i class="${cfg.icon}" style="color:${cfg.iconColor}"></i>`;
         iconEl.style.background = cfg.bg;
-        titleEl.textContent = title   || 'Yakin?';
-        msgEl.textContent = message || 'Aksi Ini Tidak Bisa Dibatalkan';
+        titleEl.textContent = title       || 'Yakin?';
+        msgEl.textContent = message     || 'Aksi Ini Tidak Bisa Dibatalkan';
         cancelEl.textContent = cancelText  || 'Batal';
         okEl.textContent = confirmText || cfg.okText;
         okEl.style.background = cfg.okBg;
         overlay.classList.add('active');
+        playSlideUp();
         _resolve = onConfirm || null;
-        return false; 
+        return false;
     }
 
     function confirm() {
         overlay.classList.remove('active');
+        box.style.animation = '';
         if (_resolve) { _resolve(); _resolve = null; }
     }
 
     function cancel() {
-        overlay.classList.remove('active');
-        _resolve = null;
+        playSlideDown(() => { _resolve = null; });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -525,15 +503,14 @@ const LaundryValidate = (() => {
     function validateField(input) {
         const d = input.dataset;
         const v = input.value;
-        const label = d.label || input.placeholder || 'Field ini';
-        let   error = null;
 
-        if (d.required) { const r = rules.required(v);if (r !== true) error = r; }
+        let   error = null;
+        if (d.required) { const r = rules.required(v); if (r !== true) error = r; }
         if (!error && d.minLength) { const r = rules.minLength(v, d.minLength); if (r !== true) error = r; }
         if (!error && d.maxLength) { const r = rules.maxLength(v, d.maxLength); if (r !== true) error = r; }
-        if (!error && d.type === 'email')  { const r = rules.email(v);  if (r !== true) error = r; }
-        if (!error && d.type === 'phone')  { const r = rules.phone(v);  if (r !== true) error = r; }
-        if (!error && d.type === 'number') { const r = rules.number(v); if (r !== true) error = r; }
+        if (!error && d.type==='email') { const r = rules.email(v);  if (r !== true) error = r; }
+        if (!error && d.type==='phone') { const r = rules.phone(v);  if (r !== true) error = r; }
+        if (!error && d.type==='number') { const r = rules.number(v); if (r !== true) error = r; }
         if (!error && d.match) { const r = rules.match(v, d.match, d.matchLabel); if (r !== true) error = r; }
 
         showFieldState(input, error);
@@ -546,20 +523,14 @@ const LaundryValidate = (() => {
 
         let errEl = input.parentElement.querySelector('.field-error');
         if (error) {
-            if (!errEl) {
-                errEl = document.createElement('p');
-                errEl.className = 'field-error';
-                input.parentElement.appendChild(errEl);
-            }
+            if (!errEl) { errEl = document.createElement('p'); errEl.className = 'field-error'; input.parentElement.appendChild(errEl); }
             errEl.innerHTML = `<i class="fas fa-circle-exclamation"></i> ${error}`;
-        } else {
-            if (errEl) errEl.remove();
-        }
+        } else { if (errEl) errEl.remove(); }
     }
 
     function validateForm(form) {
         const inputs = form.querySelectorAll('[data-required],[data-min-length],[data-type],[data-match]');
-        let   valid  = true;
+        let valid = true;
         inputs.forEach(inp => { if (!validateField(inp)) valid = false; });
         return valid;
     }
@@ -567,16 +538,13 @@ const LaundryValidate = (() => {
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('[data-required],[data-min-length],[data-type],[data-match]').forEach(input => {
             input.addEventListener('blur',  () => validateField(input));
-            input.addEventListener('input', () => {
-                if (input.classList.contains('input-error')) validateField(input);
-            });
+            input.addEventListener('input', () => { if (input.classList.contains('input-error')) validateField(input); });
         });
 
         document.querySelectorAll('form[data-validate]').forEach(form => {
             form.addEventListener('submit', function(e) {
                 if (!validateForm(this)) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    e.preventDefault(); e.stopPropagation();
                     LaundryToast.warning('Formulir Tidak Lengkap', 'Periksa Kembali Isian Yang Ditandai Merah');
                 }
             }, true);
@@ -589,13 +557,10 @@ const LaundryValidate = (() => {
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('input.debounce-search').forEach(input => {
         const delay = parseInt(input.dataset.debounce || '500');
-        let   timer = null;
+        let timer = null;
         input.addEventListener('input', function() {
             clearTimeout(timer);
-            timer = setTimeout(() => {
-                const form = this.closest('form');
-                if (form) form.submit();
-            }, delay);
+            timer = setTimeout(() => { const form = this.closest('form'); if (form) form.submit(); }, delay);
         });
     });
 });

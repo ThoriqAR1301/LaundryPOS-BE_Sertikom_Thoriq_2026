@@ -15,16 +15,16 @@
                     ['key'=>'antrian', 'label'=>'Antrian', 'icon'=>'clock', 'hex'=>'#f59e0b'],
                     ['key'=>'dicuci', 'label'=>'Dicuci', 'icon'=>'soap', 'hex'=>'#3b82f6'],
                     ['key'=>'disetrika', 'label'=>'Disetrika', 'icon'=>'wind', 'hex'=>'#7c3aed'],
-                    ['key'=>'siap diambil','label'=>'Siap Ambil', 'icon'=>'box-open', 'hex'=>'#10b981'],
+                    ['key'=>'siap diambil', 'label'=>'Siap Ambil', 'icon'=>'box-open', 'hex'=>'#10b981'],
                     ['key'=>'diambil', 'label'=>'Selesai', 'icon'=>'flag-checkered', 'hex'=>'#64748b'],
                 ];
             @endphp
             @foreach($timelineStatuses as $s)
             <div class="flex flex-col items-center gap-2 z-10 flex-1">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" style="background-color: {{ $s['hex'] }}">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" style="background-color:{{ $s['hex'] }}">
                     <i class="fas fa-{{ $s['icon'] }} text-white text-sm"></i>
                 </div>
-                <span class="text-2xl font-bold" style="color: {{ $s['hex'] }}">{{ $summary[$s['key']] }}</span>
+                <span class="text-2xl font-bold" style="color:{{ $s['hex'] }}">{{ $summary[$s['key']] }}</span>
                 <span class="text-xs font-semibold text-slate-600 text-center">{{ $s['label'] }}</span>
             </div>
             @endforeach
@@ -32,7 +32,6 @@
 
     </div>
 
-    
     <div class="card">
         <form method="GET" class="flex flex-wrap gap-3 items-end">
             <div class="flex-1 min-w-40">
@@ -52,7 +51,7 @@
                             'antrian' => ['label'=>'Antrian', 'icon'=>'🕐'],
                             'dicuci' => ['label'=>'Dicuci', 'icon'=>'🫧'],
                             'disetrika' => ['label'=>'Disetrika', 'icon'=>'♨️'],
-                            'siap diambil' => ['label'=>'Siap Diambil','icon'=>'✅'],
+                            'siap diambil' => ['label'=>'Siap Diambil', 'icon'=>'✅'],
                             'diambil' => ['label'=>'Selesai', 'icon'=>'🏁'],
                         ] as $val => $opt)
                         <option value="{{ $val }}" {{ request('status')==$val ? 'selected' : '' }}>
@@ -136,27 +135,31 @@
                     @endphp
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-4 py-3.5">
-                            <span class="font-mono font-bold text-blue-600 text-xs bg-blue-50 px-2 py-1 rounded-lg">{{ $trx->invoice_code }}</span>
+                            <span class="font-mono font-bold text-blue-600 text-xs bg-blue-50 px-2 py-1 rounded-lg">
+                                {{ $trx->invoice_code }}
+                            </span>
                         </td>
                         <td class="px-4 py-3.5">
                             <p class="font-semibold text-slate-700">{{ $trx->customer->user->name }}</p>
                             <p class="text-slate-400 text-xs">{{ $trx->created_at->format('d M Y') }}</p>
                         </td>
                         <td class="px-4 py-3.5 text-slate-600 capitalize">{{ $trx->service->service_name }}</td>
-                        <td class="px-4 py-3.5 font-bold text-slate-800">Rp {{ number_format($trx->total_price, 0, ',', '.') }}</td>
+                        <td class="px-4 py-3.5 font-bold text-slate-800">
+                            Rp {{ number_format($trx->total_price, 0, ',', '.') }}
+                        </td>
                         <td class="px-4 py-3.5">
-                            <span class="badge" style="background-color: {{ $statusBg }}; color: {{ $statusHex }}">
+                            <span class="badge" style="background-color:{{ $statusBg }};color:{{ $statusHex }}">
                                 <i class="fas fa-{{ $statusIcon }} text-xs"></i>
                                 {{ ucfirst($trx->status) }}
                             </span>
                         </td>
                         <td class="px-4 py-3.5">
                             @if($trx->payment_status == 'paid')
-                                <span class="badge" style="background-color: #d1fae5; color: #065f46">
+                                <span class="badge" style="background-color:#d1fae5;color:#065f46">
                                     <i class="fas fa-check text-xs"></i> Lunas
                                 </span>
                             @else
-                                <span class="badge" style="background-color: #ffedd5; color: #7c2d12">
+                                <span class="badge" style="background-color:#ffedd5;color:#7c2d12">
                                     <i class="fas fa-clock text-xs"></i> Pending
                                 </span>
                             @endif
@@ -167,12 +170,12 @@
                                     <i class="fas fa-eye text-xs"></i>
                                 </a>
                                 @if(!in_array($trx->status, ['siap diambil', 'diambil']))
-                                <a href="{{ route('admin.transactions.edit', $trx->id) }}" class="w-8 h-8 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center hover:bg-amber-200 transition-colors inline-flex" title="Edit Transaksi">
+                                <a href="{{ route('admin.transactions.edit', $trx->id) }}" class="w-8 h-8 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center hover:bg-amber-200 transition-colors inline-flex" title="Edit">
                                     <i class="fas fa-edit text-xs"></i>
                                 </a>
                                 @endif
                                 @if($trx->status === 'diambil')
-                                <form action="{{ route('admin.transactions.destroy', $trx->id) }}" method="POST" onsubmit="return confirm('Yakin Hapus Transaksi {{ $trx->invoice_code }}?')">
+                                <form action="{{ route('admin.transactions.destroy', ['id' => $trx->id]) }}" method="POST" data-confirm-title="Hapus Transaksi?" data-confirm-message="Transaksi {{ $trx->invoice_code }} Akan Dihapus Permanen. Data Tidak Bisa Dikembalikan" data-confirm-type="danger" data-confirm-ok="Hapus" data-no-loading>
                                     @csrf @method('DELETE')
                                     <button type="submit" class="w-8 h-8 bg-red-100 text-red-600 rounded-lg flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
                                         <i class="fas fa-trash text-xs"></i>
@@ -226,7 +229,7 @@
                             ['key'=>'antrian', 'label'=>'Antrian', 'icon'=>'clock', 'hex'=>'#f59e0b'],
                             ['key'=>'dicuci', 'label'=>'Dicuci', 'icon'=>'soap', 'hex'=>'#3b82f6'],
                             ['key'=>'disetrika', 'label'=>'Disetrika', 'icon'=>'wind', 'hex'=>'#7c3aed'],
-                            ['key'=>'siap diambil','label'=>'Siap Diambil','icon'=>'check-circle', 'hex'=>'#10b981'],
+                            ['key'=>'siap diambil', 'label'=>'Siap Diambil', 'icon'=>'check-circle', 'hex'=>'#10b981'],
                             ['key'=>'diambil', 'label'=>'Selesai', 'icon'=>'flag-checkered', 'hex'=>'#64748b'],
                         ];
                     @endphp
@@ -235,24 +238,24 @@
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-5 py-3.5">
                             <div class="flex items-center gap-2.5">
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: {{ $s['hex'] }}">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color:{{ $s['hex'] }}">
                                     <i class="fas fa-{{ $s['icon'] }} text-white text-xs"></i>
                                 </div>
                                 <span class="font-semibold text-slate-700">{{ $s['label'] }}</span>
                             </div>
                         </td>
                         <td class="px-5 py-3.5 text-center">
-                            <span class="text-lg font-bold" style="color: {{ $s['hex'] }}">{{ $summary[$s['key']] }}</span>
+                            <span class="text-lg font-bold" style="color:{{ $s['hex'] }}">{{ $summary[$s['key']] }}</span>
                         </td>
                         <td class="px-5 py-3.5 text-center">
                             <div class="flex flex-col items-center leading-tight">
-                                <span class="text-lg font-bold" style="color: {{ $s['hex'] }}">{{ $pct }}</span>
+                                <span class="text-lg font-bold" style="color:{{ $s['hex'] }}">{{ $pct }}</span>
                                 <span class="text-xs font-medium text-slate-400">%</span>
                             </div>
                         </td>
                         <td class="px-5 py-3.5 w-56">
                             <div class="w-full bg-slate-200 rounded-full h-2.5">
-                                <div class="h-2.5 rounded-full transition-all duration-500" style="width: {{ $pct }}%; background-color: {{ $s['hex'] }}"></div>
+                                <div class="h-2.5 rounded-full transition-all duration-500" style="width:{{ $pct }}%;background-color:{{ $s['hex'] }}"></div>
                             </div>
                         </td>
                     </tr>
@@ -265,35 +268,35 @@
     <div class="card">
         <h3 class="font-bold text-slate-800 text-sm mb-4">Status Pembayaran</h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div class="flex items-center gap-4 rounded-2xl px-5 py-4 border-2" style="background-color: #d1fae5; border-color: #10b981">
-                <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #10b981">
+            <div class="flex items-center gap-4 rounded-2xl px-5 py-4 border-2" style="background-color:#d1fae5;border-color:#10b981">
+                <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:#10b981">
                     <i class="fas fa-check text-white"></i>
                 </div>
                 <div class="flex-1">
-                    <p class="text-xs font-semibold" style="color: #065f46">Lunas</p>
-                    <p class="text-3xl font-bold" style="color: #064e3b">{{ $summary['lunas'] }}</p>
+                    <p class="text-xs font-semibold" style="color:#065f46">Lunas</p>
+                    <p class="text-3xl font-bold" style="color:#064e3b">{{ $summary['lunas'] }}</p>
                 </div>
-                <i class="fas fa-check-circle text-3xl opacity-20" style="color: #10b981"></i>
+                <i class="fas fa-check-circle text-3xl opacity-20" style="color:#10b981"></i>
             </div>
-            <div class="flex items-center gap-4 rounded-2xl px-5 py-4 border-2" style="background-color: #ffedd5; border-color: #f97316">
-                <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #f97316">
+            <div class="flex items-center gap-4 rounded-2xl px-5 py-4 border-2" style="background-color:#ffedd5;border-color:#f97316">
+                <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:#f97316">
                     <i class="fas fa-clock text-white"></i>
                 </div>
                 <div class="flex-1">
-                    <p class="text-xs font-semibold" style="color: #7c2d12">Pending</p>
-                    <p class="text-3xl font-bold" style="color: #431407">{{ $summary['pending'] }}</p>
+                    <p class="text-xs font-semibold" style="color:#7c2d12">Pending</p>
+                    <p class="text-3xl font-bold" style="color:#431407">{{ $summary['pending'] }}</p>
                 </div>
-                <i class="fas fa-hourglass-half text-3xl opacity-20" style="color: #f97316"></i>
+                <i class="fas fa-hourglass-half text-3xl opacity-20" style="color:#f97316"></i>
             </div>
-            <div class="flex items-center gap-4 rounded-2xl px-5 py-4 border-2" style="background-color: #dbeafe; border-color: #3b82f6">
-                <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #3b82f6">
+            <div class="flex items-center gap-4 rounded-2xl px-5 py-4 border-2" style="background-color:#dbeafe;border-color:#3b82f6">
+                <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:#3b82f6">
                     <i class="fas fa-receipt text-white"></i>
                 </div>
                 <div class="flex-1">
-                    <p class="text-xs font-semibold" style="color: #1e3a8a">Total Transaksi</p>
-                    <p class="text-3xl font-bold" style="color: #1e3a8a">{{ $summary['total'] }}</p>
+                    <p class="text-xs font-semibold" style="color:#1e3a8a">Total Transaksi</p>
+                    <p class="text-3xl font-bold" style="color:#1e3a8a">{{ $summary['total'] }}</p>
                 </div>
-                <i class="fas fa-receipt text-3xl opacity-20" style="color: #3b82f6"></i>
+                <i class="fas fa-receipt text-3xl opacity-20" style="color:#3b82f6"></i>
             </div>
         </div>
     </div>

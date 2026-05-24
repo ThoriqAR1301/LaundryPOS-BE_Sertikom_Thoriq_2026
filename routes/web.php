@@ -18,7 +18,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('customers', CustomerWebController::class);
+    Route::resource('/customers', CustomerWebController::class);
 
     Route::resource('/services', ServiceWebController::class);
 
