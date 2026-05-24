@@ -251,6 +251,35 @@
     </div>
     @endif
 
+    @if($transaction->cloth_photo)
+    <div class="card">
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:#fef3c7">
+                <i class="fas fa-camera text-xs" style="color:#d97706"></i>
+            </div>
+            Foto Kondisi Baju Masuk
+        </h3>
+        <div class="p-4 rounded-xl" style="background:#fffbeb;border:1px solid #fde68a">
+            <img src="{{ Storage::url($transaction->cloth_photo) }}" alt="Foto Kondisi Baju" class="rounded-xl border border-amber-200 max-w-xs shadow-sm mb-3 cursor-pointer" onclick="document.getElementById('clothModal').classList.remove('hidden')">
+            <p class="text-amber-700 text-xs flex items-center gap-1.5">
+                <i class="fas fa-info-circle"></i>
+                Foto Diambil Saat Baju Masuk Untuk Menghindari Komplain
+            </p>
+            <p class="text-amber-500 text-xs mt-1 flex items-center gap-1.5">
+                <i class="fas fa-hand-pointer"></i>
+                Klik Foto Untuk Memperbesar
+            </p>
+        </div>
+    </div>
+
+    <div id="clothModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.8)" onclick="this.classList.add('hidden')">
+        <img src="{{ Storage::url($transaction->cloth_photo) }}" alt="Foto Kondisi Baju" class="max-w-full max-h-full rounded-2xl shadow-2xl">
+        <button class="absolute top-4 right-4 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    @endif
+
     <div class="flex gap-12 flex-wrap">
         <a href="{{ route('admin.transactions.index') }}" class="btn-secondary">
             <i class="fas fa-arrow-left"></i> Kembali

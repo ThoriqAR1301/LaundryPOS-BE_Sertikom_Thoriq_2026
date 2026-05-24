@@ -53,6 +53,11 @@ class TransactionWebController extends Controller
             'service_id' => 'required|exists:services,id',
             'weight' => 'required|numeric|min:0.1',
             'payment_method' => 'required|in:cash,transfer',
+            'cloth_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'cloth_photo.image' => 'Foto Kondisi Baju Harus Berupa Gambar',
+            'cloth_photo.mimes' => 'Format Foto Harus jpg, jpeg, Atau png',
+            'cloth_photo.max' => 'Ukuran Foto Maksimal 2MB',
         ]);
 
         $service = Service::findOrFail($request->service_id);
@@ -61,6 +66,11 @@ class TransactionWebController extends Controller
         $lastTransaction = Transaction::withTrashed()->latest('id')->first();
         $lastNumber = $lastTransaction ? (int) substr($lastTransaction->invoice_code, 4) : 0;
         $invoiceCode = 'LND-' . str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+
+        $clothPhotoPath = null;
+        if ($request->hasFile('cloth_photo')) {
+            $clothPhotoPath = $request->file('cloth_photo')->store('cloth_photos', 'public');
+        }
 
         Transaction::create([
             'invoice_code' => $invoiceCode,
@@ -72,6 +82,7 @@ class TransactionWebController extends Controller
             'status' => 'antrian',
             'payment_method' => $request->payment_method,
             'payment_status' => 'pending',
+            'cloth_photo' => $clothPhotoPath,
         ]);
 
         return redirect()->route('admin.transactions.index')->with('success', 'Transaksi Berhasil Dibuat');

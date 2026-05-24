@@ -46,7 +46,7 @@
         </div>
         @endif
 
-        <form action="{{ route('admin.transactions.store') }}" method="POST" class="space-y-5" id="trxForm">
+        <form action="{{ route('admin.transactions.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5" id="trxForm">
             @csrf
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -150,6 +150,63 @@
                 </div>
             </div>
 
+            <div class="rounded-2xl border-2 border-dashed overflow-hidden transition-all duration-300" id="clothPhotoBox" style="border-color:#e2e8f0;background:#f8fafc">
+                <div class="flex items-center justify-between px-5 py-4 border-b border-dashed" style="border-color:#e2e8f0">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">
+                            <i class="fas fa-camera text-amber-500"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                Foto Kondisi Baju
+                                <span class="text-xs font-normal px-2 py-0.5 rounded-full" style="background:#fef3c7;color:#d97706">Opsional</span>
+                            </p>
+                            <p class="text-xs text-slate-400 mt-0.5">Dokumentasi Baju Masuk Untuk Menghindari Komplain</p>
+                        </div>
+                    </div>
+
+                    <div id="clothStatusBadge" class="hidden">
+                        <span class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:#d1fae5;color:#065f46">
+                            <i class="fas fa-check-circle text-xs"></i> Foto Dipilih
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-5">
+                    <div id="clothDropZone" class="relative rounded-xl border-2 border-dashed transition-all duration-200 cursor-pointer group" style="border-color:#cbd5e1;background:#fff" onclick="document.getElementById('clothPhotoInput').click()" ondragover="event.preventDefault();this.style.borderColor='#3b82f6';this.style.background='#eff6ff'" ondragleave="this.style.borderColor='#cbd5e1';this.style.background='#fff'" ondrop="handleClothDrop(event)">
+                        <div id="clothEmptyState" class="flex flex-col items-center justify-center py-8 px-4 text-center">
+                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-3 transition-transform group-hover:scale-110" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe)">
+                                <i class="fas fa-cloud-upload-alt text-2xl" style="color:#38bdf8"></i>
+                            </div>
+                            <p class="font-semibold text-slate-600 text-sm mb-1">Klik Atau Seret Foto Ke Sini</p>
+                            <p class="text-xs text-slate-400">jpg / jpeg / png — Maks. 2MB</p>
+                        </div>
+                        <div id="clothPreviewWrap" class="hidden p-3">
+                            <div class="relative inline-block">
+                                <img id="clothPreview" src="#" alt="Preview" class="rounded-xl border border-slate-200 max-h-52 object-cover shadow-md w-full">
+                                <div class="absolute bottom-0 left-0 right-0 px-3 py-2 rounded-b-xl" style="background:linear-gradient(to top,rgba(0,0,0,0.6),transparent)">
+                                    <p class="text-white text-xs font-medium truncate" id="clothFileName"></p>
+                                    <p class="text-white/70 text-xs" id="clothFileSize"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="file" name="cloth_photo" id="clothPhotoInput" accept="image/*" class="hidden" onchange="previewClothPhoto(this)">
+
+                    <div class="flex items-center justify-between mt-3">
+                        <p class="text-xs text-slate-400 flex items-center gap-1.5">
+                            <i class="fas fa-shield-alt text-blue-300"></i>
+                            Foto Hanya Dilihat Oleh Admin Laundry
+                        </p>
+                        <button type="button" id="clearClothBtn" onclick="clearClothPhoto()" class="hidden items-center gap-1.5 text-xs font-semibold text-red-500 hover:text-red-700 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50">
+                            <i class="fas fa-trash-alt text-xs"></i> Hapus Foto
+                        </button>
+                    </div>
+                
+                </div>
+            </div>
+
             <div class="flex gap-3 pt-5 border-t border-slate-100">
                 <button type="submit" class="btn-primary">
                     <i class="fas fa-save"></i> Buat Transaksi
@@ -184,7 +241,50 @@ function selectPayment(el) {
     el.style.borderColor = '#3b82f6';
     el.style.background = '#eff6ff';
     el.querySelector('.method-label').style.color = '#1e293b';
-    el.querySelector('input[type=radio]').checked = true;
+    el.querySelector('input[type=radio]').checked  = true;
+}
+
+function previewClothPhoto(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = e => {
+        document.getElementById('clothPreview').src = e.target.result;
+        document.getElementById('clothFileName').textContent = file.name;
+        document.getElementById('clothFileSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+        document.getElementById('clothEmptyState').classList.add('hidden');
+        document.getElementById('clothPreviewWrap').classList.remove('hidden');
+        document.getElementById('clothStatusBadge').classList.remove('hidden');
+        document.getElementById('clearClothBtn').classList.remove('hidden');
+        document.getElementById('clearClothBtn').classList.add('flex');
+        document.getElementById('clothDropZone').style.borderColor = '#10b981';
+        document.getElementById('clothDropZone').style.background = '#f0fdf4';
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearClothPhoto() {
+    document.getElementById('clothPhotoInput').value = '';
+    document.getElementById('clothPreview').src = '#';
+    document.getElementById('clothEmptyState').classList.remove('hidden');
+    document.getElementById('clothPreviewWrap').classList.add('hidden');
+    document.getElementById('clothStatusBadge').classList.add('hidden');
+    document.getElementById('clearClothBtn').classList.add('hidden');
+    document.getElementById('clearClothBtn').classList.remove('flex');
+    document.getElementById('clothDropZone').style.borderColor = '#cbd5e1';
+    document.getElementById('clothDropZone').style.background = '#fff';
+}
+
+function handleClothDrop(e) {
+    e.preventDefault();
+    const input = document.getElementById('clothPhotoInput');
+    const dt = new DataTransfer();
+    dt.items.add(e.dataTransfer.files[0]);
+    input.files = dt.files;
+    previewClothPhoto(input);
+    document.getElementById('clothDropZone').style.borderColor = '#cbd5e1';
+    document.getElementById('clothDropZone').style.background = '#fff';
 }
 
 window.addEventListener('DOMContentLoaded', () => {

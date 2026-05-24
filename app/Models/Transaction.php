@@ -20,6 +20,7 @@ class Transaction extends Model
         'payment_status',
         'payment_proof',
         'paid_at',
+        'cloth_photo',
     ];
 
     protected $casts = [
