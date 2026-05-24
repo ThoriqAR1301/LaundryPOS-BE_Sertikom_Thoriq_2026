@@ -43,7 +43,7 @@ class TransactionController extends Controller
         $service = Service::find($request->service_id);
         $total_price = $service->price * $request->weight;
 
-        $lastTransaction = Transaction::latest()->first();
+        $lastTransaction = Transaction::withTrashed()->latest('id')->first();
         $lastNumber = $lastTransaction ? (int) substr($lastTransaction->invoice_code, 4) : 0;
         $invoiceCode = 'LND-' . str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
 
@@ -69,7 +69,7 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::with(['admin', 'customer.user', 'service'])->find($id);
 
-        if (! $transaction) {
+        if (!$transaction) {
             return response()->json([
                 'status' => false,
                 'message' => 'Transaksi Tidak Ditemukan',
@@ -86,7 +86,7 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::find($id);
 
-        if (! $transaction) {
+        if (!$transaction) {
             return response()->json([
                 'status' => false,
                 'message' => 'Transaksi Tidak Ditemukan',
@@ -100,9 +100,7 @@ class TransactionController extends Controller
             'status.in' => 'Status Tidak Valid',
         ]);
 
-        $transaction->update([
-            'status' => $request->status,
-        ]);
+        $transaction->update(['status' => $request->status]);
 
         return response()->json([
             'status' => true,
@@ -115,7 +113,7 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::find($id);
 
-        if (! $transaction) {
+        if (!$transaction) {
             return response()->json([
                 'status' => false,
                 'message' => 'Transaksi Tidak Ditemukan',
@@ -155,7 +153,7 @@ class TransactionController extends Controller
         $user = $request->user();
         $customer = $user->customer;
 
-        if (! $customer) {
+        if (!$customer) {
             return response()->json([
                 'status' => false,
                 'message' => 'Data Customer Tidak Ditemukan',

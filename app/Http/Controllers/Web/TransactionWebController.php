@@ -20,8 +20,7 @@ class TransactionWebController extends Controller
 
         if ($request->search) {
             $search = $request->search;
-            $query->where(function ($q) use ($search) { $q->whereHas('customer.user', fn($q) => $q->where('name', 'like', "%$search%"))->orWhere('invoice_code', 'like', "%$search%");
-            });
+            $query->where(function ($q) use ($search) { $q->whereHas('customer.user', fn($q) => $q->where('name', 'like', "%$search%"))->orWhere('invoice_code', 'like', "%$search%"); });
         }
 
         $transactions = $query->latest()->paginate(10);
