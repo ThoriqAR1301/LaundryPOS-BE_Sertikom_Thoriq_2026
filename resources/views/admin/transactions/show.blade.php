@@ -405,11 +405,7 @@
         <a href="{{ route('admin.transactions.index') }}" class="btn-secondary">
             <i class="fas fa-arrow-left"></i> Kembali
         </a>
-        @if(!in_array($transaction->status, ['siap diambil', 'diambil']))
-        <a href="{{ route('admin.transactions.edit', ['id' => $transaction->id]) }}" class="btn-primary">
-            <i class="fas fa-edit"></i> Edit Transaksi
-        </a>
-        @endif
+        
         <button onclick="cetakStruk()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm text-white transition-all hover:-translate-y-0.5" style="background:linear-gradient(135deg,#059669,#10b981);box-shadow:0 4px 12px rgba(16,185,129,0.3)">
             <i class="fas fa-print"></i> Cetak Struk
         </button>
