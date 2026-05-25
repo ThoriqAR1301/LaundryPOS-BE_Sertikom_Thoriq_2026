@@ -156,25 +156,41 @@
                 </div>
                 Info Pelanggan
             </h3>
-            <div class="flex items-center gap-5 p-5 rounded-xl mb-4" style="background:#f5f3ff">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
-                    <span class="text-slate-800 font-bold text-lg">
+
+            <div class="flex items-center gap-4 p-4 rounded-2xl mb-3" style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #ddd6fe">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+                    <span class="text-white font-bold text-xl">
                         {{ strtoupper(substr($transaction->customer->user->name, 0, 1)) }}
                     </span>
                 </div>
-                <div>
-                    <p class="font-bold text-slate-900">{{ $transaction->customer->user->name }}</p>
-                    <p class="text-slate-900 text-xs">{{ $transaction->customer->user->email }}</p>
+                <div class="flex-1 min-w-0">
+                    <p class="font-bold text-slate-900 text-base truncate">{{ $transaction->customer->user->name }}</p>
+                    <p class="text-slate-500 text-xs truncate mt-0.5">{{ $transaction->customer->user->email }}</p>
+                    <span class="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full mt-1" style="background:#ede9fe;color:#6d28d9">
+                        <i class="fas fa-user-tag text-xs"></i> Customer
+                    </span>
                 </div>
             </div>
-            <div class="space-y-3 text-sm">
-                <div class="flex items-center gap-5 p-5 rounded-xl" style="background:#f8fafc">
-                    <i class="fas fa-phone text-slate-400 w-4 flex-shrink-0"></i>
-                    <span class="text-slate-900 font-medium">{{ $transaction->customer->phone }}</span>
+
+            <div class="space-y-2">
+                <div class="flex items-center gap-3 px-4 py-3 rounded-xl" style="background:#f0fdf4;border:1px solid #bbf7d0">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#10b981">
+                        <i class="fab fa-whatsapp text-white text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs text-slate-400 mb-0.5">No. WhatsApp</p>
+                        <p class="font-semibold text-slate-900 text-sm">{{ $transaction->customer->phone }}</p>
+                    </div>
                 </div>
-                <div class="flex items-start gap-5 p-5 rounded-xl" style="background:#f8fafc">
-                    <i class="fas fa-map-marker-alt text-slate-400 w-4 flex-shrink-0 mt-0.5"></i>
-                    <span class="text-slate-900 font-medium leading-relaxed">{{ $transaction->customer->address }}</span>
+
+                <div class="flex items-start gap-3 px-4 py-3 rounded-xl" style="background:#fff7ed;border:1px solid #fed7aa">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background:#f97316">
+                        <i class="fas fa-map-marker-alt text-white text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs text-slate-400 mb-0.5">Alamat</p>
+                        <p class="font-semibold text-slate-900 text-sm leading-relaxed">{{ $transaction->customer->address }}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -280,7 +296,112 @@
     </div>
     @endif
 
-    <div class="flex gap-12 flex-wrap">
+    <div id="strukModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.6);backdrop-filter:blur(4px)">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden" style="animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1)">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#d1fae5">
+                        <i class="fas fa-receipt text-sm" style="color:#059669"></i>
+                    </div>
+                    <p class="font-bold text-slate-800">Struk Transaksi</p>
+                </div>
+                <button onclick="tutupStruk()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+
+            <div id="strukContent" class="px-5 py-5">
+                <div class="text-center mb-4 pb-4 border-b-2 border-dashed border-slate-200">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-2" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">
+                        <i class="fas fa-shirt text-white text-lg"></i>
+                    </div>
+                    <p class="font-bold text-slate-800 text-lg">LaundryPOS</p>
+                    <p class="text-slate-500 text-xs">Sistem Manajemen Laundry</p>
+                </div>
+
+                <div class="text-center mb-4">
+                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">No. Invoice</p>
+                    <p class="font-mono font-bold text-blue-600 text-xl">{{ $transaction->invoice_code }}</p>
+                    <p class="text-xs text-slate-500 mt-1">{{ $transaction->created_at->format('d M Y, H:i') }}</p>
+                </div>
+
+                <div class="border-t border-dashed border-slate-200 mb-4"></div>
+
+                <div class="mb-4">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pelanggan</p>
+                    <p class="font-semibold text-slate-800">{{ $transaction->customer->user->name }}</p>
+                    <p class="text-xs text-slate-500">{{ $transaction->customer->phone }}</p>
+                </div>
+
+                <div class="border-t border-dashed border-slate-200 mb-4"></div>
+
+                <div class="mb-4">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Detail Layanan</p>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-slate-600 text-sm capitalize">{{ $transaction->service->service_name }}</span>
+                        <span class="text-slate-600 text-sm">{{ $transaction->service_unit }} {{ $transaction->service->unit }}</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-slate-500 text-xs">Harga Per {{ $transaction->service->unit }}</span>
+                        <span class="text-slate-500 text-xs">Rp {{ number_format($transaction->service->price, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-slate-500 text-xs">Metode Bayar</span>
+                        <span class="text-slate-600 text-xs font-semibold uppercase">{{ $transaction->payment_method }}</span>
+                    </div>
+                </div>
+
+                <div class="border-t-2 border-dashed border-slate-300 mb-4"></div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <span class="font-bold text-slate-800">TOTAL</span>
+                    <span class="font-bold text-xl" style="color:#059669">
+                        Rp {{ number_format($transaction->total_price, 0, ',', '.') }}
+                    </span>
+                </div>
+
+                <div class="flex justify-center mb-4">
+                    @if($transaction->payment_status === 'paid')
+                    <span class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold" style="background:#d1fae5;color:#065f46">
+                        <i class="fas fa-check-circle"></i> LUNAS
+                    </span>
+                    @else
+                    <span class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold" style="background:#ffedd5;color:#7c2d12">
+                        <i class="fas fa-clock"></i> BELUM LUNAS
+                    </span>
+                    @endif
+                </div>
+
+                <div class="border-t border-dashed border-slate-200 mb-4"></div>
+
+                <div class="text-center mb-2">
+                    <p class="text-xs text-slate-400 mb-1">Status Cucian</p>
+                    <p class="font-semibold text-slate-700 capitalize">{{ $transaction->status }}</p>
+                </div>
+
+                <div class="text-center mt-4 pt-4 border-t border-dashed border-slate-200">
+                    <p class="text-xs text-slate-400">Terima Kasih Telah Mempercayakan</p>
+                    <p class="text-xs text-slate-400">Cucian Anda Kepada Kami 🙏</p>
+                    <p class="text-xs text-slate-300 mt-2">Dicetak : {{ now()->format('d M Y, H:i') }}</p>
+                </div>
+
+            </div>
+
+            <div class="flex gap-2 px-5 py-4 border-t border-slate-100">
+                <button onclick="tutupStruk()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50 transition-colors">
+                    Tutup
+                </button>
+                <button onclick="printStruk()" class="flex-1 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:-translate-y-0.5" style="background:linear-gradient(135deg,#059669,#10b981)">
+                    <i class="fas fa-print mr-1.5"></i> Print
+                </button>
+                <button onclick="downloadPDFFromShow()" class="flex-1 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:-translate-y-0.5" style="background:linear-gradient(135deg,#dc2626,#ef4444)">
+                    <i class="fas fa-file-pdf mr-1.5"></i> PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex gap-3 flex-wrap">
         <a href="{{ route('admin.transactions.index') }}" class="btn-secondary">
             <i class="fas fa-arrow-left"></i> Kembali
         </a>
@@ -289,7 +410,106 @@
             <i class="fas fa-edit"></i> Edit Transaksi
         </a>
         @endif
+        <button onclick="cetakStruk()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm text-white transition-all hover:-translate-y-0.5" style="background:linear-gradient(135deg,#059669,#10b981);box-shadow:0 4px 12px rgba(16,185,129,0.3)">
+            <i class="fas fa-print"></i> Cetak Struk
+        </button>
+        <button onclick="downloadPDFFromShow()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm text-white transition-all hover:-translate-y-0.5" style="background:linear-gradient(135deg,#dc2626,#ef4444);box-shadow:0 4px 12px rgba(239,68,68,0.3)">
+            <i class="fas fa-file-pdf"></i> Download PDF
+        </button>
     </div>
 
 </div>
+
+@push('scripts')
+<script>
+function cetakStruk() {
+    document.getElementById('strukModal').classList.remove('hidden');
+}
+
+function tutupStruk() {
+    document.getElementById('strukModal').classList.add('hidden');
+}
+
+function printStruk() {
+    const content = document.getElementById('strukContent').innerHTML;
+    const win = window.open('', '_blank', 'width=400,height=700');
+    win.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Struk - {{ $transaction->invoice_code }}</title>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+            <style>
+                * { margin:0; padding:0; box-sizing:border-box; }
+                body { font-family: 'Courier New', monospace; font-size: 12px; padding: 16px; max-width: 300px; margin: 0 auto; }
+                @media print {
+                    body { padding: 0; }
+                    button { display: none !important; }
+                }
+            </style>
+        </head>
+        <body>${content}<br><button onclick="window.print()" style="width:100%;padding:8px;margin-top:10px;background:#059669;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px">🖨️ Print Struk</button></body>
+        </html>
+    `);
+    win.document.close();
+}
+
+function loadHtml2PDF(callback) {
+    if (window.html2pdf) { callback(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    s.onload = callback;
+    document.head.appendChild(s);
+}
+
+function downloadPDFFromShow() {
+    const content = document.getElementById('strukContent');
+    if (!content) {
+        alert('Konten Struk Tidak Ditemukan. Coba Buka Modal Cetak Struk Dulu');
+        return;
+    }
+
+    if (typeof LaundryToast !== 'undefined') {
+        LaundryToast.warning('Menyiapkan PDF...', 'Mohon Tunggu Sebentar');
+    }
+
+    function doDownload() {
+        const opt = {
+            margin: [4, 4, 4, 4],
+            filename: 'Struk-{{ $transaction->invoice_code }}.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false },
+            jsPDF: { unit: 'mm', format: [90, 200], orientation: 'portrait' }
+        };
+
+        const clone = content.cloneNode(true);
+        clone.style.cssText = 'background:#fff;padding:16px;font-family:sans-serif;width:280px';
+        document.body.appendChild(clone);
+
+        html2pdf().set(opt).from(clone).save().then(() => {
+            document.body.removeChild(clone);
+            if (typeof LaundryToast !== 'undefined') {
+                LaundryToast.success('PDF Berhasil Diunduh!', 'File Tersimpan Di Folder Downloads');
+            }
+        });
+    }
+
+    if (window.html2pdf) {
+        doDownload();
+    } else {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+        script.onload = doDownload;
+        script.onerror = () => alert('Gagal Memuat Library PDF. Periksa Koneksi Internet Anda');
+        document.head.appendChild(script);
+    }
+}
+
+
+document.getElementById('strukModal').addEventListener('click', function(e) {
+    if (e.target === this) tutupStruk();
+});
+</script>
+@endpush
 @endsection

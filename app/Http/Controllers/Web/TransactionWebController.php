@@ -183,4 +183,10 @@ class TransactionWebController extends Controller
 
         return redirect()->route('admin.transactions.index')->with('success', 'Transaksi Berhasil Dihapus Dari Daftar');
     }
+
+    public function printStruk($id)
+    {
+        $transaction = Transaction::with(['admin', 'customer.user', 'service'])->findOrFail($id);
+        return view('admin.transactions.print', compact('transaction'));
+    }
 }

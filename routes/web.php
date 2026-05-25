@@ -34,6 +34,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/transactions/{id}/payment-proof', [TransactionWebController::class, 'uploadPaymentProof'])->name('transactions.payment-proof');
     Route::delete('/transactions/{id}/destroy', [TransactionWebController::class, 'destroy'])->name('transactions.destroy');
 
+    Route::get('/transactions/{id}/print', [TransactionWebController::class, 'printStruk'])->name('transactions.print');
+
     Route::get('/reports', [ReportWebController::class, 'index'])->name('reports.index');
 
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
