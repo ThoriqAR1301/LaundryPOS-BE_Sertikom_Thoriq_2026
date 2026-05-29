@@ -119,7 +119,7 @@
                 <div class="flex justify-between items-center py-2 border-b border-slate-50">
                     <span class="text-slate-500">Jumlah</span>
                     <span class="font-semibold text-slate-700">
-                        {{ $transaction->service_unit }} {{ $transaction->service->unit }}
+                        {{ $transaction->service_unit != 0 ? (floatval($transaction->service_unit) == intval($transaction->service_unit) ? intval($transaction->service_unit) : floatval($transaction->service_unit)) : $transaction->service_unit }} {{ $transaction->service->unit }}
                     </span>
                 </div>
                 <div class="flex justify-between items-center py-2 border-b border-slate-50">
@@ -339,7 +339,7 @@
                     <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Detail Layanan</p>
                     <div class="flex justify-between items-center mb-1.5">
                         <span class="text-slate-600 text-sm capitalize">{{ $transaction->service->service_name }}</span>
-                        <span class="text-slate-600 text-sm">{{ $transaction->service_unit }} {{ $transaction->service->unit }}</span>
+                        <span class="text-slate-600 text-sm">{{ $transaction->service_unit != 0 ? (floatval($transaction->service_unit) == intval($transaction->service_unit) ? intval($transaction->service_unit) : floatval($transaction->service_unit)) : $transaction->service_unit }} {{ $transaction->service->unit }}</span>
                     </div>
                     <div class="flex justify-between items-center mb-1.5">
                         <span class="text-slate-500 text-xs">Harga Per {{ $transaction->service->unit }}</span>
