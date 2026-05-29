@@ -35,7 +35,9 @@ class AuthController extends Controller
             'status' => true,
             'message' => 'Login Berhasil',
             'data' => [
-                'user' => $user,
+                'user' => tap($user->load('customer'), function ($u) {
+                    $u->makeVisible('plain_password');
+                }),
                 'token' => $token,
             ],
         ], 200);
@@ -55,7 +57,9 @@ class AuthController extends Controller
     {
         return response()->json([
             'status' => true,
-            'data' => $request->user(),
+            'data' => tap($request->user()->load('customer'), function ($user) {
+                $user->makeVisible('plain_password');
+            }),
         ], 200);
     }
 }
