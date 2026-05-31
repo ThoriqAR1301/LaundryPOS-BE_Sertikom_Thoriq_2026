@@ -173,6 +173,28 @@
         #confirm-cancel:hover { background:#e2e8f0; }
         .dark #confirm-cancel { background:#334155; color:#cbd5e1; }
         #confirm-ok { color:#fff; }
+
+        @keyframes slideInNotif {
+            from { opacity:0; transform:translateY(-8px) scale(0.97); }
+            to { opacity:1; transform:translateY(0) scale(1); }
+        }
+        @keyframes slideOutNotif {
+            from { opacity:1; transform:translateY(0) scale(1); }
+            to { opacity:0; transform:translateY(-8px) scale(0.97); }
+        }
+        .notif-item { display:flex; align-items:flex-start; gap:0.75rem; padding:0.875rem 1rem; transition:background 0.15s; cursor:default; }
+        .notif-item:hover { background:#f8fafc; }
+        .dark .notif-item:hover { background:#1e293b; }
+        .notif-item-icon { width:34px; height:34px; border-radius:0.6rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.8rem; }
+        .notif-item-body { flex:1; min-width:0; }
+        .notif-item-title { font-size:0.8rem; font-weight:700; color:#1e293b; margin-bottom:0.15rem; }
+        .dark .notif-item-title { color:#e2e8f0; }
+        .notif-item-msg { font-size:0.75rem; color:#64748b; line-height:1.4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .notif-item-time { font-size:0.7rem; color:#94a3b8; margin-top:0.25rem; }
+        .notif-success .notif-item-icon { background:#d1fae5; color:#10b981; }
+        .notif-error .notif-item-icon { background:#fee2e2; color:#ef4444; }
+        .notif-warning .notif-item-icon { background:#fef3c7; color:#f59e0b; }
+        .notif-info .notif-item-icon { background:#dbeafe; color:#3b82f6; }
     </style>
 
     @stack('styles')
@@ -281,6 +303,39 @@
                 <div class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
                     <i class="fas fa-calendar-alt text-slate-400 text-sm"></i>
                     <span class="text-slate-600 text-sm font-medium" id="current-date"></span>
+                </div>
+
+                <div class="relative" id="notif-wrapper">
+                    <button onclick="toggleNotif()" class="relative w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-all duration-200" title="Notifikasi">
+                        <i class="fas fa-bell text-sm"></i>
+                        <span id="notif-badge" class="hidden absolute -top-1 -right-1 min-w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold leading-none px-1"></span>
+                    </button>
+
+                    <div id="notif-dropdown" class="hidden absolute right-0 top-12 w-80 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden dark:bg-slate-800 dark:border-slate-700" style="animation:slideInNotif 0.2s ease-out">
+                        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center dark:bg-blue-900">
+                                    <i class="fas fa-bell text-xs text-blue-500 dark:text-blue-300"></i>
+                                </div>
+                                <span class="font-bold text-slate-800 text-sm dark:text-slate-200">Notifikasi</span>
+                                <span id="notif-count-label" class="hidden text-xs bg-blue-100 text-blue-600 font-bold px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"></span>
+                            </div>
+                            <button onclick="clearAllNotif()" class="text-xs text-slate-400 hover:text-red-500 transition-colors font-medium">Hapus Semua</button>
+                        </div>
+
+                        <div id="notif-list" class="max-h-80 overflow-y-auto scrollbar-hide divide-y divide-slate-50 dark:divide-slate-700">
+                            <div id="notif-empty" class="flex flex-col items-center justify-center py-10 gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center dark:bg-slate-700">
+                                    <i class="fas fa-bell-slash text-slate-400 text-lg"></i>
+                                </div>
+                                <p class="text-slate-400 text-sm font-medium">Belum Ada Notifikasi</p>
+                            </div>
+                        </div>
+
+                        <div class="px-4 py-2.5 border-t border-slate-100 dark:border-slate-700 text-center">
+                            <p class="text-xs text-slate-400">Notifikasi Tersimpan Selama Sesi Ini</p>
+                        </div>
+                    </div>
                 </div>
 
                 <button id="theme-toggle" onclick="toggleTheme()" class="w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-all duration-200" title="Toggle Dark Mode">
@@ -408,6 +463,117 @@ const LaundryToast = (() => {
     };
 })();
 
+const NotifStore = (() => {
+    const KEY = 'laundry_notifs';
+    const iconMap = {
+        success: 'fas fa-check',
+        error: 'fas fa-times',
+        warning: 'fas fa-exclamation-triangle',
+        info: 'fas fa-info',
+    };
+
+    function getAll() {
+        try { return JSON.parse(sessionStorage.getItem(KEY) || '[]'); } catch { return []; }
+    }
+
+    function add(type, title, message) {
+        const list = getAll();
+        list.unshift({
+            id: Date.now(),
+            type, title,
+            message: message || '',
+            time: new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }),
+        });
+        sessionStorage.setItem(KEY, JSON.stringify(list.slice(0, 20)));
+        renderNotif();
+    }
+
+    function clear() {
+        sessionStorage.removeItem(KEY);
+        renderNotif();
+    }
+
+    function renderNotif() {
+        const list = getAll();
+        const listEl = document.getElementById('notif-list');
+        const emptyEl = document.getElementById('notif-empty');
+        const badge = document.getElementById('notif-badge');
+        const countLbl = document.getElementById('notif-count-label');
+
+        listEl.querySelectorAll('.notif-item').forEach(el => el.remove());
+
+        if (list.length === 0) {
+            emptyEl.style.display = 'flex';
+            badge.classList.add('hidden');
+            countLbl.classList.add('hidden');
+            return;
+        }
+
+        emptyEl.style.display = 'none';
+        badge.classList.remove('hidden');
+        badge.textContent = list.length > 9 ? '9+' : list.length;
+        countLbl.classList.remove('hidden');
+        countLbl.textContent = list.length + ' item';
+
+        list.forEach(n => {
+            const div = document.createElement('div');
+            div.className = `notif-item notif-${n.type}`;
+            div.innerHTML = `
+                <div class="notif-item-icon"><i class="${iconMap[n.type] || 'fas fa-bell'}"></i></div>
+                <div class="notif-item-body">
+                    <p class="notif-item-title">${n.title}</p>
+                    ${n.message ? `<p class="notif-item-msg">${n.message}</p>` : ''}
+                    <p class="notif-item-time"><i class="fas fa-clock text-xs mr-1"></i>${n.time}</p>
+                </div>
+            `;
+            listEl.appendChild(div);
+        });
+    }
+
+    return { add, clear, renderNotif };
+})();
+
+function toggleNotif() {
+    const dd = document.getElementById('notif-dropdown');
+    const isHidden = dd.classList.contains('hidden');
+    if (isHidden) {
+        dd.classList.remove('hidden');
+        dd.style.animation = 'none';
+        void dd.offsetWidth;
+        dd.style.animation = 'slideInNotif 0.2s ease-out forwards';
+    } else {
+        dd.style.animation = 'slideOutNotif 0.18s ease-in forwards';
+        setTimeout(() => {
+            dd.classList.add('hidden');
+            dd.style.animation = '';
+        }, 175);
+    }
+}
+
+function clearAllNotif() {
+    NotifStore.clear();
+}
+
+document.addEventListener('click', function(e) {
+    const wrapper = document.getElementById('notif-wrapper');
+    const dd      = document.getElementById('notif-dropdown');
+    if (wrapper && !wrapper.contains(e.target) && !dd.classList.contains('hidden')) {
+        dd.style.animation = 'slideOutNotif 0.18s ease-in forwards';
+        setTimeout(() => {
+            dd.classList.add('hidden');
+            dd.style.animation = '';
+        }, 175);
+    }
+});
+
+['success','error','warning','info'].forEach(type => {
+    const orig = LaundryToast[type].bind(LaundryToast);
+    LaundryToast[type] = (title, message, duration) => {
+        NotifStore.add(type, title, message);
+        orig(title, message, duration);
+    };
+});
+
 @if(session('success')) LaundryToast.success('Berhasil!', @json(session('success'))); @endif
 @if(session('error')) LaundryToast.error('Gagal!', @json(session('error'))); @endif
 @if(session('info')) LaundryToast.info('Informasi', @json(session('info'))); @endif
@@ -421,13 +587,13 @@ const LaundryConfirm = (() => {
     const iconEl = document.getElementById('confirm-icon');
     const titleEl = document.getElementById('confirm-title');
     const msgEl = document.getElementById('confirm-message');
-    const cancelEl= document.getElementById('confirm-cancel');
+    const cancelEl = document.getElementById('confirm-cancel');
     const okEl = document.getElementById('confirm-ok');
 
     const typeConfig = {
-        danger  : { icon:'fas fa-trash', bg:'#fee2e2', iconColor:'#ef4444', okBg:'linear-gradient(to right,#ef4444,#f43f5e)', okText:'Hapus' },
-        warning : { icon:'fas fa-exclamation', bg:'#fef3c7', iconColor:'#f59e0b', okBg:'linear-gradient(to right,#f59e0b,#f97316)', okText:'Lanjutkan' },
-        info    : { icon:'fas fa-question-circle', bg:'#dbeafe', iconColor:'#3b82f6', okBg:'linear-gradient(to right,#3b82f6,#06b6d4)', okText:'OK' },
+        danger: { icon:'fas fa-trash', bg:'#fee2e2', iconColor:'#ef4444', okBg:'linear-gradient(to right,#ef4444,#f43f5e)', okText:'Hapus' },
+        warning: { icon:'fas fa-exclamation', bg:'#fef3c7', iconColor:'#f59e0b', okBg:'linear-gradient(to right,#f59e0b,#f97316)', okText:'Lanjutkan' },
+        info: { icon:'fas fa-question-circle', bg:'#dbeafe', iconColor:'#3b82f6', okBg:'linear-gradient(to right,#3b82f6,#06b6d4)', okText:'OK' },
     };
 
     function playSlideUp() {
@@ -449,9 +615,9 @@ const LaundryConfirm = (() => {
         const cfg = typeConfig[type] || typeConfig.danger;
         iconEl.innerHTML = `<i class="${cfg.icon}" style="color:${cfg.iconColor}"></i>`;
         iconEl.style.background = cfg.bg;
-        titleEl.textContent = title       || 'Yakin?';
-        msgEl.textContent = message     || 'Aksi Ini Tidak Bisa Dibatalkan';
-        cancelEl.textContent = cancelText  || 'Batal';
+        titleEl.textContent = title || 'Yakin?';
+        msgEl.textContent = message || 'Aksi Ini Tidak Bisa Dibatalkan';
+        cancelEl.textContent = cancelText || 'Batal';
         okEl.textContent = confirmText || cfg.okText;
         okEl.style.background = cfg.okBg;
         overlay.classList.add('active');
@@ -475,12 +641,12 @@ const LaundryConfirm = (() => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 show({
-                    title       : this.dataset.confirmTitle,
-                    message     : this.dataset.confirmMessage || 'Aksi Ini Tidak Bisa Dibatalkan',
-                    type        : this.dataset.confirmType    || 'danger',
-                    confirmText : this.dataset.confirmOk,
-                    cancelText  : this.dataset.confirmCancel,
-                    onConfirm   : () => { this.removeAttribute('data-confirm-title'); this.submit(); }
+                    title: this.dataset.confirmTitle,
+                    message: this.dataset.confirmMessage || 'Aksi Ini Tidak Bisa Dibatalkan',
+                    type: this.dataset.confirmType || 'danger',
+                    confirmText: this.dataset.confirmOk,
+                    cancelText: this.dataset.confirmCancel,
+                    onConfirm: () => { this.removeAttribute('data-confirm-title'); this.submit(); }
                 });
             });
         });
@@ -491,26 +657,25 @@ const LaundryConfirm = (() => {
 
 const LaundryValidate = (() => {
     const rules = {
-        required  : (v) => v.trim() !== '' || 'Wajib Diisi',
-        minLength : (v, n) => v.length >= parseInt(n) || `Minimal ${n} Karakter`,
-        maxLength : (v, n) => v.length <= parseInt(n) || `Maksimal ${n} Karakter`,
-        email     : (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Format Email Tidak Valid',
-        phone     : (v) => /^[\d\s\-\+]{8,15}$/.test(v) || 'Format Nomor HP Tidak Valid',
-        number    : (v) => !isNaN(v) && v !== '' || 'Harus Berupa Angka',
-        match     : (v, sel, f) => v === (document.querySelector(sel)?.value || '') || `Harus Sama Dengan ${f || 'Field Di Atas'}`,
+        required: (v) => v.trim() !== '' || 'Wajib Diisi',
+        minLength: (v, n) => v.length >= parseInt(n) || `Minimal ${n} Karakter`,
+        maxLength: (v, n) => v.length <= parseInt(n) || `Maksimal ${n} Karakter`,
+        email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Format Email Tidak Valid',
+        phone: (v) => /^[\d\s\-\+]{8,15}$/.test(v) || 'Format Nomor HP Tidak Valid',
+        number: (v) => !isNaN(v) && v !== '' || 'Harus Berupa Angka',
+        match: (v, sel, f) => v === (document.querySelector(sel)?.value || '') || `Harus Sama Dengan ${f || 'Field Di Atas'}`,
     };
 
     function validateField(input) {
         const d = input.dataset;
         const v = input.value;
-
-        let   error = null;
+        let error = null;
         if (d.required) { const r = rules.required(v); if (r !== true) error = r; }
         if (!error && d.minLength) { const r = rules.minLength(v, d.minLength); if (r !== true) error = r; }
         if (!error && d.maxLength) { const r = rules.maxLength(v, d.maxLength); if (r !== true) error = r; }
-        if (!error && d.type==='email') { const r = rules.email(v);  if (r !== true) error = r; }
-        if (!error && d.type==='phone') { const r = rules.phone(v);  if (r !== true) error = r; }
-        if (!error && d.type==='number') { const r = rules.number(v); if (r !== true) error = r; }
+        if (!error && d.type==='email'){ const r = rules.email(v); if (r !== true) error = r; }
+        if (!error && d.type==='phone'){ const r = rules.phone(v); if (r !== true) error = r; }
+        if (!error && d.type==='number'){const r = rules.number(v); if (r !== true) error = r; }
         if (!error && d.match) { const r = rules.match(v, d.match, d.matchLabel); if (r !== true) error = r; }
 
         showFieldState(input, error);
@@ -555,6 +720,8 @@ const LaundryValidate = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
+    NotifStore.renderNotif();
+
     document.querySelectorAll('input.debounce-search').forEach(input => {
         const delay = parseInt(input.dataset.debounce || '500');
         let timer = null;

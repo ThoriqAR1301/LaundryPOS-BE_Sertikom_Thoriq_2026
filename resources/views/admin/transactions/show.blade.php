@@ -59,36 +59,50 @@
     </div>
 
     <div class="card">
-        <h3 class="font-bold text-slate-800 mb-5 flex items-center gap-2">
+        <h3 class="font-bold text-slate-800 mb-6 flex items-center gap-2">
             <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:#dbeafe">
                 <i class="fas fa-tasks text-xs" style="color:#3b82f6"></i>
             </div>
             Progress Cucian
         </h3>
-        <div class="relative px-2 pb-4 pt-2">
 
-            <div class="absolute h-1 bg-slate-200 rounded-full" style="top:28px;left:calc(10% + 16px);right:calc(10% + 16px);z-index:0"></div>
+        @php
+            $statusStyles = [
+                'antrian' => ['gradient'=>'linear-gradient(135deg,#f59e0b,#d97706)', 'icon'=>'fa-clock', 'color'=>'#f59e0b', 'label'=>'Antrian'],
+                'dicuci' => ['gradient'=>'linear-gradient(135deg,#3b82f6,#0ea5e9)', 'icon'=>'fa-soap', 'color'=>'#3b82f6', 'label'=>'Dicuci'],
+                'disetrika' => ['gradient'=>'linear-gradient(135deg,#7c3aed,#a855f7)', 'icon'=>'fa-wind', 'color'=>'#7c3aed', 'label'=>'Disetrika'],
+                'siap diambil' => ['gradient'=>'linear-gradient(135deg,#10b981,#059669)', 'icon'=>'fa-box-open', 'color'=>'#10b981', 'label'=>'Siap Ambil'],
+                'diambil' => ['gradient'=>'linear-gradient(135deg,#64748b,#475569)', 'icon'=>'fa-flag-checkered','color'=>'#64748b', 'label'=>'Selesai'],
+            ];
+            $statusSteps = ['antrian','dicuci','disetrika','siap diambil','diambil'];
+            $currentStep = array_search($transaction->status, $statusSteps);
+        @endphp
 
-            <div class="absolute h-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full transition-all duration-500" style="top:28px;left:calc(10% + 16px);width:calc((100% - 20% - 32px) * {{ $currentStep / (count($statusSteps)-1) }});z-index:0"></div>
+        <div class="relative flex items-start justify-between px-4">
 
-            <div class="flex items-start justify-between px-0">
-                @foreach($statusSteps as $i => $step)
-                <div class="flex flex-col items-center gap-2" style="z-index:1;width:20%">
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all {{ $i <= $currentStep ? 'bg-gradient-to-br from-blue-400 to-cyan-400 border-blue-400 text-white' : 'bg-white border-slate-200 text-slate-300' }}">
-                        @if($i < $currentStep)
-                            <i class="fas fa-check text-sm"></i>
-                        @elseif($i == $currentStep)
-                            <i class="fas fa-circle text-sm animate-pulse"></i>
-                        @else
-                            <i class="fas fa-circle text-sm"></i>
-                        @endif
-                    </div>
-                    <span class="text-sm font-semibold text-center w-full leading-tight {{ $i <= $currentStep ? 'text-blue-600' : 'text-slate-400' }}">
-                        {{ ucfirst($step) }}
-                    </span>
+            <div class="absolute h-0.5 bg-slate-200 dark:bg-slate-700 rounded-full" style="top:28px;left:calc(10% + 28px);right:calc(10% + 28px);z-index:0"></div>
+
+            @if($currentStep > 0)
+            <div class="absolute h-0.5 rounded-full transition-all duration-700" style="top:28px;left:calc(10% + 28px);width:calc((100% - 20% - 56px) * {{ $currentStep / (count($statusSteps)-1) }});background:linear-gradient(to right,#f59e0b,#3b82f6,#7c3aed,#10b981);z-index:0"></div>
+            @endif
+
+            @foreach($statusSteps as $i => $step)
+            @php $st = $statusStyles[$step]; $done = $i < $currentStep; $active = $i == $currentStep; @endphp
+            <div class="flex flex-col items-center gap-2" style="z-index:1;width:20%">
+
+                <div class="w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-all duration-300" style="background:{{ ($done || $active) ? $st['gradient'] : '#e2e8f0' }}; {{ $active ? 'box-shadow:0 0 0 4px rgba(0,0,0,0.06),0 0 16px ' . $st['color'] . '55' : '' }}">
+                    <i class="fas {{ $st['icon'] }} text-lg" style="color:{{ ($done || $active) ? '#fff' : '#94a3b8' }}"></i>
                 </div>
-                @endforeach
+
+                <span class="text-xl font-extrabold leading-none" style="color:{{ ($done || $active) ? $st['color'] : '#94a3b8' }}">
+                    {{ $active ? '●' : ($done ? '✓' : '0') }}
+                </span>
+
+                <span class="text-xs font-semibold text-center leading-tight text-slate-500 dark:text-slate-400">
+                    {{ $st['label'] }}
+                </span>
             </div>
+            @endforeach
         </div>
     </div>
 

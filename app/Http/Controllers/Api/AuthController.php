@@ -62,4 +62,27 @@ class AuthController extends Controller
             }),
         ], 200);
     }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string',
+        ]);
+
+        $user = $request->user();
+        $user->update(['name' => $request->name]);
+
+        $user->customer()->updateOrCreate(
+            ['user_id' => $user->id],
+            ['phone' => $request->phone, 'address' => $request->address]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Profil Berhasil Diperbarui',
+            'data' => $user->load('customer'),
+        ]);
+    }
 }

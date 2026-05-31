@@ -91,8 +91,9 @@ class TransactionWebController extends Controller
     public function show($id)
     {
         $transaction = Transaction::with(['admin', 'customer.user', 'service'])->findOrFail($id);
+        $statusCounts = \App\Models\Transaction::selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status');
 
-        return view('admin.transactions.show', compact('transaction'));
+        return view('admin.transactions.show', compact('transaction', 'statusCounts'));
     }
 
     public function edit($id)
