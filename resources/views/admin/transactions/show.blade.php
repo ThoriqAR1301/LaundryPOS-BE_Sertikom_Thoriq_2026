@@ -400,18 +400,7 @@
                 </div>
 
             </div>
-
-            <div class="flex gap-2 px-5 py-4 border-t border-slate-100">
-                <button onclick="tutupStruk()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50 transition-colors">
-                    Tutup
-                </button>
-                <button onclick="printStruk()" class="flex-1 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:-translate-y-0.5" style="background:linear-gradient(135deg,#059669,#10b981)">
-                    <i class="fas fa-print mr-1.5"></i> Print
-                </button>
-                <button onclick="downloadPDFFromShow()" class="flex-1 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:-translate-y-0.5" style="background:linear-gradient(135deg,#dc2626,#ef4444)">
-                    <i class="fas fa-file-pdf mr-1.5"></i> PDF
-                </button>
-            </div>
+            
         </div>
     </div>
 
