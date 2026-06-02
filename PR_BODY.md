@@ -3,7 +3,7 @@ Title: chore(swagger): stabilize generation, add CI validation and improve OpenA
 Summary:
 
 - Stabilize `l5-swagger` generation by ensuring docblock parsing works and avoiding duplicate/invalid annotations.
-- Add CI workflow to automatically generate and validate OpenAPI JSON on push.
+- Add CI workflow to automatically generate and validate OpenAPI JSON on push and pull requests to `main`.
 - Fix workflow PHP setup so required Laravel extensions are installed in the GitHub runner.
 - Add annotation and schema checks to fail CI early (PHP lint, annotation sanity checks, lightweight JSON checks, extended structural checks, swagger-cli validation).
 - Add/clean OpenAPI annotations for models and key API endpoints (Auth, Customer, Service, Transaction, Report).
