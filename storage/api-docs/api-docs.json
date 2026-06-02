@@ -361,17 +361,6 @@
                     }
                 ]
             }
-        },
-        "/api/ping": {
-            "get": {
-                "summary": "Ping",
-                "operationId": "882b2d1e3a4c3b11a87bda0a6ff1be71",
-                "responses": {
-                    "200": {
-                        "description": "pong"
-                    }
-                }
-            }
         }
     },
     "components": {

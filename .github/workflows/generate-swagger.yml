@@ -43,6 +43,9 @@ jobs:
           echo "Running annotation sanity checks..."
           php scripts/debug_parse.php
 
+      - name: Debug: Scan ApiInfo
+        run: php scripts/ci_scan_check.php
+
       - name: Generate Swagger docs
         run: php artisan l5-swagger:generate --no-interaction
 

@@ -17,12 +17,6 @@ use OpenApi\Annotations as OA;
  *     scheme="bearer",
  *     bearerFormat="JWT"
  * )
- *
- * @OA\Get(
- *     path="/api/ping",
- *     summary="Ping",
- *     @OA\Response(response=200, description="pong")
- * )
  */
 class ApiInfo
 {
