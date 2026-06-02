@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use OpenApi\Annotations as OA;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Customer;
@@ -15,15 +16,54 @@ class ReportController extends Controller
     {
         $today = Carbon::today();
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/reports/dashboard",
+     *     tags={"Report"},
+     *     summary="Dashboard ringkasan",
+     *     @OA\Response(response=200, description="Dashboard data")
+     * )
+     */
         $totalPendapatan = Transaction::where('payment_status', 'paid')->sum('total_price');
         $pendapatanHariIni = Transaction::where('payment_status', 'paid')->whereDate('paid_at', $today)->sum('total_price');
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/reports/pendapatan",
+     *     tags={"Report"},
+     *     summary="Pendapatan per bulan",
+     *     @OA\Parameter(name="year", in="query", required=false, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Data pendapatan per bulan")
+     * )
+     */
         $totalTransaksi = Transaction::count();
         $transaksiHariIni = Transaction::whereDate('created_at', $today)->count();
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/reports/transaksi-per-hari",
+     *     tags={"Report"},
+     *     summary="Transaksi per hari",
+     *     @OA\Parameter(name="month", in="query", required=false, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="year", in="query", required=false, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Data transaksi per hari")
+     * )
+     */
         $totalCustomer = Customer::count();
         $totalLayanan = Service::count();
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/reports/layanan-populer",
+     *     tags={"Report"},
+     *     summary="Layanan populer",
+     *     @OA\Response(response=200, description="Data layanan populer")
+     * )
+     */
         $statusSummary = Transaction::selectRaw('status, count(*) as total')->groupBy('status')->get();
 
         $transaksiAntrian = Transaction::where('status', 'antrian')->count();
@@ -31,6 +71,19 @@ class ReportController extends Controller
         $transaksiSiap = Transaction::where('status', 'siap diambil')->count();
         $transaksiSelesai = Transaction::where('status', 'diambil')->count();
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/reports/riwayat",
+     *     tags={"Report"},
+     *     summary="Riwayat transaksi",
+     *     @OA\Parameter(name="status", in="query", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="payment_status", in="query", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="start_date", in="query", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="end_date", in="query", required=false, @OA\Schema(type="string")),
+     *     @OA\Response(response=200, description="Data riwayat transaksi")
+     * )
+     */
         return response()->json([
             'status' => true,
             'data' => [

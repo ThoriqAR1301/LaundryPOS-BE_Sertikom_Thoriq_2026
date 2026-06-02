@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use OpenApi\Annotations as OA;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Transaction;
@@ -21,8 +22,49 @@ class TransactionController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/transactions",
+     *     tags={"Transaksi"},
+     *     summary="Daftar Transaksi",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Daftar transaksi berhasil diambil",
+     *         @OA\JsonContent(type="object",
+     *             @OA\Property(property="status", type="boolean"),
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Transaction"))
+     *         )
+     *     )
+     * )
+     */
+
     public function store(Request $request)
     {
+        /**
+         * @OA\Post(
+         *     path="/api/transactions",
+         *     tags={"Transaksi"},
+         *     summary="Buat transaksi",
+         *     security={{"bearerAuth":{}}},
+         *     @OA\RequestBody(
+         *         required=true,
+         *         @OA\JsonContent(
+         *             required={"customer_id","service_id","weight","payment_method"},
+         *             @OA\Property(property="customer_id", type="integer"),
+         *             @OA\Property(property="service_id", type="integer"),
+         *             @OA\Property(property="weight", type="number"),
+         *             @OA\Property(property="payment_method", type="string")
+         *         )
+         *     ),
+         *     @OA\Response(
+         *         response=201,
+         *         description="Transaksi Berhasil Dibuat",
+         *         @OA\JsonContent(type="object", @OA\Property(property="status", type="boolean"), @OA\Property(property="data", ref="#/components/schemas/Transaction"))
+         *     ),
+         *     @OA\Response(response=422, description="Validation Error")
+         * )
+         */
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'service_id' => 'required|exists:services,id',
@@ -40,13 +82,78 @@ class TransactionController extends Controller
             'payment_method.in' => 'Metode Pembayaran Harus Cash Atau Transfer',
         ]);
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/transactions/{id}",
+     *     tags={"Transaksi"},
+     *     summary="Detail transaksi",
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+        *     @OA\Response(
+        *         response=200,
+        *         description="Detail transaksi berhasil diambil",
+        *         @OA\JsonContent(type="object",
+        *             @OA\Property(property="status", type="boolean"),
+        *             @OA\Property(property="data", ref="#/components/schemas/Transaction")
+        *         )
+        *     ),
+        *     @OA\Response(response=404, description="Transaksi tidak ditemukan")
+     * )
+     */
         $service = Service::find($request->service_id);
         $total_price = $service->price * $request->weight;
 
+
+    /**
+     * @OA\Put(
+     *     path="/api/transactions/{id}/status",
+     *     tags={"Transaksi"},
+     *     summary="Update status transaksi",
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+        *     @OA\Response(
+        *         response=200,
+        *         description="Data Transaksi Berhasil Diambil",
+        *         @OA\JsonContent(type="object",
+        *             @OA\Property(property="status", type="boolean"),
+        *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Transaction"))
+        *         )
+        *     )
+        *     @OA\Response(
+        *         response=200,
+        *         description="Status berhasil diperbarui",
+        *         @OA\JsonContent(type="object",
+        *             @OA\Property(property="status", type="boolean"),
+        *             @OA\Property(property="message", type="string", example="Status Transaksi Berhasil Diperbarui"),
+        *             @OA\Property(property="data", ref="#/components/schemas/Transaction")
+        *         )
+        *     ),
+        *     @OA\Response(response=404, description="Transaksi tidak ditemukan")
+     * )
+     */
         $lastTransaction = Transaction::withTrashed()->latest('id')->first();
         $lastNumber = $lastTransaction ? (int) substr($lastTransaction->invoice_code, 4) : 0;
         $invoiceCode = 'LND-' . str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/transactions/{id}/payment-proof",
+     *     tags={"Transaksi"},
+     *     summary="Upload bukti pembayaran",
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\MediaType(mediaType="multipart/form-data", @OA\Schema(@OA\Property(property="payment_proof", type="string", format="binary")))),
+        *     @OA\Response(
+        *         response=200,
+        *         description="Bukti pembayaran berhasil diupload",
+        *         @OA\JsonContent(type="object",
+        *             @OA\Property(property="status", type="boolean"),
+        *             @OA\Property(property="message", type="string", example="Bukti Pembayaran Berhasil Diupload"),
+        *             @OA\Property(property="data", ref="#/components/schemas/Transaction")
+        *         )
+        *     ),
+        *     @OA\Response(response=404, description="Transaksi tidak ditemukan")
+     * )
+     */
         $transaction = Transaction::create([
             'invoice_code' => $invoiceCode,
             'admin_id' => $request->user()->id,
@@ -148,6 +255,15 @@ class TransactionController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/status-laundry",
+     *     tags={"Transaksi"},
+     *     summary="Ambil Status Cucian Milik Pelanggan Yang Login",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Data Transaksi Berhasil Diambil")
+     * )
+    */
     public function statusLaundry(Request $request)
     {
         $user = $request->user();

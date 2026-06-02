@@ -1,0 +1,512 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "LaundryPOS API",
+        "description": "Dokumentasi API LaundryPOS Ecosystem",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login Pelanggan",
+                "operationId": "222b2625838e3c57e017987f73598fda",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "budi@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "budi1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login Berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "$ref": "#/components/schemas/User"
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Email Atau Password Salah"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout Pelanggan",
+                "operationId": "ad65cbbd4e9f201619eae184a5961a98",
+                "responses": {
+                    "200": {
+                        "description": "Logout berhasil"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profile": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Ambil Data Profil Yang Sedang Login",
+                "operationId": "94a5f4c5f5e5755cf43698cf9bc49e9d",
+                "responses": {
+                    "200": {
+                        "description": "Data profil berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Update Profil Pelanggan",
+                "operationId": "4ac9a00014f69a885c9373fdefcaf6f9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Budi Santoso"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "08123456789"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Jl. Contoh No. 1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profil Berhasil Diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customers/{id}": {
+            "get": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Detail pelanggan",
+                "operationId": "7deb49e3f8080db32f759218f96721d8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail pelanggan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Customer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pelanggan tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/services": {
+            "get": {
+                "tags": [
+                    "Service"
+                ],
+                "summary": "List layanan",
+                "operationId": "e7afb58ca51f2c3f60f521dddc32b1d0",
+                "responses": {
+                    "200": {
+                        "description": "Daftar layanan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Service"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/services/{id}": {
+            "get": {
+                "tags": [
+                    "Service"
+                ],
+                "summary": "Detail layanan",
+                "operationId": "dce5b306a141bdec91eff8a15534d7d7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail layanan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Service"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Layanan tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/transactions": {
+            "get": {
+                "tags": [
+                    "Transaksi"
+                ],
+                "summary": "Daftar Transaksi",
+                "operationId": "85b7f9074f7849c472cce811af893538",
+                "responses": {
+                    "200": {
+                        "description": "Daftar transaksi berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Transaction"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/status-laundry": {
+            "get": {
+                "tags": [
+                    "Transaksi"
+                ],
+                "summary": "Ambil Status Cucian Milik Pelanggan Yang Login",
+                "operationId": "02a7be40bb6c61c4d749422f3125f7e1",
+                "responses": {
+                    "200": {
+                        "description": "Data Transaksi Berhasil Diambil"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ping": {
+            "get": {
+                "summary": "Ping",
+                "operationId": "882b2d1e3a4c3b11a87bda0a6ff1be71",
+                "responses": {
+                    "200": {
+                        "description": "pong"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Customer": {
+                "required": [
+                    "id",
+                    "user_id",
+                    "phone"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "user_id": {
+                        "type": "integer"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Service": {
+                "required": [
+                    "id",
+                    "service_name",
+                    "price"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "service_name": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "unit": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Transaction": {
+                "required": [
+                    "id",
+                    "invoice_code",
+                    "customer_id",
+                    "service_id",
+                    "total_price"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "invoice_code": {
+                        "type": "string"
+                    },
+                    "customer_id": {
+                        "type": "integer"
+                    },
+                    "service_id": {
+                        "type": "integer"
+                    },
+                    "total_price": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "payment_method": {
+                        "type": "string"
+                    },
+                    "payment_status": {
+                        "type": "string"
+                    },
+                    "paid_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "required": [
+                    "id",
+                    "name",
+                    "email"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Customer",
+            "description": "Customer"
+        },
+        {
+            "name": "Service",
+            "description": "Service"
+        },
+        {
+            "name": "Transaksi",
+            "description": "Transaksi"
+        }
+    ]
+}

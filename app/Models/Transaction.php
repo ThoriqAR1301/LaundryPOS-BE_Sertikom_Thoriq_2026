@@ -4,6 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OpenApi\Annotations as OA;
+
+/**
+ * @OA\Schema(
+ *     schema="Transaction",
+ *     required={"id","invoice_code","customer_id","service_id","total_price"},
+ *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="invoice_code", type="string"),
+ *     @OA\Property(property="customer_id", type="integer"),
+ *     @OA\Property(property="service_id", type="integer"),
+ *     @OA\Property(property="total_price", type="number"),
+ *     @OA\Property(property="status", type="string"),
+ *     @OA\Property(property="payment_method", type="string"),
+ *     @OA\Property(property="payment_status", type="string"),
+ *     @OA\Property(property="paid_at", type="string", format="date-time")
+ * )
+ */
 
 class Transaction extends Model
 {

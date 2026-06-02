@@ -3,6 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use OpenApi\Annotations as OA;
+
+/**
+ * @OA\Schema(
+ *     schema="Customer",
+ *     required={"id","user_id","phone"},
+ *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="user_id", type="integer"),
+ *     @OA\Property(property="phone", type="string"),
+ *     @OA\Property(property="address", type="string")
+ * )
+ */
 
 class Customer extends Model
 {

@@ -1,0 +1,69 @@
+name: Generate Swagger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: mbstring, json, curl
+          coverage: none
+
+      - name: Setup Composer Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      - name: Lint PHP files
+        run: |
+          set -e
+          echo "Running PHP lint on app/..."
+          find app -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Check Swagger annotations
+        run: |
+          set -e
+          echo "Running annotation sanity checks..."
+          php scripts/debug_parse.php
+
+      - name: Generate Swagger docs
+        run: php artisan l5-swagger:generate --no-interaction
+
+      - name: Validate generated OpenAPI
+        run: |
+          set -e
+          echo "Validating storage/api-docs/api-docs.json"
+          php scripts/validate_openapi.php
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Validate OpenAPI with swagger-cli
+        run: |
+          set -e
+          echo "Installing swagger-cli and validating api-docs.json"
+          npm install -g @apidevtools/swagger-cli
+          swagger-cli validate storage/api-docs/api-docs.json
+
+      - name: Upload api-docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-docs
+          path: storage/api-docs/api-docs.json
