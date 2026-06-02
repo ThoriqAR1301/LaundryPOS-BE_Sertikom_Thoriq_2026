@@ -16,7 +16,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
-          extensions: mbstring, json, curl
+          extensions: mbstring, json, curl, zip, xml, tokenizer, ctype, fileinfo, openssl, pdo
           coverage: none
 
       - name: Setup Composer Cache
