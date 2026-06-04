@@ -55,17 +55,32 @@
                     <label class="form-label">
                         <i class="fas fa-user text-blue-400 mr-1.5"></i> Pelanggan
                     </label>
-                    <div class="relative">
-                        <i class="fas fa-users absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <select name="customer_id" class="form-input pl-10 pr-10 appearance-none cursor-pointer" required>
-                            <option value="">— Pilih Pelanggan —</option>
+                    <div class="relative" id="customerDropdownWrap">
+                        <div class="relative">
+                            <i class="fas fa-users absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                            <input type="text" id="customerSearch" class="form-input pl-10 pr-10 cursor-pointer" placeholder="Cari Nama Atau Nomor HP Pelanggan..." autocomplete="off" onFocus="showCustomerDropdown()" onInput="filterCustomer(this.value)">
+                            <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                        </div>
+
+                        <input type="hidden" name="customer_id" id="customerIdInput" value="{{ old('customer_id') }}" required>
+
+                        <div id="customerDropdownList" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-50 max-h-56 overflow-y-auto scrollbar-hide" style="animation:fadeIn 0.15s ease-out">
                             @foreach($customers as $c)
-                            <option value="{{ $c->id }}" {{ old('customer_id')==$c->id ? 'selected' : '' }}>
-                                {{ $c->user->name }} — {{ $c->phone }}
-                            </option>
+                            <div class="customer-option flex items-center gap-3 px-4 py-3 hover:bg-slate-50 cursor-pointer transition-colors border-b border-slate-50 last:border-0" data-id="{{ $c->id }}" data-name="{{ $c->user->name }}" data-phone="{{ $c->phone }}" onclick="selectCustomer({{ $c->id }}, '{{ $c->user->name }}', '{{ $c->phone }}')">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-sm text-white" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+                                    {{ strtoupper(substr($c->user->name, 0, 1)) }}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-slate-800 text-sm truncate">{{ $c->user->name }}</p>
+                                    <p class="text-xs text-slate-800">{{ $c->phone }}</p>
+                                </div>
+                            </div>
                             @endforeach
-                        </select>
-                        <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                            <div id="customerNoResult" class="hidden px-4 py-6 text-center text-slate-400 text-sm">
+                                <i class="fas fa-search mb-2 block text-lg"></i>
+                                Pelanggan Tidak Ditemukan
+                            </div>
+                        </div>
                     </div>
                     <p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
                         <i class="fas fa-info-circle text-blue-300"></i>
@@ -292,6 +307,57 @@ window.addEventListener('DOMContentLoaded', () => {
     if (checked) selectPayment(checked.closest('.payment-label'));
     hitungTotal();
 });
+
+function showCustomerDropdown() {
+    document.getElementById('customerDropdownList').classList.remove('hidden');
+}
+
+function hideCustomerDropdown() {
+    setTimeout(() => {
+        document.getElementById('customerDropdownList').classList.add('hidden');
+    }, 200);
+}
+
+function filterCustomer(query) {
+    const options = document.querySelectorAll('.customer-option');
+    const noResult = document.getElementById('customerNoResult');
+    const q = query.toLowerCase();
+    let found = 0;
+
+    options.forEach(opt => {
+        const name = opt.dataset.name.toLowerCase();
+        const phone = opt.dataset.phone.toLowerCase();
+        const match = name.includes(q) || phone.includes(q);
+        opt.style.display = match ? 'flex' : 'none';
+        if (match) found++;
+    });
+
+    noResult.classList.toggle('hidden', found > 0);
+    showCustomerDropdown();
+}
+
+function selectCustomer(id, name, phone) {
+    document.getElementById('customerIdInput').value = id;
+    document.getElementById('customerSearch').value = name + ' — ' + phone;
+    document.getElementById('customerDropdownList').classList.add('hidden');
+}
+
+document.addEventListener('click', function(e) {
+    const wrap = document.getElementById('customerDropdownWrap');
+    if (wrap && !wrap.contains(e.target)) {
+        document.getElementById('customerDropdownList').classList.add('hidden');
+    }
+});
+
+@if(old('customer_id'))
+document.addEventListener('DOMContentLoaded', () => {
+    const selected = document.querySelector(`.customer-option[data-id="{{ old('customer_id') }}"]`);
+    if (selected) {
+        document.getElementById('customerSearch').value = selected.dataset.name + ' — ' + selected.dataset.phone;
+    }
+});
+@endif
+</script>
 </script>
 @endpush
 @endsection

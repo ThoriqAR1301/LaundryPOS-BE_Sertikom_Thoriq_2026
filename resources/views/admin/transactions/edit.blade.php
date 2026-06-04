@@ -90,21 +90,21 @@
                     <label class="form-label">
                         <i class="fas fa-user text-blue-400 mr-1.5"></i> Pelanggan
                     </label>
-                    <div class="relative">
-                        <i class="fas fa-users absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <select name="customer_id" class="form-input pl-10 pr-10 appearance-none cursor-pointer" required>
-                            <option value="">— Pilih Pelanggan —</option>
-                            @foreach($customers as $c)
-                            <option value="{{ $c->id }}" {{ (old('customer_id', $transaction->customer_id) == $c->id) ? 'selected' : '' }}>
-                                {{ $c->user->name }} — {{ $c->phone }}
-                            </option>
-                            @endforeach
-                        </select>
-                        <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                    <input type="hidden" name="customer_id" value="{{ $transaction->customer_id }}">
+
+                    <div class="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 cursor-not-allowed">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-sm text-white" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+                            {{ strtoupper(substr($transaction->customer->user->name, 0, 1)) }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-slate-700 text-sm truncate">{{ $transaction->customer->user->name }}</p>
+                            <p class="text-xs text-slate-400">{{ $transaction->customer->phone }}</p>
+                        </div>
+                        <i class="fas fa-lock text-slate-300 text-sm"></i>
                     </div>
                     <p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
                         <i class="fas fa-info-circle text-blue-300"></i>
-                        Pilih Pelanggan Yang Melakukan Laundry
+                        Pelanggan Tidak Dapat Diubah Setelah Transaksi Dibuat
                     </p>
                 </div>
 
