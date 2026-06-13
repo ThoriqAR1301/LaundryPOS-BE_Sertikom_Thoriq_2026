@@ -124,10 +124,10 @@
         </div>
 
         <div class="flex items-center gap-3 w-full max-w-sm" id="btn-row">
-            <button id="btn-prev" onclick="prevSlide()" class="flex-1 py-3.5 rounded-2xl font-semibold text-sm transition-all" style="display:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)">
-                <i class="fas fa-arrow-left mr-2"></i> Kembali
+            <button id="btn-prev" onclick="prevSlide()" class="flex-1 py-3.5 rounded-2xl font-semibold text-sm transition-all hover:-translate-y-0.5 shadow-lg flex items-center justify-center gap-2" style="display:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)">
+                <i class="fas fa-arrow-left text-xs"></i> Kembali
             </button>
-            <button id="btn-next" onclick="nextSlide()" class="flex-1 py-3.5 rounded-2xl font-bold text-sm text-white transition-all hover:-translate-y-0.5 shadow-lg" style="background:linear-gradient(to right,#1d4ed8,#3b82f6,#38bdf8);box-shadow:0 6px 20px rgba(59,130,246,0.35)">
+            <button id="btn-next" onclick="nextSlide()" class="flex-1 py-3.5 rounded-2xl font-bold text-sm text-white transition-all hover:-translate-y-0.5 shadow-lg flex items-center justify-center gap-2" style="background:linear-gradient(to right,#1d4ed8,#3b82f6,#38bdf8);box-shadow:0 6px 20px rgba(59,130,246,0.35)">
                 Selanjutnya <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
@@ -136,137 +136,114 @@
 </div>
 
 <script>
-// ── Data Slides ──────────────────────────────────────────────────
+
 const SLIDES = [
     {
-        bg       : 'linear-gradient(135deg,#060d1a 0%,#0d1f3c 50%,#0f2952 100%)',
-        iconBg   : 'linear-gradient(135deg,#1d4ed8,#3b82f6,#38bdf8)',
+        bg: 'linear-gradient(135deg,#060d1a 0%,#0d1f3c 50%,#0f2952 100%)',
+        iconBg: 'linear-gradient(135deg,#1d4ed8,#3b82f6,#38bdf8)',
         ringOuter: 'rgba(56,189,248,0.2)',
         ringInner: 'rgba(56,189,248,0.35)',
-        glow     : 'rgba(56,189,248,0.15)',
-        accent   : '#38bdf8',
-        icon     : 'fa-shirt',
-        title    : 'Selamat Datang di<br>LaundryPOS',
-        subtitle : 'Solusi modern untuk mengelola dan memantau laundry Anda secara efisien, kapan saja dan di mana saja.',
-        progress : '33.33%',
-        btnBg    : 'linear-gradient(to right,#1d4ed8,#3b82f6,#38bdf8)',
+        glow: 'rgba(56,189,248,0.15)',
+        accent: '#38bdf8',
+        icon: 'fa-shirt',
+        title: 'Selamat Datang Di<br>LaundryPOS',
+        subtitle: 'Solusi Modern Untuk Mengelola Dan Memantau Laundry Anda Secara Efisien, Kapan Saja Dan Di Mana Saja',
+        progress: '33.33%',
+        btnBg: 'linear-gradient(to right,#1d4ed8,#3b82f6,#38bdf8)',
         btnShadow: 'rgba(59,130,246,0.35)',
     },
     {
-        bg       : 'linear-gradient(135deg,#0f0a1e 0%,#1e0a3c 50%,#2e1065 100%)',
-        iconBg   : 'linear-gradient(135deg,#5b21b6,#7c3aed,#a855f7)',
+        bg: 'linear-gradient(135deg,#0f0a1e 0%,#1e0a3c 50%,#2e1065 100%)',
+        iconBg: 'linear-gradient(135deg,#5b21b6,#7c3aed,#a855f7)',
         ringOuter: 'rgba(167,139,250,0.2)',
         ringInner: 'rgba(167,139,250,0.35)',
-        glow     : 'rgba(167,139,250,0.15)',
-        accent   : '#a78bfa',
-        icon     : 'fa-bell',
-        title    : 'Pantau Status<br>Cucian Realtime',
-        subtitle : 'Dari antrian, dicuci, disetrika, hingga siap diambil — semua terpantau langsung dari dashboard admin.',
-        progress : '66.66%',
-        btnBg    : 'linear-gradient(to right,#5b21b6,#7c3aed,#a855f7)',
+        glow: 'rgba(167,139,250,0.15)',
+        accent: '#a78bfa',
+        icon: 'fa-bell',
+        title: 'Pantau Status<br>Cucian Realtime',
+        subtitle: 'Dari Antrian, Dicuci, Disetrika, Hingga Siap Diambil — Semua Terpantau Langsung Dari Dashboard Admin',
+        progress: '66.66%',
+        btnBg: 'linear-gradient(to right,#5b21b6,#7c3aed,#a855f7)',
         btnShadow: 'rgba(124,58,237,0.35)',
     },
     {
-        bg       : 'linear-gradient(135deg,#071a14 0%,#0a2e22 50%,#022c22 100%)',
-        iconBg   : 'linear-gradient(135deg,#065f46,#059669,#10b981)',
+        bg: 'linear-gradient(135deg,#071a14 0%,#0a2e22 50%,#022c22 100%)',
+        iconBg: 'linear-gradient(135deg,#065f46,#059669,#10b981)',
         ringOuter: 'rgba(52,211,153,0.2)',
         ringInner: 'rgba(52,211,153,0.35)',
-        glow     : 'rgba(52,211,153,0.15)',
-        accent   : '#34d399',
-        icon     : 'fa-shield-halved',
-        title    : 'Aman, Cepat,<br>dan Terpercaya',
-        subtitle : 'Kelola transaksi, pelanggan, dan laporan laundry dengan sistem yang aman dan mudah digunakan.',
-        progress : '100%',
-        btnBg    : 'linear-gradient(to right,#065f46,#059669,#10b981)',
+        glow: 'rgba(52,211,153,0.15)',
+        accent: '#34d399',
+        icon: 'fa-shield-halved',
+        title: 'Aman, Cepat,<br>Dan Terpercaya',
+        subtitle: 'Kelola Transaksi, Pelanggan, Dan Laporan Laundry Dengan Sistem Yang Aman Dan Mudah Digunakan',
+        progress: '100%',
+        btnBg: 'linear-gradient(to right,#065f46,#059669,#10b981)',
         btnShadow: 'rgba(16,185,129,0.35)',
     },
 ];
 
 let current = 0;
 
-// ── Render Slide ─────────────────────────────────────────────────
-function renderSlide(index, direction = 'next') {
+function renderSlide(index) {
     const s = SLIDES[index];
+    const btnNext = document.getElementById('btn-next');
+    const btnPrev = document.getElementById('btn-prev');
 
-    // Background
     document.getElementById('bg-slide').style.background = s.bg;
 
-    // Progress bar
     const pb = document.getElementById('progress-bar');
-    pb.style.width      = s.progress;
+    pb.style.width = s.progress;
     pb.style.background = s.btnBg;
 
-    // Animasi konten
     const content = document.getElementById('slide-content');
     content.style.animation = '';
     void content.offsetWidth;
     content.style.animation = 'slideIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards';
 
-    // Ikon
-    document.getElementById('slide-icon').className       = `fas ${s.icon} text-white`;
+    document.getElementById('slide-icon').className = `fas ${s.icon} text-white`;
     document.getElementById('slide-icon-box').style.background = s.iconBg;
     document.getElementById('slide-ring-outer').style.borderColor = s.ringOuter;
     document.getElementById('slide-ring-inner').style.borderColor = s.ringInner;
-    document.getElementById('slide-glow').style.background        = s.glow;
+    document.getElementById('slide-glow').style.background = s.glow;
 
-    // Teks
-    document.getElementById('slide-title').innerHTML    = s.title;
+    document.getElementById('slide-title').innerHTML = s.title;
     document.getElementById('slide-subtitle').textContent = s.subtitle;
 
-    // Dots
     document.querySelectorAll('.dot').forEach((dot, i) => {
         if (i === index) {
-            dot.style.width      = '24px';
+            dot.style.width = '24px';
             dot.style.background = s.accent;
-            dot.classList.add('dot-active');
         } else {
-            dot.style.width      = '8px';
+            dot.style.width = '8px';
             dot.style.background = 'rgba(255,255,255,0.2)';
-            dot.classList.remove('dot-active');
         }
     });
 
-    // Tombol
-    function renderSlide(index, direction = 'next') {
-        const btnNext = document.getElementById('btn-next');
-        const btnPrev = document.getElementById('btn-prev');
-    
+    btnNext.style.background = s.btnBg;
+    btnNext.style.boxShadow = `0 6px 20px ${s.btnShadow}`;
 
-        btnNext.style.background  = s.btnBg;
-        btnNext.style.boxShadow   = `0 6px 20px ${s.btnShadow}`;
-
-        if (index === SLIDES.length - 1) {
-            btnNext.innerHTML = '<i class="fas fa-rocket mr-2"></i> Mulai Sekarang';
-            btnNext.onclick   = finishOnboarding;
-        } else {
-            btnNext.innerHTML = 'Selanjutnya <i class="fas fa-arrow-right ml-2"></i>';
-            btnNext.onclick   = nextSlide;
-        }
-
-        console.log('index:', index, 'btnPrev:', btnPrev);
-        if (index > 0) {
-            btnPrev.style.display  = 'flex';
-            btnPrev.style.setProperty('display', 'flex', 'important');
-        } else {
-            btnPrev.style.display  = 'none';
-            btnPrev.style.setProperty('display', 'none', 'important');
-        }
-        console.log('btnPrev display after:', btnPrev.style.display);
+    if (index === SLIDES.length - 1) {
+        btnNext.innerHTML = '<i class="fas fa-rocket mr-2"></i> Mulai Sekarang';
+        btnNext.onclick = finishOnboarding;
+    } else {
+        btnNext.innerHTML = 'Selanjutnya <i class="fas fa-arrow-right ml-2"></i>';
+        btnNext.onclick = nextSlide;
     }
+
+    btnPrev.style.display = index > 0 ? 'flex' : 'none';
 }
 
-// ── Navigasi ─────────────────────────────────────────────────────
 function nextSlide() {
     if (current < SLIDES.length - 1) {
         current++;
-        renderSlide(current, 'next');
+        renderSlide(current);
     }
 }
 
 function prevSlide() {
     if (current > 0) {
         current--;
-        renderSlide(current, 'prev');
+        renderSlide(current);
     }
 }
 
@@ -281,23 +258,22 @@ function skipOnboarding() {
     finishOnboarding();
 }
 
-// Keyboard support
 document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'Enter') nextSlide();
-    if (e.key === 'ArrowLeft')  prevSlide();
-    if (e.key === 'Escape')     skipOnboarding();
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+    if (e.key === 'Escape') skipOnboarding();
 });
 
-// Swipe support (touch)
 let touchStartX = 0;
 document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
-document.addEventListener('touchend',   e => {
+document.addEventListener('touchend', e => {
     const diff = touchStartX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
 });
 
-// Init
-renderSlide(0);
+document.addEventListener('DOMContentLoaded', () => {
+    renderSlide(0);
+});
 </script>
 </body>
 </html>
