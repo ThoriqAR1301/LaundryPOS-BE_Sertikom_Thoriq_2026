@@ -8,10 +8,13 @@ use App\Http\Controllers\Web\ServiceWebController;
 use App\Http\Controllers\Web\TransactionWebController;
 use App\Http\Controllers\Web\ReportWebController;
 
-Route::get('/', [AuthController::class, 'showLogin'])->name('login');
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login.form');
+Route::get('/onboarding', function () { return view('onboarding'); })->name('onboarding');
+
+Route::get('/', function () { if (request()->cookie('laundry_onboarding_done')) { return redirect()->route('login'); } return redirect()->route('onboarding'); });
+
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('onboarding');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register')->middleware('onboarding');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

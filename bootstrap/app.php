@@ -19,13 +19,14 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'auth.sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            'onboarding' => \App\Http\Middleware\OnboardingMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (AuthenticationException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'status'  => false,
+                    'status' => false,
                     'message' => 'Unauthenticated. Silakan Login Terlebih Dahulu',
                 ], 401);
             }
