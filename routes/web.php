@@ -10,7 +10,7 @@ use App\Http\Controllers\Web\ReportWebController;
 
 Route::get('/onboarding', function () { return view('onboarding'); })->name('onboarding');
 
-Route::get('/', function () { if (request()->cookie('laundry_onboarding_done')) { return redirect()->route('login'); } return redirect()->route('onboarding'); });
+Route::get('/', function () { return view('onboarding_redirect'); });
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('onboarding');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
