@@ -1,58 +1,372 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 🧺 LaundryPOS — Backend API
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Sanctum](https://img.shields.io/badge/Laravel_Sanctum-API_Auth-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**REST API Backend Untuk Sistem Laundry Point Of Sales**
+Dibangun Dengan Laravel 11 + Laravel Sanctum
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+</div>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📋 Daftar Isi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- [Tentang Proyek](#-tentang-proyek)
+- [Teknologi](#-teknologi)
+- [Struktur Database](#-struktur-database)
+- [Instalasi](#-instalasi)
+- [Konfigurasi](#-konfigurasi)
+- [Menjalankan Server](#-menjalankan-server)
+- [API Endpoints](#-api-endpoints)
+- [Autentikasi](#-autentikasi)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 🎯 Tentang Proyek
 
-## Agentic Development
+LaundryPOS Backend Adalah REST API Yang Dibangun Menggunakan **Laravel 11** Sebagai Tulang Punggung Sistem Ekosistem Laundry. API Ini Melayani Dua Klien Utama :
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- **Web Admin Panel** — Untuk Petugas Mengelola Transaksi Dan Status Cucian
+- **Mobile App (React Native)** — Untuk Pelanggan Memantau Status Cucian Secara Realtime
 
-```bash
-composer require laravel/boost --dev
+---
 
-php artisan boost:install
+## 🛠 Teknologi
+
+| Teknologi | Versi | Kegunaan |
+|-----------|-------|----------|
+| PHP | 8.2+ | Bahasa pemrograman |
+| Laravel | 11.x | Framework Backend |
+| Laravel Sanctum | 4.x | Autentikasi API Token |
+| MySQL | 8.0 | Database |
+| Laravel Storage | - | Upload & Manajemen File |
+
+---
+
+## 🗄 Struktur Database
+
+```
+users
+├── id, name, email, password, plain_password, role (admin/customer)
+
+customers
+├── id, user_id (FK), phone, address
+
+services
+├── id, service_name, price, unit (Kg/Pcs)
+
+transactions
+├── id, invoice_code, admin_id (FK), customer_id (FK), service_id (FK)
+├── service_unit, total_price, status (Enum)
+├── payment_method, payment_status, payment_proof
+├── paid_at, cloth_photo, deleted_at (soft delete)
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## ⚙ Instalasi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Prasyarat
+- PHP >= 8.2
+- Composer
+- MySQL
+- Node.js (Opsional, Untuk Asset)
 
-## Code of Conduct
+### Langkah Instalasi
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**1. Clone Repository**
+```bash
+git clone https://github.com/username/laundrypos-backend.git
+cd laundrypos-backend
+```
 
-## Security Vulnerabilities
+**2. Install Dependencies**
+```bash
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**3. Salin File Environment**
+```bash
+cp .env.example .env
+```
 
-## License
+**4. Generate Application Key**
+```bash
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**5. Jalankan Migration & Seeder**
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+**6. Buat Symbolic Link Storage**
+```bash
+php artisan storage:link
+```
+
+---
+
+## 🔧 Konfigurasi
+
+Sesuaikan File `.env` Dengan Konfigurasi Lokal Anda :
+
+```env
+APP_NAME=LaundryPOS
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laundry_pos
+DB_USERNAME=root
+DB_PASSWORD=
+
+FILESYSTEM_DISK=public
+```
+
+---
+
+## 🚀 Menjalankan Server
+
+```bash
+php artisan serve --host=0.0.0.0 --port=8000
+```
+
+Server Berjalan Di : `http://localhost:8000`
+
+---
+
+## 📡 API Endpoints
+
+### Authentication
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| POST | `/api/login` | Login Pelanggan | ❌ |
+| POST | `/api/logout` | Logout Pelanggan | ✅ |
+| GET | `/api/profile` | Ambil Profil User | ✅ |
+| PUT | `/api/profile` | Update Profil User | ✅ |
+
+### Transaksi
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| GET | `/api/status-laundry` | Status Cucian Milik Customer | ✅ |
+
+### Customers
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| GET | `/api/customers` | List Semua Pelanggan | ✅ |
+| POST | `/api/customers` | Tambah Pelanggan | ✅ |
+| GET | `/api/customers/{id}` | Detail Pelanggan | ✅ |
+| PUT | `/api/customers/{id}` | Update Pelanggan | ✅ |
+| DELETE | `/api/customers/{id}` | Hapus Pelanggan | ✅ |
+
+### Services
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| GET | `/api/services` | List Semua Layanan | ✅ |
+| POST | `/api/services` | Tambah Layanan | ✅ |
+| GET | `/api/services/{id}` | Detail Layanan | ✅ |
+| PUT | `/api/services/{id}` | Update Layanan | ✅ |
+| DELETE | `/api/services/{id}` | Hapus Layanan | ✅ |
+
+---
+
+## 🔐 Autentikasi
+
+API Menggunakan **Laravel Sanctum** Dengan Bearer Token.
+
+**Login :**
+```json
+POST /api/login
+{
+    "email": "customer@example.com",
+    "password": "password123"
+}
+```
+
+**Response :**
+```json
+{
+    "status": true,
+    "message": "Login Berhasil",
+    "data": {
+        "user": { ... },
+        "token": "1|xxxxxxxxxxxxxxxx"
+    }
+}
+```
+
+**Gunakan Token Di Header Setiap Request :**
+```
+Authorization: Bearer 1|xxxxxxxxxxxxxxxx
+```
+
+---
+
+## 👨‍💻 Developer
+
+Dibuat Dengan ❤️ Untuk **Ujian Sertifikasi Kompetensi XI RPL**
+Tahun Pelajaran 2025/2026
+
+<div align="center">
+
+# 🖥️ LaundryPOS — Web Admin Panel
+
+![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Chart.js](https://img.shields.io/badge/Chart.js-4.x-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)
+
+**Dashboard Admin Untuk Sistem Laundry Point Of Sales**
+Dibangun Dengan Laravel Blade + Tailwind CSS
+
+</div>
+
+---
+
+## 📋 Daftar Isi
+
+- [Tentang Proyek](#-tentang-proyek)
+- [Fitur](#-fitur)
+- [Teknologi](#-teknologi)
+- [Instalasi](#-instalasi)
+- [Menjalankan Aplikasi](#-menjalankan-aplikasi)
+- [Akun Default](#-akun-default)
+- [Struktur Halaman](#-struktur-halaman)
+- [Screenshots](#-screenshots)
+
+---
+
+## 🎯 Tentang Proyek
+
+LaundryPOS Web Admin Panel Adalah Antarmuka Berbasis Web Untuk Petugas Laundry Dalam Mengelola Seluruh Operasional Bisnis — Mulai Dari Manajemen Pelanggan, Layanan, Transaksi, Hingga Laporan Keuangan.
+
+---
+
+## ✨ Fitur
+
+### 🔐 Autentikasi
+- Halaman **OnBoarding** 3 Slide Sebelum Login
+- Login & Register Dengan Validasi
+- Proteksi Route (Tidak Bisa Akses Tanpa Login)
+- Auto Redirect Ke Login Saat Sesi Habis
+
+### 📊 Dashboard
+- Widget Ringkasan : Total Pendapatan, Total Transaksi, Status Cucian
+- Grafik **Pendapatan Per Bulan** (Chart.js)
+- Grafik **Transaksi Harian**
+- **Layanan Terpopuler** Berdasarkan Total Order
+- Status Pembayaran (Lunas vs Pending)
+- Data Statistik Menggunakan **Soft Delete** Agar Angka Tetap Akurat
+
+### 👥 Manajemen Pelanggan
+- Tabel Pelanggan Dengan Pencarian (Nama/HP)
+- Tambah, Edit, Dan Hapus Pelanggan
+- Detail Pelanggan + Riwayat Transaksi
+- Tampilan Password Dengan Toggle Show/Hide
+
+### 🏷️ Manajemen Layanan
+- CRUD Layanan Laundry (Kiloan/Satuan)
+- Harga Per Unit Dengan Kalkulasi Otomatis
+
+### 🧾 Manajemen Transaksi
+- Form Transaksi Baru Dengan **Pencarian Pelanggan**
+- Kalkulasi Total Harga Otomatis
+- Upload **Foto Kondisi Baju** Saat Masuk
+- Upload **Bukti Transfer** Pembayaran
+- Update Status Cucian (Antrian → Dicuci → Disetrika → Siap Diambil → Selesai)
+- **Cetak Struk** & **Download PDF**
+- Progress Bar Alur Status Cucian
+- Soft Delete Transaksi
+
+### 📈 Laporan
+- Laporan Pendapatan Per Bulan
+- Filter Berdasarkan Periode
+
+### 🎨 UI/UX
+- **Dark Mode** Toggle
+- **Loading Spinner** Di Setiap Aksi
+- **Toast Notification** (Sukses/Gagal/Peringatan)
+- **Modal Konfirmasi** Sebelum Hapus Data
+- **Dropdown Notifikasi** Yang Menyimpan Riwayat Toast
+- Live Clock & Tanggal Di Header
+- Desain Responsif
+
+---
+
+## 🛠 Teknologi
+
+| Teknologi | Kegunaan |
+|-----------|----------|
+| Laravel 11 (Blade) | Template Engine & Routing |
+| Tailwind CSS (CDN) | Styling & Layout |
+| Chart.js | Grafik Dashboard & Laporan |
+| Font Awesome 6 | Ikon |
+| Plus Jakarta Sans | Font |
+| html2pdf.js | Generate PDF Struk |
+| Laravel Sanctum | Autentikasi |
+
+---
+
+## ⚙ Instalasi
+
+> Web Admin Panel Sudah **Menjadi Satu** Dengan Backend API Dalam Satu Project Laravel.
+> Ikuti Langkah Instalasi Di [README Backend](../backend/README.md).
+
+---
+
+## 🚀 Menjalankan Aplikasi
+
+```bash
+php artisan serve --host=0.0.0.0 --port=8000
+```
+
+Buka Browser : `http://localhost:8000`
+
+Saat Pertama Kali Dibuka Akan Muncul Halaman **OnBoarding** Terlebih Dahulu.
+
+---
+
+## 👤 Akun Default
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@laundrypos.com | admin123 |
+
+---
+
+## 📄 Struktur Halaman
+
+```
+/                          → Redirect (Cek OnBoarding)
+/onboarding                → Halaman OnBoarding (3 Slide)
+/login                     → Halaman Login
+/register                  → Halaman Register
+
+/admin/dashboard           → Dashboard Utama
+/admin/customers           → Daftar Pelanggan
+/admin/customers/create    → Tambah Pelanggan
+/admin/customers/{id}      → Detail Pelanggan
+/admin/customers/{id}/edit → Edit Pelanggan
+/admin/services            → Daftar Layanan
+/admin/services/create     → Tambah Layanan
+/admin/transactions        → Daftar Transaksi
+/admin/transactions/create → Buat Transaksi Baru
+/admin/transactions/{id}   → Detail Transaksi
+/admin/reports             → Halaman Laporan
+/admin/profile             → Profil Admin
+```
+
+---
+
+## 👨‍💻 Developer
+
+Dibuat Dengan ❤️ Untuk **Ujian Sertifikasi Kompetensi XI RPL**
+Tahun Pelajaran 2025/2026
